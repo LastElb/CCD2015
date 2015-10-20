@@ -213,7 +213,7 @@ public class Chessboard extends JPanel
         }
         for (int x = 0; x < 8; x++)
         {
-            this.squares[x][i].setPiece(new Pawn(this, player));
+            this.squares[x][i].setPiece(new NewPawn(this, player));
         }
     }
 
