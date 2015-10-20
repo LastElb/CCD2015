@@ -78,7 +78,7 @@ public class GUI
         return img;
     }/*--endOf-loadImage--*/
 
-
+    //TODO: Fix useless function
     static boolean themeIsValid(String name)
     {
         return true;

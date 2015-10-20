@@ -126,6 +126,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             Properties prp = GUI.getConfigFile();
             int element = this.themesList.getSelectedIndex();
             String name = this.themesList.getModel().getElementAt(element).toString();
+            //TODO: Throws {@link ArrayIndexOutOfBoundsException} if no theme is selected. Issue #1
             if (GUI.themeIsValid(name))
             {
                 prp.setProperty("THEME", name);
