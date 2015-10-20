@@ -46,7 +46,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     {
         super(parent);
 
-        File dir = new File(GUI.getJarPath() + File.separator + "theme"+File.separator);
+        File dir = new File(GUI.getJarPath() + File.separator + "jchess/theme"+File.separator);
 
         System.out.println("Theme path: "+dir.getPath());
 
