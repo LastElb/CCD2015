@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Optional;
 import java.util.Properties;
 
 public class ThemeChooseWindow extends JDialog implements ActionListener, ListSelectionListener {
@@ -108,29 +109,28 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     /**
      * Method wich is changing a pawn into queen, rook, bishop or knight
      *
-     * @param arg0 Capt information about performed action
+     * @param evt Capt information about performed action
      */
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == this.okButton) {
             Properties prp = GUI.getConfigFile();
             int element = this.themesList.getSelectedIndex();
-            String name = this.themesList.getModel().getElementAt(element).toString();
-            //TODO: Throws {@link ArrayIndexOutOfBoundsException} if no theme is selected. Issue #1
-            if (GUI.themeIsValid(name)) {
-                prp.setProperty("THEME", name);
-                try {
-                    //FileOutputStream fOutStr = new FileOutputStream(ThemeChooseWindow.class.getResource("config.txt").getFile());
-                    FileOutputStream fOutStr = new FileOutputStream("config.txt");
-                    prp.store(fOutStr, null);
-                    fOutStr.flush();
-                    fOutStr.close();
-                } catch (java.io.IOException exc) {
+            if (element >= 0) {
+                String name = this.themesList.getModel().getElementAt(element).toString();
+                if (GUI.themeIsValid(name)) {
+                    prp.setProperty("THEME", name);
+                    try {
+                        //FileOutputStream fOutStr = new FileOutputStream(ThemeChooseWindow.class.getResource("config.txt").getFile());
+                        FileOutputStream fOutStr = new FileOutputStream("config.txt");
+                        prp.store(fOutStr, null);
+                        fOutStr.flush();
+                        fOutStr.close();
+                    } catch (java.io.IOException exc) {
+                    }
+                    JOptionPane.showMessageDialog(this, Settings.lang("changes_visible_after_restart"));
                 }
-                JOptionPane.showMessageDialog(this, Settings.lang("changes_visible_after_restart"));
-                this.setVisible(false);
-
             }
-            System.out.print(prp.getProperty("THEME"));
+            this.dispose();
         }
     }
 }
