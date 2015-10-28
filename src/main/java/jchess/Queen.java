@@ -20,32 +20,29 @@
  */
 package jchess;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.awt.Graphics;
-import java.awt.Image;
 
 /**
  * Class to represent a queen piece
  * Queen can move almost in every way:
  * |_|_|_|X|_|_|_|X|7
-    |X|_|_|X|_|_|X|_|6
-    |_|X|_|X|_|X|_|_|5
-    |_|_|X|X|x|_|_|_|4
-    |X|X|X|Q|X|X|X|X|3
-    |_|_|X|X|X|_|_|_|2
-    |_|X|_|X|_|X|_|_|1
-    |X|_|_|X|_|_|X|_|0
-    0 1 2 3 4 5 6 7
+ * |X|_|_|X|_|_|X|_|6
+ * |_|X|_|X|_|X|_|_|5
+ * |_|_|X|X|x|_|_|_|4
+ * |X|X|X|Q|X|X|X|X|3
+ * |_|_|X|X|X|_|_|_|2
+ * |_|X|_|X|_|X|_|_|1
+ * |X|_|_|X|_|_|X|_|0
+ * 0 1 2 3 4 5 6 7
  */
-public class Queen extends Piece
-{
+public class Queen extends Piece {
 
-    public static short value = 9;
     protected static final Image imageWhite = GUI.loadImage("Queen-W.png");
     protected static final Image imageBlack = GUI.loadImage("Queen-B.png");
+    public static short value = 9;
 
-    Queen(Chessboard chessboard, Player player)
-    {
+    Queen(Chessboard chessboard, Player player) {
         super(chessboard, player);//call initializer of super type: Piece
         //this.setImages("Queen-W.png", "Queen-B.png");
         this.symbol = "Q";
@@ -53,14 +50,10 @@ public class Queen extends Piece
     }
 
     @Override
-    void setImage()
-    {
-        if (this.player.color == this.player.color.black)
-        {
+    void setImage() {
+        if (this.player.color == this.player.color.black) {
             image = imageBlack;
-        }
-        else
-        {
+        } else {
             image = imageWhite;
         }
         orgImage = image;
@@ -68,288 +61,209 @@ public class Queen extends Piece
 
     /**
      * Annotation to superclass Piece changing pawns location
-     * @return  ArrayList with new possition of piece
+     *
+     * @return ArrayList with new possition of piece
      */
     @Override
-    public ArrayList allMoves()
-    {
+    public ArrayList allMoves() {
         ArrayList list = new ArrayList();
 
         // ------------- as Rook --------------
-        for (int i = this.square.pozY + 1; i <= 7; ++i)
-        {//up
+        for (int i = this.square.pozY + 1; i <= 7; ++i) {//up
 
-            if (this.checkPiece(this.square.pozX, i))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(this.square.pozX, i)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i])) {
                         list.add(chessboard.squares[this.square.pozX][i]);
                     }
-                }
-                else
-                {//or black
+                } else {//or black
 
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i]))
-                    {
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i])) {
                         list.add(chessboard.squares[this.square.pozX][i]);
                     }
                 }
 
-                if (this.otherOwner(this.square.pozX, i))
-                {
+                if (this.otherOwner(this.square.pozX, i)) {
                     break;
                 }
-            }
-            else //if on this square is piece
+            } else //if on this square is piece
             {
                 break;//we've to break becouse we cannot go beside other piece!!
             }
         }
 
-        for (int i = this.square.pozY - 1; i >= 0; --i)
-        {//down
+        for (int i = this.square.pozY - 1; i >= 0; --i) {//down
 
-            if (this.checkPiece(this.square.pozX, i))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(this.square.pozX, i)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i])) {
                         list.add(chessboard.squares[this.square.pozX][i]);
                     }
-                }
-                else
-                {//or black
+                } else {//or black
 
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i]))
-                    {
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[this.square.pozX][i])) {
                         list.add(chessboard.squares[this.square.pozX][i]);
                     }
                 }
 
-                if (this.otherOwner(this.square.pozX, i))
-                {
+                if (this.otherOwner(this.square.pozX, i)) {
                     break;
                 }
-            }
-            else
-            {//if on this square is piece
+            } else {//if on this square is piece
 
                 break;//we've to break becouse we cannot go beside other piece!!
             }
         }
 
-        for (int i = this.square.pozX - 1; i >= 0; --i)
-        {//left
+        for (int i = this.square.pozX - 1; i >= 0; --i) {//left
 
-            if (this.checkPiece(i, this.square.pozY))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(i, this.square.pozY)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY])) {
                         list.add(chessboard.squares[i][this.square.pozY]);
                     }
-                }
-                else
-                {//or black
+                } else {//or black
 
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY]))
-                    {
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY])) {
                         list.add(chessboard.squares[i][this.square.pozY]);
                     }
                 }
 
-                if (this.otherOwner(i, this.square.pozY))
-                {
+                if (this.otherOwner(i, this.square.pozY)) {
                     break;
                 }
-            }
-            else
-            {//if on this square is piece
+            } else {//if on this square is piece
 
                 break;//we've to break becouse we cannot go beside other piece!!
             }
         }
 
-        for (int i = this.square.pozX + 1; i <= 7; ++i)
-        {//right
+        for (int i = this.square.pozX + 1; i <= 7; ++i) {//right
 
-            if (this.checkPiece(i, this.square.pozY))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(i, this.square.pozY)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY])) {
                         list.add(chessboard.squares[i][this.square.pozY]);
                     }
-                }
-                else
-                {//or black
+                } else {//or black
 
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY]))
-                    {
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[i][this.square.pozY])) {
                         list.add(chessboard.squares[i][this.square.pozY]);
                     }
                 }
 
-                if (this.otherOwner(i, this.square.pozY))
-                {
+                if (this.otherOwner(i, this.square.pozY)) {
                     break;
                 }
-            }
-            else
-            {//if on this square is piece
+            } else {//if on this square is piece
 
                 break;//we've to break becouse we cannot go beside other piece!!
             }
         }
 
         // ------------- as Bishop ------------------
-        for (int h = this.square.pozX - 1, i = this.square.pozY + 1; !isout(h, i); --h, ++i)
-        {//left-up
+        for (int h = this.square.pozX - 1, i = this.square.pozY + 1; !isout(h, i); --h, ++i) {//left-up
 
-            if (this.checkPiece(h, i))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(h, i)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
-                }
-                else
-                {//or black
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                } else {//or black
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
                 }
 
-                if (this.otherOwner(h, i))
-                {
+                if (this.otherOwner(h, i)) {
                     break;
                 }
-            }
-            else
-            {//if on this square is piece
+            } else {//if on this square is piece
 
                 break;//we've to break becouse we cannot go beside other piece!!
             }
         }
 
-        for (int h = this.square.pozX - 1, i = this.square.pozY - 1; !isout(h, i); --h, --i)
-        {//left-down
+        for (int h = this.square.pozX - 1, i = this.square.pozY - 1; !isout(h, i); --h, --i) {//left-down
 
-            if (this.checkPiece(h, i))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(h, i)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
-                }
-                else
-                {//or black
+                } else {//or black
 
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
                 }
 
-                if (this.otherOwner(h, i))
-                {
+                if (this.otherOwner(h, i)) {
                     break;
                 }
-            }
-            else
-            {//if on this square is piece
+            } else {//if on this square is piece
 
                 break;//we've to break becouse we cannot go beside other piece!!
             }
         }
 
-        for (int h = this.square.pozX + 1, i = this.square.pozY + 1; !isout(h, i); ++h, ++i)
-        {//right-up
+        for (int h = this.square.pozX + 1, i = this.square.pozY + 1; !isout(h, i); ++h, ++i) {//right-up
 
-            if (this.checkPiece(h, i))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(h, i)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
-                }
-                else
-                {//or black
+                } else {//or black
 
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
                 }
 
-                if (this.otherOwner(h, i))
-                {
+                if (this.otherOwner(h, i)) {
                     break;
                 }
-            }
-            else
-            {//if on this square is piece
+            } else {//if on this square is piece
 
                 break;//we've to break becouse we cannot go beside other piece!!
             }
         }
 
-        for (int h = this.square.pozX + 1, i = this.square.pozY - 1; !isout(h, i); ++h, --i)
-        {//right-down
+        for (int h = this.square.pozX + 1, i = this.square.pozY - 1; !isout(h, i); ++h, --i) {//right-down
 
-            if (this.checkPiece(h, i))
-            {//if on this sqhuare isn't piece
+            if (this.checkPiece(h, i)) {//if on this sqhuare isn't piece
 
-                if (this.player.color == Player.colors.white)
-                {//white
+                if (this.player.color == Player.colors.white) {//white
 
-                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                    if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
-                }
-                else
-                {//or black
+                } else {//or black
 
-                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i]))
-                    {
+                    if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
                 }
 
-                if (this.otherOwner(h, i))
-                {
+                if (this.otherOwner(h, i)) {
                     break;
                 }
-            }
-            else
-            { //if on this square is piece
+            } else { //if on this square is piece
 
                 break;//we've to break becouse we cannot go beside other piece!!
             }

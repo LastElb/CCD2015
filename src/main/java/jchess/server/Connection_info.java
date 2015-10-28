@@ -20,8 +20,7 @@
  */
 package jchess.server;
 
-public enum Connection_info
-{
+public enum Connection_info {
 
     all_is_ok(0),
     err_bad_table_ID(1),
@@ -30,15 +29,12 @@ public enum Connection_info
     err_bad_password(4);
     private int value;
 
-    Connection_info(int value)
-    {
+    Connection_info(int value) {
         this.value = value;
     }
 
-    public static Connection_info get(int id)
-    {
-        switch (id)
-        {
+    public static Connection_info get(int id) {
+        switch (id) {
             case 0:
                 return Connection_info.all_is_ok;
             case 1:
@@ -54,8 +50,7 @@ public enum Connection_info
         }
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return value;
     }
 }

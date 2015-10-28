@@ -20,8 +20,7 @@ package jchess;
 
 import jchess.Moves.castling;
 
-class Move
-{
+class Move {
 
     protected Square from = null;
     protected Square to = null;
@@ -32,8 +31,7 @@ class Move
     protected castling castlingMove = castling.none;
     protected boolean wasPawnTwoFieldsMove = false;
 
-    Move(Square from, Square to, Piece movedPiece, Piece takenPiece, castling castlingMove, boolean wasEnPassant, Piece promotedPiece)
-    {
+    Move(Square from, Square to, Piece movedPiece, Piece takenPiece, castling castlingMove, boolean wasEnPassant, Piece promotedPiece) {
         this.from = from;
         this.to = to;
 
@@ -43,53 +41,42 @@ class Move
         this.castlingMove = castlingMove;
         this.wasEnPassant = wasEnPassant;
 
-        if (movedPiece.name.equals("Pawn") && Math.abs(to.pozY - from.pozY) == 2)
-        {
+        if (movedPiece.name.equals("Pawn") && Math.abs(to.pozY - from.pozY) == 2) {
             this.wasPawnTwoFieldsMove = true;
-        }
-        else if (movedPiece.name.equals("Pawn") && to.pozY == Chessboard.bottom || to.pozY == Chessboard.top && promotedPiece != null)
-        {
+        } else if (movedPiece.name.equals("Pawn") && to.pozY == Chessboard.bottom || to.pozY == Chessboard.top && promotedPiece != null) {
             this.promotedTo = promotedPiece;
         }
     }
 
-    public Square getFrom()
-    {
+    public Square getFrom() {
         return this.from;
     }
 
-    public Square getTo()
-    {
+    public Square getTo() {
         return this.to;
     }
 
-    public Piece getMovedPiece()
-    {
+    public Piece getMovedPiece() {
         return this.movedPiece;
     }
 
-    public Piece getTakenPiece()
-    {
+    public Piece getTakenPiece() {
         return this.takenPiece;
     }
 
-    public boolean wasEnPassant()
-    {
+    public boolean wasEnPassant() {
         return this.wasEnPassant;
     }
 
-    public boolean wasPawnTwoFieldsMove()
-    {
+    public boolean wasPawnTwoFieldsMove() {
         return this.wasPawnTwoFieldsMove;
     }
 
-    public castling getCastlingMove()
-    {
+    public castling getCastlingMove() {
         return this.castlingMove;
     }
 
-    public Piece getPromotedPiece()
-    {
+    public Piece getPromotedPiece() {
         return this.promotedTo;
     }
 }

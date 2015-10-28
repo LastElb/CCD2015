@@ -29,21 +29,16 @@ import java.util.logging.Logger;
 /**
  * Class responsible for hashing the messages
  */
-public class MD5
-{
+public class MD5 {
 
-    public static String encrypt(String str)
-    {
+    public static String encrypt(String str) {
         MessageDigest m;
 
-        try
-        {
+        try {
             m = MessageDigest.getInstance("MD5");
             m.update(str.getBytes(), 0, str.length());
             return new BigInteger(1, m.digest()).toString(16);
-        }
-        catch (NoSuchAlgorithmException ex)
-        {
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(MD5.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }

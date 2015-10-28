@@ -20,22 +20,16 @@
  */
 package jchess;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
 
 /**
  * Class representing the game chat
  * Players are in touch and can write a messages to each other
  */
-public class Chat extends JPanel implements ActionListener
-{
+public class Chat extends JPanel implements ActionListener {
 
     public Client client;
     private GridBagLayout gbl;
@@ -45,8 +39,7 @@ public class Chat extends JPanel implements ActionListener
     private JTextField textInput;
     private JButton buttonSend;
 
-    Chat()
-    {
+    Chat() {
         super();
 
         this.textOutput = new JTextArea();
@@ -92,7 +85,8 @@ public class Chat extends JPanel implements ActionListener
         this.add(buttonSend);
     }
 
-    /** Method of adding message to the list
+    /**
+     * Method of adding message to the list
      */
     public void addMessage(String str) //added message to list
     {
@@ -100,7 +94,8 @@ public class Chat extends JPanel implements ActionListener
         textOutput.setCaretPosition(textOutput.getDocument().getLength());
     }
 
-    /** Sending message method
+    /**
+     * Sending message method
      */
     public void actionPerformed(ActionEvent arg0) //sending message
     {

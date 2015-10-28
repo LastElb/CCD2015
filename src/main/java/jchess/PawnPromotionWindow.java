@@ -20,30 +20,30 @@
  */
 package jchess;
 
-import java.awt.*;
 import javax.swing.*;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-/** Class responsible for promotion of a pawn.
+/**
+ * Class responsible for promotion of a pawn.
  * When pawn reach the end of the chessboard it can be change to rook,
  * bishop, queen or knight. For what pawn is promoted decideds player.
+ *
  * @param parent Information about the current piece
- * @param color The player color
+ * @param color  The player color
  */
-public class PawnPromotionWindow extends JDialog implements ActionListener
-{
+public class PawnPromotionWindow extends JDialog implements ActionListener {
 
+    public String result;
     JButton knightButton;
     JButton bishopButton;
     JButton rookButton;
     JButton queenButton;
     GridBagLayout gbl;
-    public String result;
     GridBagConstraints gbc;
 
-    PawnPromotionWindow(Frame parent, String color)
-    {
+    PawnPromotionWindow(Frame parent, String color) {
         super(parent);
         this.setTitle("Choose piece");
         this.setMinimumSize(new Dimension(520, 130));
@@ -72,35 +72,31 @@ public class PawnPromotionWindow extends JDialog implements ActionListener
         this.add(knightButton);
     }
 
-    /** Method setting the color fo promoted pawn
+    /**
+     * Method setting the color fo promoted pawn
+     *
      * @param color The players color
      */
-    public void setColor(String color)
-    {
+    public void setColor(String color) {
         this.knightButton.setIcon(new ImageIcon(GUI.loadImage("Knight-" + color + ".png")));
         this.bishopButton.setIcon(new ImageIcon(GUI.loadImage("Bishop-" + color + ".png")));
         this.rookButton.setIcon(new ImageIcon(GUI.loadImage("Rook-" + color + ".png")));
         this.queenButton.setIcon(new ImageIcon(GUI.loadImage("Queen-" + color + ".png")));
     }
 
-    /** Method wich is changing a pawn into queen, rook, bishop or knight
+    /**
+     * Method wich is changing a pawn into queen, rook, bishop or knight
+     *
      * @param arg0 Capt information about performed action
      */
-    public void actionPerformed(ActionEvent arg0)
-    {
-        if (arg0.getSource() == queenButton)
-        {
+    public void actionPerformed(ActionEvent arg0) {
+        if (arg0.getSource() == queenButton) {
             result = "Queen";
-        }
-        else if (arg0.getSource() == rookButton)
-        {
+        } else if (arg0.getSource() == rookButton) {
             result = "Rook";
-        }
-        else if (arg0.getSource() == bishopButton)
-        {
+        } else if (arg0.getSource() == bishopButton) {
             result = "Bishop";
-        }
-        else //knight
+        } else //knight
         {
             result = "Knight";
         }
