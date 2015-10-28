@@ -47,7 +47,6 @@ public class GUI {
      * @name     : string of image to load for ex. "chessboard.jpg"
      * @returns  : image or null if cannot load
      * */
-
     static Image loadImage(String name) {
         if (configFile == null) {
             return null;
@@ -58,6 +57,25 @@ public class GUI {
         try {
             String imageLink = "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
             System.out.println(configFile.getProperty("THEME"));
+            url = JChessApp.class.getResource(imageLink);
+            img = tk.getImage(url);
+
+        } catch (Exception e) {
+            System.out.println("some error loading image!");
+            e.printStackTrace();
+        }
+        return img;
+    }/*--endOf-loadImage--*/
+
+    static Image loadImageFromTheme(String name, String theme) {
+        if (configFile == null) {
+            return null;
+        }
+        Image img = null;
+        URL url = null;
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        try {
+            String imageLink = "theme/" + theme + "/images/" + name;
             url = JChessApp.class.getResource(imageLink);
             img = tk.getImage(url);
 
