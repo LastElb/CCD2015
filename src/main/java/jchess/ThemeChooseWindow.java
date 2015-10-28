@@ -29,7 +29,6 @@ import javax.swing.event.ListSelectionEvent;
 import java.io.File;
 import java.util.Properties;
 import java.io.FileOutputStream;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class ThemeChooseWindow extends JDialog implements ActionListener, ListSelectionListener
 {
@@ -46,7 +45,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     {
         super(parent);
 
-        File dir = new File(GUI.getJarPath() + File.separator + "jchess/theme"+File.separator);
+        File dir = new File(GUI.getJarPath() + File.separator + "jchess/theme" +File.separator);
 
         System.out.println("Theme path: "+dir.getPath());
 
@@ -83,7 +82,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             catch (java.lang.NullPointerException exc)
             {
                 System.out.println("Cannot find preview image: " + exc);
-                this.themePreview = new ImageIcon(JChessApp.class.getResource("theme/noPreview.png"));
+                this.themePreview = new ImageIcon(JChessApp.class.getResource("jchess/theme/noPreview.png"));
                 return;
             }
             this.result = "";
@@ -109,7 +108,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     public void valueChanged(ListSelectionEvent event)
     {
         String element = this.themesList.getModel().getElementAt(this.themesList.getSelectedIndex()).toString();
-        String path = GUI.getJarPath() + File.separator + "theme/";
+        String path = GUI.getJarPath() + File.separator + "jchess/theme/";
         //String path  = JChessApp.class.getResource("theme/").getPath().toString();
         System.out.println(path + element + "/images/Preview.png");
         this.themePreview = new ImageIcon(path + element + "/images/Preview.png");

@@ -23,13 +23,8 @@ package jchess;
 import java.awt.*;
 import java.net.*;
 import java.io.*;
-import java.io.InputStreamReader;
-import javax.swing.*;
-import javax.swing.JPanel;
-import java.io.IOException;
 import java.util.Properties;
 import java.io.FileOutputStream;
-import java.util.logging.Logger;
 
 /** Class representing the game interface which is seen by a player and
  * where are lockated available for player opptions, current games and where
@@ -64,7 +59,7 @@ public class GUI
         Toolkit tk = Toolkit.getDefaultToolkit();
         try
         {
-            String imageLink = "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
+            String imageLink = "jchess/theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
             System.out.println(configFile.getProperty("THEME"));
             url = JChessApp.class.getResource(imageLink);
             img = tk.getImage(url);
