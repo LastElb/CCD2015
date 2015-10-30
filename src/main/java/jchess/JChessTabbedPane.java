@@ -68,7 +68,6 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         JChessApp.getApplication().show(JChessApp.jcv.newGameFrame);
     }
 
-    @Override
     public void mouseClicked(MouseEvent e) {
         Rectangle rect;
         int tabNumber = getUI().tabForCoordinate(this, e.getX(), e.getY());

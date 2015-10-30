@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -148,7 +149,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
                     if (!selFile.exists()) {
                         try {
                             selFile.createNewFile();
-                        } catch (java.io.IOException exc) {
+                        } catch (IOException exc) {
                             System.out.println("error creating file: " + exc);
                         }
                     } else if (selFile.exists()) {

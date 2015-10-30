@@ -20,21 +20,26 @@
  */
 package jchess;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
 /**
  * Class representing the game interface which is seen by a player and
- * where are lockated available for player opptions, current games and where
+ * where are located available for player options, current games and where
  * can he start a new game (load it or save it)
  */
 public class GUI {
 
     static final public Properties configFile = GUI.getConfigFile();
+    static Logger logger = LoggerFactory.getLogger(GUI.class);
     public Game game;
 
     public GUI() {
@@ -48,29 +53,24 @@ public class GUI {
      * @returns  : image or null if cannot load
      * */
     static Image loadImage(String name) {
-        if (configFile == null) {
+        if (configFile == null)
             return null;
-        }
         Image img = null;
         URL url = null;
         Toolkit tk = Toolkit.getDefaultToolkit();
         try {
             String imageLink = "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
-            System.out.println(configFile.getProperty("THEME"));
             url = JChessApp.class.getResource(imageLink);
             img = tk.getImage(url);
-
         } catch (Exception e) {
-            System.out.println("some error loading image!");
-            e.printStackTrace();
+            logger.error("Error loading image", e);
         }
         return img;
     }/*--endOf-loadImage--*/
 
     static Image loadImageFromTheme(String name, String theme) {
-        if (configFile == null) {
+        if (configFile == null)
             return null;
-        }
         Image img = null;
         URL url = null;
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -78,10 +78,8 @@ public class GUI {
             String imageLink = "theme/" + theme + "/images/" + name;
             url = JChessApp.class.getResource(imageLink);
             img = tk.getImage(url);
-
         } catch (Exception e) {
-            System.out.println("some error loading image!");
-            e.printStackTrace();
+            logger.error("Error loading image", e);
         }
         return img;
     }/*--endOf-loadImage--*/
@@ -108,19 +106,20 @@ public class GUI {
         File outFile = new File(GUI.getJarPath() + File.separator + "config.txt");
         try {
             defConfFile.load(GUI.class.getResourceAsStream("config.txt"));
-        } catch (java.io.IOException exc) {
-            System.out.println("some error loading image! what goes: " + exc);
-            exc.printStackTrace();
+        } catch (IOException e) {
+            logger.error("Error loading config file", e);
         }
         if (!outFile.exists()) {
             try {
                 defConfFile.store(new FileOutputStream(outFile), null);
-            } catch (java.io.IOException exc) {
+            } catch (IOException e) {
+                logger.error("", e);
             }
         }
         try {
-            confFile.load(new FileInputStream("config.txt"));
-        } catch (java.io.IOException exc) {
+            confFile.load(new FileInputStream(outFile));
+        } catch (IOException e) {
+            logger.error("", e);
         }
         return confFile;
     }

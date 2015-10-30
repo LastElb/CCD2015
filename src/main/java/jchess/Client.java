@@ -21,6 +21,7 @@
 package jchess;
 
 import jchess.server.Connection_info;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -48,20 +49,12 @@ public class Client implements Runnable {
     Settings sett;
     boolean wait4undoAnswer = false;
     boolean isObserver = false;
+    org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
     Client(String ip, int port) {
-        print("running");
-
         this.ip = ip;
         this.port = port;
-    }
-
-    /* Method responsible for printing on screen client informations
-     */
-    public static void print(String str) {
-        if (isPrintEnable) {
-            System.out.println("Client: " + str);
-        }
+        logger.info("Running");
     }
 
     /* Method responsible for joining to the server on
@@ -69,27 +62,27 @@ public class Client implements Runnable {
      */
     boolean join(int tableID, boolean asPlayer, String nick, String password) throws Error //join to server
     {
-        print("running function: join(" + tableID + ", " + asPlayer + ", " + nick + ")");
+        logger.debug("running function: join(" + tableID + ", " + asPlayer + ", " + nick + ")");
         try {
-            print("join to server: ip:" + ip + " port:" + port);
+            logger.debug("join to server: ip:" + ip + " port:" + port);
             this.isObserver = !asPlayer;
             try {
                 s = new Socket(ip, port);
                 output = new ObjectOutputStream(s.getOutputStream());
                 input = new ObjectInputStream(s.getInputStream());
                 //send data to server
-                print("send to server: table ID");
+                logger.debug("send to server: table ID");
                 output.writeInt(tableID);
-                print("send to server: player or observer");
+                logger.debug("send to server: player or observer");
                 output.writeBoolean(asPlayer);
-                print("send to server: player nick");
+                logger.debug("send to server: player nick");
                 output.writeUTF(nick);
-                print("send to server: password");
+                logger.debug("send to server: password");
                 output.writeUTF(password);
                 output.flush();
 
                 int servCode = input.readInt(); //server returning code
-                print("connection info: " + Connection_info.get(servCode).name());
+                logger.debug("connection info: " + Connection_info.get(servCode).name());
                 if (Connection_info.get(servCode).name().startsWith("err_")) {
                     throw new Error(Connection_info.get(servCode).name());
                 }
@@ -119,12 +112,12 @@ public class Client implements Runnable {
     /* Method responsible for running of the game
      */
     public void run() {
-        print("running function: run()");
+        logger.debug("running function: run()");
         boolean isOK = true;
         while (isOK) {
             try {
                 String in = input.readUTF();
-                print("input code: " + in);
+                logger.debug("input code: " + in);
 
                 if (in.equals("#move")) //getting new move from server
                 {
@@ -189,7 +182,7 @@ public class Client implements Runnable {
      */
     public void sendMove(int beginX, int beginY, int endX, int endY) //sending new move to server
     {
-        print("running function: sendMove(" + beginX + ", " + beginY + ", " + endX + ", " + endY + ")");
+        logger.debug("running function: sendMove(" + beginX + ", " + beginY + ", " + endX + ", " + endY + ")");
         try {
             output.writeUTF("#move");
             output.writeInt(beginX);
@@ -203,7 +196,7 @@ public class Client implements Runnable {
     }
 
     public void sendUndoAsk() {
-        print("sendUndoAsk");
+        logger.debug("sendUndoAsk");
         try {
             this.wait4undoAnswer = true;
             output.writeUTF("#undoAsk");
@@ -236,7 +229,7 @@ public class Client implements Runnable {
      */
     public void sendMassage(String str) //sending new move to server
     {
-        print("running function: sendMessage(" + str + ")");
+        logger.debug("running function: sendMessage(" + str + ")");
         try {
             output.writeUTF("#message");
             output.writeUTF(str);
