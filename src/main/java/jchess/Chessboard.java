@@ -160,8 +160,8 @@ public class Chessboard extends JPanel {
             player.goDown = true;
         }
 
-        this.squares[0][i].setPiece(new Rook(this, player));
-        this.squares[7][i].setPiece(new Rook(this, player));
+        this.squares[0][i].setPiece(new NewRook(this, player));
+        this.squares[7][i].setPiece(new NewRook(this, player));
         this.squares[1][i].setPiece(new Knight(this, player));
         this.squares[6][i].setPiece(new Knight(this, player));
         this.squares[2][i].setPiece(new Bishop(this, player));
@@ -424,7 +424,7 @@ public class Chessboard extends JPanel {
                         end.piece = queen;
                     } else if (newPiece.equals("Rook")) // transform pawn to rook
                     {
-                        Rook rook = new Rook(this, end.piece.player);
+                        NewRook rook = new NewRook(this, end.piece.player);
                         rook.chessboard = end.piece.chessboard;
                         rook.player = end.piece.player;
                         rook.square = end.piece.square;
