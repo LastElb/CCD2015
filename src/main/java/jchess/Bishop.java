@@ -45,14 +45,13 @@ public class Bishop extends Piece {
 
     Bishop(Chessboard chessboard, Player player) {
         super(chessboard, player);      //call initializer of super type: Piece
-        //this.setImages("Bishop-W.png", "Bishop-B.png");
         this.symbol = "B";
         this.setImage();
     }
 
     @Override
     void setImage() {
-        if (this.player.color == this.player.color.black) {
+        if (this.player.color == Player.colors.black) {
             image = imageBlack;
         } else {
             image = imageWhite;
@@ -63,7 +62,7 @@ public class Bishop extends Piece {
     /**
      * Annotation to superclass Piece changing pawns location
      *
-     * @return ArrayList with new possition of piece
+     * @return ArrayList with new position of piece
      */
     @Override
     public ArrayList allMoves() {
@@ -102,8 +101,7 @@ public class Bishop extends Piece {
                     if (this.chessboard.kingWhite.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }
-                } else //or black
-                {
+                } else { //or black
                     if (this.chessboard.kingBlack.willBeSafeWhenMoveOtherPiece(this.square, chessboard.squares[h][i])) {
                         list.add(chessboard.squares[h][i]);
                     }

@@ -21,6 +21,9 @@
 package jchess;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -41,11 +44,12 @@ public abstract class Piece {
     protected String symbol;
     Chessboard chessboard; // <-- this relations isn't in class diagram, but it's necessary :/
     String name;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     Piece(Chessboard chessboard, Player player) {
         this.chessboard = chessboard;
         this.player = player;
-        if (player.color == player.color.black) {
+        if (player.color == Player.colors.black) {
             image = imageBlack;
         } else {
             image = imageWhite;
@@ -67,7 +71,7 @@ public abstract class Piece {
             int y = (this.square.pozY * height) + topLeft.y;
             float addX = (height - image.getWidth(null)) / 2;
             float addY = (height - image.getHeight(null)) / 2;
-            if (image != null && g != null) {
+            if (image != null) {
                 Image tempImage = orgImage;
                 BufferedImage resized = new BufferedImage(height, height, BufferedImage.TYPE_INT_ARGB_PRE);
                 Graphics2D imageGr = (Graphics2D) resized.createGraphics();
@@ -77,11 +81,11 @@ public abstract class Piece {
                 image = resized.getScaledInstance(height, height, 0);
                 g2d.drawImage(image, x, y, null);
             } else {
-                System.out.println("image is null!");
+                logger.error("Image is null");
             }
 
-        } catch (java.lang.NullPointerException exc) {
-            System.out.println("Something wrong when painting piece: " + exc.getMessage());
+        } catch (NullPointerException e) {
+            logger.error("Something wrong when painting piece", e);
         }
     }
 
@@ -96,9 +100,8 @@ public abstract class Piece {
      */
     boolean canMove(Square square, ArrayList allmoves) {
         //throw new UnsupportedOperationException("Not supported yet.");
-        ArrayList moves = allmoves;
-        for (Iterator it = moves.iterator(); it.hasNext(); ) {
-            Square sq = (Square) it.next();//get next from iterator
+        for (Object allmove : allmoves) {
+            Square sq = (Square) allmove;//get next from iterator
             if (sq == square) {//if adress is the same
                 return true; //piece canMove
             }
@@ -107,7 +110,7 @@ public abstract class Piece {
     }
 
     void setImage() {
-        if (this.player.color == this.player.color.black) {
+        if (this.player.color == Player.colors.black) {
             image = imageBlack;
         } else {
             image = imageWhite;
@@ -137,10 +140,7 @@ public abstract class Piece {
      * @return true if parameters are out of bounds (array)
      */
     protected boolean isout(int x, int y) {
-        if (x < 0 || x > 7 || y < 0 || y > 7) {
-            return true;
-        }
-        return false;
+        return x < 0 || x > 7 || y < 0 || y > 7;
     }
 
     /**
@@ -154,12 +154,8 @@ public abstract class Piece {
             return false;
         }
         Piece piece = chessboard.squares[x][y].piece;
-        if (piece == null || //if this sqhuare is empty
-                piece.player != this.player) //or piece is another player
-        {
-            return true;
-        }
-        return false;
+        return piece == null || //if this sqhuare is empty
+                piece.player != this.player;
     }
 
     /**
@@ -171,13 +167,7 @@ public abstract class Piece {
      */
     protected boolean otherOwner(int x, int y) {
         Square sq = chessboard.squares[x][y];
-        if (sq.piece == null) {
-            return false;
-        }
-        if (this.player != sq.piece.player) {
-            return true;
-        }
-        return false;
+        return sq.piece != null && this.player != sq.piece.player;
     }
 
     public String getSymbol() {
