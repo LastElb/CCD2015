@@ -9,47 +9,53 @@ public class Hexagon {
 
     public final int q;
     public final int r;
-    public final int s;
 
     public Hexagon(int q, int r) {
         this.q = q;
         this.r = r;
-        this.s = -q - r;
     }
 
-    static public Hexagon add(Hexagon a, Hexagon b)
-    {
+    static public Hexagon add(Hexagon a, Hexagon b) {
         return new Hexagon(a.q + b.q, a.r + b.r);
     }
-    
-    static public ArrayList<Hexagon> directions = new ArrayList<Hexagon>() {{
-        add(new Hexagon(1, 0));     // right / east
-        add(new Hexagon(1, -1));    // top right / northeast
-        add(new Hexagon(0, -1));    // top left / northwest
-        add(new Hexagon(-1, 0));    // left / west
-        add(new Hexagon(-1, 1));    // down left / southwest
-        add(new Hexagon(0, 1));     // down right / southeast
-    }};
 
-    static public Hexagon direction(int direction) {
-        return Hexagon.directions.get(direction);
+    public enum Directions {
+        RIGHT(new Hexagon(1, 0)),
+        TOP_RIGHT(new Hexagon(1, -1)),
+        TOP_LEFT(new Hexagon(0, -1)),
+        LEFT(new Hexagon(-1, 0)),
+        DOWN_LEFT(new Hexagon(-1, 1)),
+        DOWN_RIGHT(new Hexagon(0, 1));
+
+        Hexagon hexagon;
+
+        Directions(Hexagon h) {
+            this.hexagon = h;
+        }
     }
 
-
-    static public Hexagon neighbor(Hexagon Hexagon, int direction) {
-        return Hexagon.add(Hexagon, Hexagon.direction(direction));
+    public Hexagon neighbour(Directions d) {
+        return add(this, d.hexagon);
     }
 
-    static public ArrayList<Hexagon> diagonals = new ArrayList<Hexagon>() {{
-        add(new Hexagon(2, -1));
-        add(new Hexagon(1, -2));
-        add(new Hexagon(-1, -1));
-        add(new Hexagon(-2, 1));
-        add(new Hexagon(-1, 2));
-        add(new Hexagon(1, 1));
-    }};
+    public enum Diagonals {
+        DIAGONAL_TOP_RIGHT(new Hexagon(2, -1)),
+        DIAGONAL_TOP_STRAIGHT(new Hexagon(1, -2)),
+        DIAGONAL_TOP_LEFT(new Hexagon(-1, -1)),
+        DIAGONAL_DOWN_LEFT(new Hexagon(-2, 1)),
+        DIAGONAL_DOWN_STRAIGHT(new Hexagon(-1, 2)),
+        DIAGONAL_DOWN_RIGHT(new Hexagon(1, 1));
 
-    static public Hexagon diagonalNeighbor(Hexagon Hexagon, int direction) {
-        return Hexagon.add(Hexagon, Hexagon.diagonals.get(direction));
+        Hexagon hexagon;
+
+        Diagonals(Hexagon hexagon) {
+            this.hexagon = hexagon;
+        }
     }
+
+    public Hexagon diagonalNeighbour(Diagonals d) {
+        return add(this, d.hexagon);
+    }
+
 }
+
