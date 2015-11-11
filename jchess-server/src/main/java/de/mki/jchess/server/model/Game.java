@@ -1,0 +1,60 @@
+package de.mki.jchess.server.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.mki.jchess.server.exception.TooManyPlayersException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Igor on 11.11.2015.
+ */
+public abstract class Game {
+    String id;
+    String gameMode;
+    @JsonIgnore
+    List<Client> playerList;
+    @JsonIgnore
+    List<Client> observerList;
+    int maximumPlayers;
+
+    public Game(String id, int maximumPlayers) {
+        this.id = id;
+        this.maximumPlayers = maximumPlayers;
+        this.playerList = new ArrayList<>();
+        this.observerList = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Game setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getGameMode() {
+        return gameMode;
+    }
+
+    public Game setGameMode(String gameMode) {
+        this.gameMode = gameMode;
+        return this;
+    }
+
+    public void addClientAsPlayer(Client client) throws TooManyPlayersException {
+        if (!hasSufficientPlayers())
+            playerList.add(client);
+        else
+            throw new TooManyPlayersException();
+    }
+
+    public void addClientAsObserver(Client client) {
+        observerList.add(client);
+    }
+
+    public boolean hasSufficientPlayers() {
+        return playerList.size() >= maximumPlayers;
+    }
+}
