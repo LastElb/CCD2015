@@ -20,6 +20,9 @@
  */
 package jchess;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -40,13 +43,14 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     GridBagConstraints gbc;
     JButton themePreviewButton;
     JButton okButton;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     ThemeChooseWindow(Frame parent) throws Exception {
         super(parent);
 
         File dir = new File(GUI.getJarPath() + File.separator + "jchess" + File.separator + "theme" + File.separator);
 
-        System.out.println("Theme path: " + dir.getPath());
+        logger.info("Theme path: " + dir.getPath());
 
         File[] files = dir.listFiles();
         if (files != null && dir.exists()) {
@@ -66,16 +70,16 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             this.themesList.setLocation(new Point(10, 10));
             this.themesList.setSize(new Dimension(100, 120));
             this.add(this.themesList);
-            this.themesList.setSelectionMode(0);
+            this.themesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             this.themesList.addListSelectionListener(this);
             Properties prp = GUI.getConfigFile();
 
             this.gbl = new GridBagLayout();
             this.gbc = new GridBagConstraints();
             try {
-                this.themePreview = new ImageIcon(GUI.loadImage("Preview.png"));//JChessApp.class.getResource("theme/"+GUI.configFile.getProperty("THEME")+"/images/Preview.png"));
+                this.themePreview = new ImageIcon(GUI.loadImage("Preview.png"));
             } catch (Exception ex) {
-                System.out.println("Cannot find preview image: " + ex);
+                logger.error("Cannot find preview image", ex);
                 this.themePreview = new ImageIcon(JChessApp.class.getResource("theme/noPreview.png"));
                 return;
             }
@@ -93,15 +97,10 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
         } else {
             throw new Exception(Settings.lang("error_when_creating_theme_config_window"));
         }
-
     }
 
-    @Override
     public void valueChanged(ListSelectionEvent event) {
         String element = this.themesList.getModel().getElementAt(this.themesList.getSelectedIndex()).toString();
-        String path = GUI.getJarPath() + File.separator + "theme/";
-        //String path  = JChessApp.class.getResource("theme/").getPath().toString();
-        //System.out.println(path + element + "/images/Preview.png");
         this.themePreview = new ImageIcon(GUI.loadImageFromTheme("Preview.png", element));
         this.themePreviewButton.setIcon(this.themePreview);
     }
@@ -117,15 +116,16 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             int element = this.themesList.getSelectedIndex();
             if (element >= 0) {
                 String name = this.themesList.getModel().getElementAt(element).toString();
+                logger.info("Changed theme to: " + name);
                 if (GUI.themeIsValid(name)) {
                     prp.setProperty("THEME", name);
                     try {
-                        //FileOutputStream fOutStr = new FileOutputStream(ThemeChooseWindow.class.getResource("config.txt").getFile());
                         FileOutputStream fOutStr = new FileOutputStream("config.txt");
                         prp.store(fOutStr, null);
                         fOutStr.flush();
                         fOutStr.close();
                     } catch (java.io.IOException exc) {
+                        logger.error("", exc);
                     }
                     JOptionPane.showMessageDialog(this, Settings.lang("changes_visible_after_restart"));
                 }
