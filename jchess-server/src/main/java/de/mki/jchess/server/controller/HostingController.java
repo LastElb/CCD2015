@@ -9,9 +9,7 @@ import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.HostedGamesService;
 import de.mki.jchess.server.service.RandomStringService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Igor on 11.11.2015.
@@ -39,19 +37,20 @@ public class HostingController {
             default:
                 game = null;
         }
+        hostedGamesService.addNewHostedGame(game);
         return game;
     }
 
-    @RequestMapping("/joinAsPlayer")
-    public Client connectToHostedGameAsPlayer(@RequestParam("hostedID") String hostedID) throws HostedGameNotFoundException, TooManyPlayersException {
-        Client client = new Client(randomStringService.getRandomString());
+    @RequestMapping(value = "/joinAsPlayer", method = RequestMethod.POST)
+    public Client connectToHostedGameAsPlayer(@RequestParam("hostedID") String hostedID, @RequestBody Client client) throws HostedGameNotFoundException, TooManyPlayersException {
+        client.setId(randomStringService.getRandomString());
         hostedGamesService.getHostedGameByID(hostedID).addClientAsPlayer(client);
         return client;
     }
 
     @RequestMapping("/joinAsObserver")
-    public Client connectToHostedGameAsObserver(@RequestParam("hostedID") String hostedID) throws HostedGameNotFoundException {
-        Client client = new Client(randomStringService.getRandomString());
+    public Client connectToHostedGameAsObserver(@RequestParam("hostedID") String hostedID, @RequestBody Client client) throws HostedGameNotFoundException {
+        client.setId(randomStringService.getRandomString());
         hostedGamesService.getHostedGameByID(hostedID).addClientAsObserver(client);
         return client;
     }
