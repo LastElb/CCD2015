@@ -1,6 +1,14 @@
 package de.mki.jchess.server.implementation.twoPersonChess;
 
+import de.mki.jchess.server.implementation.twoPersonChess.figures.*;
+import de.mki.jchess.server.model.Client;
+import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
+import de.mki.jchess.server.service.RandomStringService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Created by Igor on 11.11.2015.
@@ -8,6 +16,8 @@ import de.mki.jchess.server.model.Game;
 public class TwoPersonGame extends Game {
 
     Chessboard chessboard;
+    List<Figure<Square>> playerWhiteFigures;
+    List<Figure<Square>> playerBlackFigures;
 
     public TwoPersonGame(String id) {
         super(id, 2);
@@ -26,14 +36,14 @@ public class TwoPersonGame extends Game {
                         int difY = 0;
                         Direction oppositeDirection = direction;
                         switch (direction) {
-                            case BOTTOM: difY = 1; oppositeDirection = Direction.TOP; break;
-                            case BOTTOMLEFT: difY = 1; difX = -1; oppositeDirection = Direction.TOPRIGHT; break;
-                            case BOTTOMRIGHT: difY = 1; difX = 1; oppositeDirection = Direction.TOPLEFT; break;
+                            case BOTTOM: difY = -1; oppositeDirection = Direction.TOP; break;
+                            case BOTTOMLEFT: difY = -1; difX = -1; oppositeDirection = Direction.TOPRIGHT; break;
+                            case BOTTOMRIGHT: difY = -1; difX = 1; oppositeDirection = Direction.TOPLEFT; break;
                             case LEFT: difX = -1; oppositeDirection = Direction.RIGHT; break;
                             case RIGHT: difX = 1; oppositeDirection = Direction.LEFT; break;
-                            case TOP: difY = -1; oppositeDirection = Direction.BOTTOM; break;
-                            case TOPLEFT: difY = -1; difX = -1; oppositeDirection = Direction.BOTTOMRIGHT; break;
-                            case TOPRIGHT: difY = -1; difX = 1; oppositeDirection = Direction.BOTTOMLEFT; break;
+                            case TOP: difY = 1; oppositeDirection = Direction.BOTTOM; break;
+                            case TOPLEFT: difY = 1; difX = -1; oppositeDirection = Direction.BOTTOMRIGHT; break;
+                            case TOPRIGHT: difY = 1; difX = 1; oppositeDirection = Direction.BOTTOMLEFT; break;
                         }
                         Square neighbour = chessboard.getFieldByNotation(column + difX, row + difY);
                         square.addNeighbour(neighbour, direction);
@@ -41,7 +51,60 @@ public class TwoPersonGame extends Game {
                     } catch (Exception ignore) {}
                 chessboard.addField(square);
             }
+        playerWhiteFigures = new ArrayList<>();
+        playerBlackFigures = new ArrayList<>();
 
+        // Player White \\
+        try {
+            Client playerWhite = getPlayerList().get(0);
+            playerWhiteFigures.add(new King(RandomStringService.getRandomString(), playerWhite).setPictureId("king-white").setPosition(chessboard.getFieldByNotation("e1")));
+            playerWhiteFigures.add(new Queen(RandomStringService.getRandomString(), playerWhite).setPictureId("queen-white").setPosition(chessboard.getFieldByNotation("d1")));
+            playerWhiteFigures.add(new Rook(RandomStringService.getRandomString(), playerWhite).setPictureId("rook-white").setPosition(chessboard.getFieldByNotation("a1")));
+            playerWhiteFigures.add(new Rook(RandomStringService.getRandomString(), playerWhite).setPictureId("rook-white").setPosition(chessboard.getFieldByNotation("h1")));
+            playerWhiteFigures.add(new Knight(RandomStringService.getRandomString(), playerWhite).setPictureId("knight-white").setPosition(chessboard.getFieldByNotation("b1")));
+            playerWhiteFigures.add(new Knight(RandomStringService.getRandomString(), playerWhite).setPictureId("knight-white").setPosition(chessboard.getFieldByNotation("g1")));
+            playerWhiteFigures.add(new Bishop(RandomStringService.getRandomString(), playerWhite).setPictureId("bishop-white").setPosition(chessboard.getFieldByNotation("f1")));
+            playerWhiteFigures.add(new Bishop(RandomStringService.getRandomString(), playerWhite).setPictureId("bishop-white").setPosition(chessboard.getFieldByNotation("c1")));
+            IntStream.range(0, 8).forEach(value -> {
+                Pawn pawn = new Pawn(RandomStringService.getRandomString(), playerWhite, Direction.TOP);
+                pawn.setPictureId("pawn-white");
+                try {
+                    pawn.setPosition(chessboard.getFieldByNotation(value, 1));
+                    playerWhiteFigures.add(pawn);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            chessboard.getFigures().addAll(playerWhiteFigures);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Player Black \\
+        try {
+            Client playerBlack = getPlayerList().get(1);
+            playerBlackFigures.add(new King(RandomStringService.getRandomString(), playerBlack).setPictureId("king-black").setPosition(chessboard.getFieldByNotation("e8")));
+            playerBlackFigures.add(new Queen(RandomStringService.getRandomString(), playerBlack).setPictureId("queen-black").setPosition(chessboard.getFieldByNotation("d8")));
+            playerBlackFigures.add(new Rook(RandomStringService.getRandomString(), playerBlack).setPictureId("rook-black").setPosition(chessboard.getFieldByNotation("a8")));
+            playerBlackFigures.add(new Rook(RandomStringService.getRandomString(), playerBlack).setPictureId("rook-black").setPosition(chessboard.getFieldByNotation("h8")));
+            playerBlackFigures.add(new Knight(RandomStringService.getRandomString(), playerBlack).setPictureId("knight-black").setPosition(chessboard.getFieldByNotation("b8")));
+            playerBlackFigures.add(new Knight(RandomStringService.getRandomString(), playerBlack).setPictureId("knight-black").setPosition(chessboard.getFieldByNotation("g8")));
+            playerBlackFigures.add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPictureId("bishop-black").setPosition(chessboard.getFieldByNotation("f8")));
+            playerBlackFigures.add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPictureId("bishop-black").setPosition(chessboard.getFieldByNotation("c8")));
+            IntStream.range(0, 8).forEach(value -> {
+                Pawn pawn = new Pawn(RandomStringService.getRandomString(), playerBlack, Direction.TOP);
+                pawn.setPictureId("pawn-black");
+                try {
+                    pawn.setPosition(chessboard.getFieldByNotation(value, 6));
+                    playerBlackFigures.add(pawn);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            chessboard.getFigures().addAll(playerBlackFigures);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        chessboard.setCurrentPlayer(getPlayerList().get(0));
     }
 
     public Chessboard getChessboard() {
@@ -54,3 +117,4 @@ public class TwoPersonGame extends Game {
         System.out.println("chessboard.getFieldByNotation(\"b7\") = " + twoPersonGame.getChessboard().getFieldByNotation("b7"));
     }
 }
+

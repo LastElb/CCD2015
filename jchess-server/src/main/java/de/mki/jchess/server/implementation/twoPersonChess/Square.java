@@ -1,5 +1,6 @@
 package de.mki.jchess.server.implementation.twoPersonChess;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.model.Field;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by Igor on 11.11.2015.
  */
 public class Square extends Field<Direction> {
-
+    @JsonIgnore
     List<SquareNeighbourModel> neighbours;
     int x;
     int y;
@@ -43,7 +44,11 @@ public class Square extends Field<Direction> {
             neighbours.add(new SquareNeighbourModel((Square) neighbour, direction));
     }
 
-    private class SquareNeighbourModel {
+    public List<SquareNeighbourModel> getNeighbours() {
+        return neighbours;
+    }
+
+    public static class SquareNeighbourModel {
         Square square;
         Direction direction;
 

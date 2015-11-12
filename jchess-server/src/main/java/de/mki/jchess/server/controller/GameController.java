@@ -29,6 +29,11 @@ public class GameController {
         return new PollInformation();
     }
 
+    @RequestMapping("/full")
+    public Game getFullGame(@PathVariable String gameId) throws HostedGameNotFoundException {
+        return hostedGamesService.getHostedGameByID(gameId);
+    }
+
     public static class PollInformation {
         List<String> actions;
         String info;

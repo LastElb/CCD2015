@@ -14,7 +14,7 @@ public class RandomStringService {
      * Returns a {@link String} containing the lower cased english alphabet and the digits from 0 to 9
      * @return String Returns a {@link String} with the length of 20
      */
-    public String getRandomString() {
+    public static String getRandomString() {
         return getRandomString(20);
     }
 
@@ -23,7 +23,7 @@ public class RandomStringService {
      * @param length The desired length of the {@link String}.
      * @return @return String Returns a {@link String} with the specified length
      */
-    public String getRandomString(int length) {
+    public static String getRandomString(int length) {
         char[] chars = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
         StringBuilder sb = new StringBuilder();
         Random random = new Random();

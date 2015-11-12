@@ -49,6 +49,8 @@ public abstract class Game {
         else
             throw new TooManyPlayersException();
         client.setConnectedGameId(getId());
+        if (hasSufficientPlayers())
+            initializeGame();
         return client;
     }
 
@@ -56,6 +58,18 @@ public abstract class Game {
         observerList.add(client);
         client.setConnectedGameId(getId());
         return client;
+    }
+
+    public List<Client> getPlayerList() {
+        return playerList;
+    }
+
+    public List<Client> getObserverList() {
+        return observerList;
+    }
+
+    public int getMaximumPlayers() {
+        return maximumPlayers;
     }
 
     public boolean hasSufficientPlayers() {

@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by Igor on 11.11.2015.
+ * @param <T> The implemented {@link Field} of your game mode
  */
 public abstract class Figure<T extends Field> {
     String id;
@@ -11,6 +12,12 @@ public abstract class Figure<T extends Field> {
     T position;
     String name;
     String pictureId;
+    Client client;
+
+    public Figure(Client client) {
+        isRemoved = false;
+        this.client = client;
+    }
 
     public boolean isRemoved() {
         return isRemoved;
@@ -48,7 +55,7 @@ public abstract class Figure<T extends Field> {
         return this;
     }
 
-    public List<Field> getPossibleMovements;
+    public abstract List<T> getPossibleMovements(Chessboard chessboard);
 
     public String getId() {
         return id;

@@ -7,21 +7,17 @@ import java.util.List;
  * Created by Igor on 11.11.2015.
  */
 public abstract class Chessboard<T extends Field> {
-    public List<Figure> figures;
+    public List<Figure<T>> figures;
     public List<T> fields;
+    Client currentPlayer;
 
     public Chessboard() {
         fields = new ArrayList<>();
         figures = new ArrayList<>();
     }
 
-    public List<Figure> getFigures() {
+    public List<Figure<T>> getFigures() {
         return figures;
-    }
-
-    public Chessboard setFigures(List<Figure> figures) {
-        this.figures = figures;
-        return this;
     }
 
     public List<T> getFields() {
@@ -36,4 +32,15 @@ public abstract class Chessboard<T extends Field> {
     public Field getFieldByNotation(String notation) throws Exception {
         return fields.stream().filter(field -> field.getNotation().equals(notation)).findFirst().orElseThrow(() -> new Exception("Notation not found"));
     }
+
+    public Client getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public Chessboard setCurrentPlayer(Client currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        return this;
+    }
+
+    public abstract boolean isKingCheckedAtPosition(Figure<T> king, T field);
 }
