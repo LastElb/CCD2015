@@ -110,11 +110,5 @@ public class TwoPersonGame extends Game {
     public Chessboard getChessboard() {
         return chessboard;
     }
-
-    public static void main(String[] args) throws Exception {
-        TwoPersonGame twoPersonGame = new TwoPersonGame("foobar");
-        twoPersonGame.initializeGame();
-        System.out.println("chessboard.getFieldByNotation(\"b7\") = " + twoPersonGame.getChessboard().getFieldByNotation("b7"));
-    }
 }
 

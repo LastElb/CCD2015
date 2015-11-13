@@ -55,7 +55,18 @@ public abstract class Figure<T extends Field> {
         return this;
     }
 
+    /**
+     * Returns a list of possible {@link Field}s. This list may include {@link Field}s from {@link #getPossibleSpecialMovements(Chessboard)}
+     * @param chessboard The instance of the {@link Chessboard} of the current {@link Game}
+     * @return Returns a list of {@link Field}.
+     */
     public abstract List<T> getPossibleMovements(Chessboard chessboard);
+
+    /**
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a list of possible {@link Field}s for special movements like castling, en passant and pawn promotion.
+     */
+    public abstract List<T> getPossibleSpecialMovements(Chessboard chessboard);
 
     public String getId() {
         return id;

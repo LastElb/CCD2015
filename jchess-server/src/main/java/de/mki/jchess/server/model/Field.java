@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class Field<T> {
     /**
-     * Notation of the position. Like A7 (on a normal chessboard)
+     * Notation of the position. Like a7 on a normal chessboard
      */
     public abstract String getNotation();
     public abstract void addNeighbour(Field neighbour, T direction);
