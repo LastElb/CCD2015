@@ -34,20 +34,19 @@ public class TwoPersonGame extends Game {
                     try {
                         int difX = 0;
                         int difY = 0;
-                        Direction oppositeDirection = direction;
                         switch (direction) {
-                            case BOTTOM: difY = -1; oppositeDirection = Direction.TOP; break;
-                            case BOTTOMLEFT: difY = -1; difX = -1; oppositeDirection = Direction.TOPRIGHT; break;
-                            case BOTTOMRIGHT: difY = -1; difX = 1; oppositeDirection = Direction.TOPLEFT; break;
-                            case LEFT: difX = -1; oppositeDirection = Direction.RIGHT; break;
-                            case RIGHT: difX = 1; oppositeDirection = Direction.LEFT; break;
-                            case TOP: difY = 1; oppositeDirection = Direction.BOTTOM; break;
-                            case TOPLEFT: difY = 1; difX = -1; oppositeDirection = Direction.BOTTOMRIGHT; break;
-                            case TOPRIGHT: difY = 1; difX = 1; oppositeDirection = Direction.BOTTOMLEFT; break;
+                            case BOTTOM: difY = -1; break;
+                            case BOTTOMLEFT: difY = -1; difX = -1; break;
+                            case BOTTOMRIGHT: difY = -1; difX = 1; break;
+                            case LEFT: difX = -1; break;
+                            case RIGHT: difX = 1; break;
+                            case TOP: difY = 1; break;
+                            case TOPLEFT: difY = 1; difX = -1; break;
+                            case TOPRIGHT: difY = 1; difX = 1; break;
                         }
                         Square neighbour = chessboard.getFieldByNotation(column + difX, row + difY);
                         square.addNeighbour(neighbour, direction);
-                        neighbour.addNeighbour(square, oppositeDirection);
+                        neighbour.addNeighbour(square, direction.getOppositeDirection());
                     } catch (Exception ignore) {}
                 chessboard.addField(square);
             }
