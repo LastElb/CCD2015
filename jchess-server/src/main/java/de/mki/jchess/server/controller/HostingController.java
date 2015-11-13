@@ -3,6 +3,7 @@ package de.mki.jchess.server.controller;
 import de.mki.jchess.server.exception.HostedGameNotFoundException;
 import de.mki.jchess.server.exception.InvalidGameModeException;
 import de.mki.jchess.server.exception.TooManyPlayersException;
+import de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame;
 import de.mki.jchess.server.implementation.twoPersonChess.TwoPersonGame;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Game;
@@ -21,8 +22,6 @@ public class HostingController {
     @Autowired
     GameModeController gameModeController;
     @Autowired
-    RandomStringService randomStringService;
-    @Autowired
     HostedGamesService hostedGamesService;
 
     @RequestMapping("/byGameMode")
@@ -32,7 +31,10 @@ public class HostingController {
         Game game;
         switch (name) {
             case "default-2-person-chess":
-                game = new TwoPersonGame(randomStringService.getRandomString());
+                game = new TwoPersonGame(RandomStringService.getRandomString());
+                break;
+            case "default-3-person-chess":
+                game = new ThreePersonGame(RandomStringService.getRandomString());
                 break;
             default:
                 game = null;
@@ -43,14 +45,14 @@ public class HostingController {
 
     @RequestMapping(value = "/joinAsPlayer", method = RequestMethod.POST)
     public Client connectToHostedGameAsPlayer(@RequestParam("hostedID") String hostedID, @RequestBody Client client) throws HostedGameNotFoundException, TooManyPlayersException {
-        client.setId(randomStringService.getRandomString());
+        client.setId(RandomStringService.getRandomString());
         hostedGamesService.getHostedGameByID(hostedID).addClientAsPlayer(client);
         return client;
     }
 
     @RequestMapping("/joinAsObserver")
     public Client connectToHostedGameAsObserver(@RequestParam("hostedID") String hostedID, @RequestBody Client client) throws HostedGameNotFoundException {
-        client.setId(randomStringService.getRandomString());
+        client.setId(RandomStringService.getRandomString());
         hostedGamesService.getHostedGameByID(hostedID).addClientAsObserver(client);
         return client;
     }
