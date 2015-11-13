@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Igor on 11.11.2015.
  */
 public class Square extends Field<Direction> {
-    @JsonIgnore
+
     List<SquareNeighbourModel> neighbours;
     int x;
     int y;
@@ -44,6 +44,7 @@ public class Square extends Field<Direction> {
             neighbours.add(new SquareNeighbourModel((Square) neighbour, direction));
     }
 
+    @JsonIgnore
     public List<SquareNeighbourModel> getNeighbours() {
         return neighbours;
     }

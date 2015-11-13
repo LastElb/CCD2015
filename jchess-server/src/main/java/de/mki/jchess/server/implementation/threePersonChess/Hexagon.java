@@ -1,6 +1,8 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.mki.jchess.server.model.Field;
 
 import java.util.ArrayList;
@@ -11,14 +13,13 @@ import java.util.List;
  */
 public class Hexagon extends Field<Direction> {
 
-    @JsonIgnore
     List<HexagonNeighbourModel> neighbours;
-    int x;
-    int y;
+    int column;
+    int row;
 
-    public Hexagon(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Hexagon(int column, int row) {
+        this.column = column;
+        this.row = row;
         this.neighbours = new ArrayList<>();
     }
 
@@ -29,7 +30,7 @@ public class Hexagon extends Field<Direction> {
     @Override
     public String getNotation() {
         String letter;
-        switch (y){
+        switch (row){
             case 0: letter = "a"; break;
             case 1: letter = "b"; break;
             case 2: letter = "c"; break;
@@ -45,7 +46,7 @@ public class Hexagon extends Field<Direction> {
             case 12: letter = "m"; break;
             default:letter = "";
         }
-        return letter + (x + 1);
+        return letter + (column + 1);
     }
 
     @Override

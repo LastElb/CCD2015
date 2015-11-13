@@ -8,7 +8,7 @@ import de.mki.jchess.server.model.Figure;
 public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
     public Hexagon getFieldByNotation(int x, int y) throws Exception {
-        return fields.stream().filter(field -> field.x == x && field.y == y).findFirst().orElseThrow(() -> new Exception("Notation not found"));
+        return fields.stream().filter(field -> field.column == x && field.row == y).findFirst().orElseThrow(() -> new Exception("Notation not found"));
     }
 
     @Override
