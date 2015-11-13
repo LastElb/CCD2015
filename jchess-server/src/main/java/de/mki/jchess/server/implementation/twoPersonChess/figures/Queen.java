@@ -24,4 +24,9 @@ public class Queen extends Figure<Square> {
         return null;
     }
 
+    @Override
+    public List<Square> getPossibleSpecialMovements(Chessboard chessboard) {
+        return null;
+    }
+
 }

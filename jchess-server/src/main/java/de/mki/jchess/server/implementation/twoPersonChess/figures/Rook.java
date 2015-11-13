@@ -22,4 +22,9 @@ public class Rook extends Figure<Square> {
         return null;
     }
 
+    @Override
+    public List<Square> getPossibleSpecialMovements(Chessboard chessboard) {
+        return null;
+    }
+
 }

@@ -26,4 +26,9 @@ public class King extends Figure<Square> {
 //        output.addAll(getPosition().getNeighbours().stream().map(Square.SquareNeighbourModel::getSquare).collect(Collectors.toList()));
 //        return output;
     }
+
+    @Override
+    public List<Square> getPossibleSpecialMovements(Chessboard chessboard) {
+        return null;
+    }
 }

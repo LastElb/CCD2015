@@ -26,4 +26,9 @@ public class Pawn extends Figure<Square> {
     public List<Square> getPossibleMovements(Chessboard chessboard) {
         return null;
     }
+
+    @Override
+    public List<Square> getPossibleSpecialMovements(Chessboard chessboard) {
+        return null;
+    }
 }
