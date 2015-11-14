@@ -2,6 +2,8 @@ package de.mki.jchess.server.implementation.twoPersonChess;
 
 import de.mki.jchess.server.model.Figure;
 
+import java.util.List;
+
 /**
  * Created by Igor on 11.11.2015.
  */
@@ -14,5 +16,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
     @Override
     public boolean isKingCheckedAtPosition(Figure<Square> king, Square field) {
         return false;
+    }
+
+    @Override
+    public List<Square> getPossibleFieldsToMove(String figureId) {
+        return null;
     }
 }

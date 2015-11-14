@@ -89,6 +89,7 @@ public class ThreePersonGame extends Game {
         });
     }
 
+    @Override
     public Chessboard getChessboard() {
         return chessboard;
     }

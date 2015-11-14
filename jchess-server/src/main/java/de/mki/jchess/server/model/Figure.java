@@ -1,5 +1,8 @@
 package de.mki.jchess.server.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import de.mki.jchess.server.json.View;
+
 import java.util.List;
 
 /**
@@ -12,6 +15,7 @@ public abstract class Figure<T extends Field> {
     T position;
     String name;
     String pictureId;
+    @JsonView(View.hideSensitiveFields.class)
     Client client;
 
     public Figure(Client client) {

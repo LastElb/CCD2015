@@ -115,5 +115,6 @@ public abstract class Game {
      * {@link Figure}s.
      */
     public abstract void initializeGame();
-    
+
+    public abstract Chessboard getChessboard();
 }

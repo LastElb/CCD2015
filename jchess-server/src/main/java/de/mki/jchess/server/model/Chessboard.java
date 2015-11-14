@@ -43,4 +43,6 @@ public abstract class Chessboard<T extends Field> {
     }
 
     public abstract boolean isKingCheckedAtPosition(Figure<T> king, T field);
+
+    public abstract List<T> getPossibleFieldsToMove(String figureId);
 }

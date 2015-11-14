@@ -106,6 +106,7 @@ public class TwoPersonGame extends Game {
         chessboard.setCurrentPlayer(getPlayerList().get(0));
     }
 
+    @Override
     public Chessboard getChessboard() {
         return chessboard;
     }
