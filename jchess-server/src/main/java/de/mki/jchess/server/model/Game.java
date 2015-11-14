@@ -22,6 +22,7 @@ public abstract class Game {
     @JsonIgnore
     List<Client> observerList;
     int maximumPlayers;
+    List<HistoryEntry> gameHistory;
 
     /**
      * Default constructor for creating a new game.
@@ -33,6 +34,7 @@ public abstract class Game {
         this.maximumPlayers = maximumPlayers;
         this.playerList = new ArrayList<>();
         this.observerList = new ArrayList<>();
+        this.gameHistory = new ArrayList<>();
     }
 
     /**
@@ -122,4 +124,8 @@ public abstract class Game {
     public abstract void initializeGame();
 
     public abstract Chessboard getChessboard();
+
+    public List<HistoryEntry> getGameHistory() {
+        return gameHistory;
+    }
 }
