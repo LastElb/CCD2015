@@ -73,7 +73,13 @@ If there already joined enough players (no observer limit) the server responds w
 }
 ```
 
-### 4. Full game information
+### 4. Request possible movements
+To get a list of possible fields a figure can walk to, request ```game/{game id}/possibleMoves/{figure id}```. The server responds with an array of target locations represented by their notation.
+
+### 5. Perform movement
+To perform a figure movement call ```game/{game id}/possibleMoves/{figure id}```. The server just generates a response if the move is not valid. In every other case all changes are notified through websockets.
+
+### 6. Full game information
 To get all available game information request ```game/{game id}/full```
 ```
 {
@@ -564,10 +570,7 @@ To get all available game information request ```game/{game id}/full```
             {
                 "notation": "h8"
             }
-        ],
-        "currentPlayer": {
-            "nickname": "Your nickname"
-        }
+        ]
     }
 }
 ```
