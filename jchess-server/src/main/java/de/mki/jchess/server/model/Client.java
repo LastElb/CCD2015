@@ -1,17 +1,13 @@
 package de.mki.jchess.server.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import de.mki.jchess.server.json.View;
-
 /**
  * Created by Igor on 11.11.2015.
  */
 public class Client {
-    @JsonView(View.hideSensitiveFields.class)
     String id;
     String nickname;
-    @JsonView(View.hideSensitiveFields.class)
     String connectedGameId;
+    String team;
 
     public String getId() {
         return id;
@@ -37,6 +33,15 @@ public class Client {
 
     public Client setConnectedGameId(String connectedGameId) {
         this.connectedGameId = connectedGameId;
+        return this;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public Client setTeam(String team) {
+        this.team = team;
         return this;
     }
 

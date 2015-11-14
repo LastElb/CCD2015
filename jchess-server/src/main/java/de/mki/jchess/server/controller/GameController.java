@@ -1,11 +1,7 @@
 package de.mki.jchess.server.controller;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonView;
 import de.mki.jchess.server.exception.HostedGameNotFoundException;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
-import de.mki.jchess.server.json.View;
-import de.mki.jchess.server.model.Field;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.HostedGamesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +30,6 @@ public class GameController {
         return new PollInformation();
     }
 
-    @JsonView(View.hideSensitiveFields.class)
     @RequestMapping("/full")
     public Game getFullGame(@PathVariable String gameId) throws HostedGameNotFoundException {
         return hostedGamesService.getHostedGameByID(gameId);

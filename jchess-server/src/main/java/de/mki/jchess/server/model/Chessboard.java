@@ -1,9 +1,7 @@
 package de.mki.jchess.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
-import de.mki.jchess.server.json.View;
 
 import java.util.ArrayList;
 import java.util.List;

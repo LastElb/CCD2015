@@ -1,8 +1,5 @@
 package de.mki.jchess.server.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import de.mki.jchess.server.json.View;
-
 import java.util.List;
 
 /**

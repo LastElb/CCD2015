@@ -1,7 +1,5 @@
 package de.mki.jchess.server.model;
 
-import java.util.List;
-
 /**
  * Created by Igor on 11.11.2015.
  */
