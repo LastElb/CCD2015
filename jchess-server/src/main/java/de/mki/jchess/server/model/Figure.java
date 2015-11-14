@@ -15,7 +15,6 @@ public abstract class Figure<T extends Field> {
     T position;
     String name;
     String pictureId;
-    @JsonView(View.hideSensitiveFields.class)
     Client client;
 
     public Figure(Client client) {

@@ -1,5 +1,10 @@
 package de.mki.jchess.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import de.mki.jchess.server.exception.MoveNotAllowedException;
+import de.mki.jchess.server.json.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +14,7 @@ import java.util.List;
 public abstract class Chessboard<T extends Field> {
     public List<Figure<T>> figures;
     public List<T> fields;
+    @JsonIgnore
     Client currentPlayer;
 
     public Chessboard() {
@@ -45,4 +51,6 @@ public abstract class Chessboard<T extends Field> {
     public abstract boolean isKingCheckedAtPosition(Figure<T> king, T field);
 
     public abstract List<T> getPossibleFieldsToMove(String figureId);
+
+    public abstract void performMovement(String figureId, String targetFieldNotation) throws MoveNotAllowedException;
 }

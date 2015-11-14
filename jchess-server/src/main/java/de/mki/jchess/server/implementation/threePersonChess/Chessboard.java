@@ -1,5 +1,6 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
+import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.model.Figure;
 
 import java.util.List;
@@ -22,4 +23,11 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     public List<Hexagon> getPossibleFieldsToMove(String figureId) {
         return null;
     }
+
+    @Override
+    public void performMovement(String figureId, String targetFieldNotation) throws MoveNotAllowedException {
+        List<Hexagon> possibleMovements = getPossibleFieldsToMove(figureId);
+    }
+
+
 }

@@ -24,8 +24,8 @@ public class HostingController {
     @Autowired
     HostedGamesService hostedGamesService;
 
-    @RequestMapping("/byGameMode")
-    public Game hostRequestByGameMode(@RequestParam("name") String name) throws InvalidGameModeException {
+    @RequestMapping("/byGameMode/{name}")
+    public Game hostRequestByGameMode(@PathVariable String name) throws InvalidGameModeException {
         if (!gameModeController.availableGameModes.contains(name))
             throw new InvalidGameModeException(name);
         Game game;
@@ -43,17 +43,17 @@ public class HostingController {
         return game;
     }
 
-    @RequestMapping(value = "/joinAsPlayer", method = RequestMethod.POST)
-    public Client connectToHostedGameAsPlayer(@RequestParam("hostedID") String hostedID, @RequestBody Client client) throws HostedGameNotFoundException, TooManyPlayersException {
+    @RequestMapping(value = "/joinAsPlayer/{gameId}", method = RequestMethod.POST)
+    public Client connectToHostedGameAsPlayer(@PathVariable String gameId, @RequestBody Client client) throws HostedGameNotFoundException, TooManyPlayersException {
         client.setId(RandomStringService.getRandomString());
-        hostedGamesService.getHostedGameByID(hostedID).addClientAsPlayer(client);
+        hostedGamesService.getHostedGameByID(gameId).addClientAsPlayer(client);
         return client;
     }
 
-    @RequestMapping("/joinAsObserver")
-    public Client connectToHostedGameAsObserver(@RequestParam("hostedID") String hostedID, @RequestBody Client client) throws HostedGameNotFoundException {
+    @RequestMapping(value = "/joinAsObserver/{gameId}", method = RequestMethod.POST)
+    public Client connectToHostedGameAsObserver(@PathVariable String gameId, @RequestBody Client client) throws HostedGameNotFoundException {
         client.setId(RandomStringService.getRandomString());
-        hostedGamesService.getHostedGameByID(hostedID).addClientAsObserver(client);
+        hostedGamesService.getHostedGameByID(gameId).addClientAsObserver(client);
         return client;
     }
 }

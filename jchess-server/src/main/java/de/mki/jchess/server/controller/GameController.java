@@ -3,6 +3,7 @@ package de.mki.jchess.server.controller;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonView;
 import de.mki.jchess.server.exception.HostedGameNotFoundException;
+import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.json.View;
 import de.mki.jchess.server.model.Field;
 import de.mki.jchess.server.model.Game;
@@ -44,6 +45,13 @@ public class GameController {
         Game game = hostedGamesService.getHostedGameByID(gameId);
         return game.getChessboard().getPossibleFieldsToMove(figureId);
     }
+
+    @RequestMapping("/performMove/{figureId}/{targetNotation}")
+    public void performMove(@PathVariable String gameId, @PathVariable String figureId, @PathVariable String targetNotation) throws HostedGameNotFoundException, MoveNotAllowedException {
+        Game game = hostedGamesService.getHostedGameByID(gameId);
+        game.getChessboard().performMovement(figureId, targetNotation);
+    }
+
 
     public static class PollInformation {
         List<String> actions;

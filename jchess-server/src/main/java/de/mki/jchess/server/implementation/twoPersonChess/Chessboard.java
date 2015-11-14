@@ -1,5 +1,6 @@
 package de.mki.jchess.server.implementation.twoPersonChess;
 
+import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.model.Figure;
 
 import java.util.List;
@@ -21,5 +22,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
     @Override
     public List<Square> getPossibleFieldsToMove(String figureId) {
         return null;
+    }
+
+    @Override
+    public void performMovement(String figureId, String targetFieldNotation) throws MoveNotAllowedException {
+        List<Square> possibleMovements = getPossibleFieldsToMove(figureId);
     }
 }

@@ -20,7 +20,7 @@ A possible answer:
 All game modes listed in the response can be hosted on the server.
 
 ### 2. Request a hosted game
-After choosing the wanted game mode call ```GET host/byGameMode?name=default-2-person-chess```. The response contains more detailed information to join the server:
+After choosing the wanted game mode call ```GET host/byGameMode/default-2-person-chess```. The response contains more detailed information to join the server:
 ```
 {
     "id": "82cqu8tj72zsyx61zh79",
@@ -33,7 +33,7 @@ After choosing the wanted game mode call ```GET host/byGameMode?name=default-2-p
 ### 3. Join a hosted game
 With the ID delivered from the last response players and observers are able to join the game.
 ```
-POST host/joinAsPlayer?hostedID=82cqu8tj72zsyx61zh79
+POST host/joinAsPlayer/82cqu8tj72zsyx61zh79
 DATA:
 {
   "nickname":"Your nickname"
@@ -566,9 +566,7 @@ To get all available game information request ```game/{game id}/full```
             }
         ],
         "currentPlayer": {
-            "id": "806mwc8x24ng5op3l5aw",
-            "nickname": "Your nickname",
-            "connectedGameId": "82cqu8tj72zsyx61zh79"
+            "nickname": "Your nickname"
         }
     }
 }
