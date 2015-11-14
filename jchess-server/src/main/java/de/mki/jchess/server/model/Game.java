@@ -3,6 +3,7 @@ package de.mki.jchess.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.controller.GameModeController;
 import de.mki.jchess.server.exception.TooManyPlayersException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,17 +59,20 @@ public abstract class Game {
     /**
      * Adds a {@link Client} as player. Initializes the game (call to {@link #initializeGame()}) as soon as there are enough players.
      * @param client The {@link Client} that wants to join as player.
+     * @param simpMessagingTemplate MessagingTemplate for sending websocket messages
      * @return Returns a modified version of {@link Client} where the {@link Client#connectedGameId} is set to the current {@link Game} id.
      * @throws TooManyPlayersException If you want to add a player and the count of sufficient players is exceeded an exception is thrown.
      */
-    public Client addClientAsPlayer(Client client) throws TooManyPlayersException {
+    public Client addClientAsPlayer(Client client, SimpMessagingTemplate simpMessagingTemplate) throws TooManyPlayersException {
         if (!hasSufficientPlayers())
             playerList.add(client);
         else
             throw new TooManyPlayersException();
         client.setConnectedGameId(getId());
-        if (hasSufficientPlayers())
+        if (hasSufficientPlayers()) {
             initializeGame();
+            simpMessagingTemplate.convertAndSend("/websocket/" + getId(), "game ready");
+        }
         return client;
     }
 

@@ -1,10 +1,12 @@
 package de.mki.jchess.server.implementation.twoPersonChess;
 
+import de.mki.jchess.server.exception.TooManyPlayersException;
 import de.mki.jchess.server.implementation.twoPersonChess.figures.*;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.RandomStringService;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +106,15 @@ public class TwoPersonGame extends Game {
             e.printStackTrace();
         }
         chessboard.setCurrentPlayer(getPlayerList().get(0));
+    }
+
+    @Override
+    public Client addClientAsPlayer(Client client, SimpMessagingTemplate simpMessagingTemplate) throws TooManyPlayersException {
+        switch (getPlayerList().size()) {
+            case 1: client.setTeam("white"); break;
+            case 2: client.setTeam("black"); break;
+        }
+        return super.addClientAsPlayer(client, simpMessagingTemplate);
     }
 
     @Override

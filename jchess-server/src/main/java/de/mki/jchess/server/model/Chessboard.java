@@ -2,6 +2,7 @@ package de.mki.jchess.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +51,5 @@ public abstract class Chessboard<T extends Field> {
 
     public abstract List<T> getPossibleFieldsToMove(String figureId);
 
-    public abstract void performMovement(String figureId, String targetFieldNotation) throws MoveNotAllowedException;
+    public abstract void performMovement(String figureId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException;
 }

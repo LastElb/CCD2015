@@ -5,6 +5,7 @@ import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.HostedGamesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,8 @@ public class GameController {
 
     @Autowired
     HostedGamesService hostedGamesService;
+    @Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
 
     @RequestMapping("/poll")
     public PollInformation pollGameAction(@PathVariable String gameId) throws HostedGameNotFoundException {
@@ -44,7 +47,7 @@ public class GameController {
     @RequestMapping("/performMove/{figureId}/{targetNotation}")
     public void performMove(@PathVariable String gameId, @PathVariable String figureId, @PathVariable String targetNotation) throws HostedGameNotFoundException, MoveNotAllowedException {
         Game game = hostedGamesService.getHostedGameByID(gameId);
-        game.getChessboard().performMovement(figureId, targetNotation);
+        game.getChessboard().performMovement(figureId, targetNotation, simpMessagingTemplate);
     }
 
 

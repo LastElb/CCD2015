@@ -10,6 +10,7 @@ import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.HostedGamesService;
 import de.mki.jchess.server.service.RandomStringService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,6 +24,8 @@ public class HostingController {
     GameModeController gameModeController;
     @Autowired
     HostedGamesService hostedGamesService;
+    @Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
 
     @RequestMapping("/byGameMode/{name}")
     public Game hostRequestByGameMode(@PathVariable String name) throws InvalidGameModeException {
@@ -46,7 +49,7 @@ public class HostingController {
     @RequestMapping(value = "/joinAsPlayer/{gameId}", method = RequestMethod.POST)
     public Client connectToHostedGameAsPlayer(@PathVariable String gameId, @RequestBody Client client) throws HostedGameNotFoundException, TooManyPlayersException {
         client.setId(RandomStringService.getRandomString());
-        hostedGamesService.getHostedGameByID(gameId).addClientAsPlayer(client);
+        hostedGamesService.getHostedGameByID(gameId).addClientAsPlayer(client, simpMessagingTemplate);
         return client;
     }
 

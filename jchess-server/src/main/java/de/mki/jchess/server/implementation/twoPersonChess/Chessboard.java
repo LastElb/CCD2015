@@ -2,6 +2,7 @@ package de.mki.jchess.server.implementation.twoPersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.model.Figure;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
     }
 
     @Override
-    public void performMovement(String figureId, String targetFieldNotation) throws MoveNotAllowedException {
+    public void performMovement(String figureId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException {
         List<Square> possibleMovements = getPossibleFieldsToMove(figureId);
     }
 }

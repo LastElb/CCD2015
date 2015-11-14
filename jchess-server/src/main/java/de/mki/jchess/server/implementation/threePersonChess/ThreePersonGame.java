@@ -1,6 +1,9 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
+import de.mki.jchess.server.exception.TooManyPlayersException;
+import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Game;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.stream.IntStream;
 
@@ -92,5 +95,15 @@ public class ThreePersonGame extends Game {
     @Override
     public Chessboard getChessboard() {
         return chessboard;
+    }
+
+    @Override
+    public Client addClientAsPlayer(Client client, SimpMessagingTemplate simpMessagingTemplate) throws TooManyPlayersException {
+        switch (getPlayerList().size()) {
+            case 1: client.setTeam("white"); break;
+            case 2: client.setTeam("grey"); break;
+            case 3: client.setTeam("black"); break;
+        }
+        return super.addClientAsPlayer(client, simpMessagingTemplate);
     }
 }
