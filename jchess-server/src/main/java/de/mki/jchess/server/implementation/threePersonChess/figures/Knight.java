@@ -6,6 +6,7 @@ import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,22 +21,22 @@ public class Knight extends Figure<Hexagon> {
 
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
-        return null;
+        return new ArrayList<>();
     }
 
 }

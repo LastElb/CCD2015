@@ -30,6 +30,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
      * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} is checked.
      */
+    @Override
     public boolean isKingChecked(String clientId) throws Exception {
         // The king
         final boolean[] output = {false};
@@ -55,6 +56,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
      * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} would be checked.
      */
+    @Override
     public boolean willKingBeChecked(String clientId) throws Exception {
         // The king
         final boolean[] output = {false};
@@ -130,7 +132,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     return true;
             }
             return false;
-        }).count() != positions.size();
+        }).count() == positions.size();
     }
 
 
