@@ -106,26 +106,33 @@ public class Pawn extends Figure<Hexagon> {
         }
         // Attack move on pawns are special moves, as they are diagonal
         attackableDirections.forEach(direction -> getPosition().getNeighbourByDirection(direction)
-                .ifPresent(hexagon -> chessboard.getFigures().stream()
-                        .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
-                        .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
-                        .findFirst()
-                        .ifPresent(o -> {
-                            Figure figure = (Figure) o;
-                            figure.setHypotheticalRemoved(true);
+                .ifPresent(hexagon -> {
+                    getAttackableFields(chessboard).stream()
+                            .filter(attackableHexagon -> attackableHexagon.getNotation().equals(hexagon.getNotation()))
+                            .findFirst()
+                            .ifPresent(hexagon1 -> {
+                                chessboard.getFigures().stream()
+                                        .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
+                                        .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
+                                        .findFirst()
+                                        .ifPresent(o -> {
+                                            Figure figure = (Figure) o;
+                                            figure.setHypotheticalRemoved(true);
 
-                            logger.trace("Found beatable figure (" + figure.getName() + ") at field " + hexagon.getNotation());
+                                            logger.trace("Found beatable figure (" + figure.getName() + ") at field " + hexagon.getNotation());
 
-                            setHypotheticalPosition(hexagon);
-                            try {
-                                if (!chessboard.willKingBeChecked(getClient().getId()))
-                                    output.add(hexagon);
-                            } catch (Exception e) {
-                                logger.error("", e);
-                            }
-                            setHypotheticalPosition(null);
-                            figure.setHypotheticalRemoved(null);
-                        })));
+                                            setHypotheticalPosition(hexagon);
+                                            try {
+                                                if (!chessboard.willKingBeChecked(getClient().getId()))
+                                                    output.add(hexagon);
+                                            } catch (Exception e) {
+                                                logger.error("", e);
+                                            }
+                                            setHypotheticalPosition(null);
+                                            figure.setHypotheticalRemoved(null);
+                                        });
+                            });
+                }));
 
         return output;
     }
