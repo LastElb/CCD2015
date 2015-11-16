@@ -65,7 +65,7 @@ public abstract class Figure<T extends Field> {
 
     /**
      * Returns a list of possible {@link Field}s the figure can move to. This list may include {@link Field}s from {@link #getPossibleSpecialMovements(Chessboard)}
-     * The List will overlap with {@link #getAttackableFields()}, but due to some chess rules not all must be included.
+     * The List will overlap with {@link #getAttackableFields(Chessboard chessboard)}, but due to some chess rules not all must be included.
      * @param chessboard The instance of the {@link Chessboard} of the current {@link Game}
      * @return Returns a list of {@link Field}.
      */

@@ -140,14 +140,14 @@ public class ThreePersonGame extends Game {
         // Black figures
         Client playerBlack = getPlayerList().get(2);
         try {
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(7, 5)).setPictureId("rook-black"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(6, 6)).setPictureId("knight-black"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(5, 7)).setPictureId("bishop-black"));
-            getChessboard().getFigures().add(new Queen(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(4, 8)).setPictureId("queen-black"));
-            getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(3, 9)).setPictureId("king-black"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(2, 10)).setPictureId("knight-black"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(1, 11)).setPictureId("bishop-black"));
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(0, 12)).setPictureId("rook-black"));
+            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 12)).setPictureId("rook-black"));
+            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 11)).setPictureId("knight-black"));
+            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 10)).setPictureId("bishop-black"));
+            getChessboard().getFigures().add(new Queen(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 9)).setPictureId("queen-black"));
+            getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 8)).setPictureId("king-black"));
+            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 7)).setPictureId("knight-black"));
+            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 6)).setPictureId("bishop-black"));
+            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 5)).setPictureId("rook-black"));
             IntStream.range(4, 13).forEach(row -> {
                 try {
                     getChessboard().getFigures().add(new Pawn(RandomStringService.getRandomString(), playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-grey"));
