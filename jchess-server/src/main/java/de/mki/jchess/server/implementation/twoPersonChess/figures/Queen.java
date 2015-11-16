@@ -29,4 +29,9 @@ public class Queen extends Figure<Square> {
         return null;
     }
 
+    @Override
+    public List<Square> getAttackableFields() {
+        return null;
+    }
+
 }

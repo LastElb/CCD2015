@@ -31,4 +31,9 @@ public class King extends Figure<Square> {
     public List<Square> getPossibleSpecialMovements(Chessboard chessboard) {
         return null;
     }
+
+    @Override
+    public List<Square> getAttackableFields() {
+        return null;
+    }
 }

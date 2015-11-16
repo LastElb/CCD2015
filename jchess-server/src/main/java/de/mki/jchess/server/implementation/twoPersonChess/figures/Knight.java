@@ -27,4 +27,9 @@ public class Knight extends Figure<Square> {
         return null;
     }
 
+    @Override
+    public List<Square> getAttackableFields() {
+        return null;
+    }
+
 }

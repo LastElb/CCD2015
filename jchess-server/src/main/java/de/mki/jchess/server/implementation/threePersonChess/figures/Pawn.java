@@ -31,4 +31,9 @@ public class Pawn extends Figure<Hexagon> {
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
         return null;
     }
+
+    @Override
+    public List<Hexagon> getAttackableFields() {
+        return null;
+    }
 }

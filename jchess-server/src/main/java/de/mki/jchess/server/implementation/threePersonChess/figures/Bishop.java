@@ -28,4 +28,9 @@ public class Bishop extends Figure<Hexagon> {
         return null;
     }
 
+    @Override
+    public List<Hexagon> getAttackableFields() {
+        return null;
+    }
+
 }
