@@ -80,7 +80,7 @@ public abstract class Figure<T extends Field> {
     /**
      * @return This method returns a list of all fields the figure could attack.
      */
-    public abstract List<T> getAttackableFields();
+    public abstract List<T> getAttackableFields(Chessboard chessboard);
 
     public String getId() {
         return id;

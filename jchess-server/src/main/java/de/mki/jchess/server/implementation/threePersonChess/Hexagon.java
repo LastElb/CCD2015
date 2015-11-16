@@ -7,6 +7,7 @@ import de.mki.jchess.server.model.Field;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Igor on 13.11.2015.
@@ -53,6 +54,10 @@ public class Hexagon extends Field<Direction> {
     public void addNeighbour(Field neighbour, Direction direction) {
         if (neighbours.stream().filter(hexagonNeighbourModel -> hexagonNeighbourModel.direction.equals(direction)).count() == 0)
             neighbours.add(new HexagonNeighbourModel((Hexagon) neighbour, direction));
+    }
+
+    public Optional<Hexagon> getNeighbourByDirection(Direction direction) {
+        return neighbours.stream().filter(hexagonNeighbourModel -> hexagonNeighbourModel.direction.equals(direction)).map(HexagonNeighbourModel::getHexagon).findFirst();
     }
 
     public static class HexagonNeighbourModel {

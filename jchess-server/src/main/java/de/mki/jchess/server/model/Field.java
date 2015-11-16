@@ -4,6 +4,8 @@ package de.mki.jchess.server.model;
  * Created by Igor on 11.11.2015.
  */
 
+import java.util.Optional;
+
 /**
  * Created by Igor on 11.11.2015.
  * @param <T> The Direction enum

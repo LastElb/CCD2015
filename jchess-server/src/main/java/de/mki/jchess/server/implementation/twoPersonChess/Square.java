@@ -5,6 +5,7 @@ import de.mki.jchess.server.model.Field;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Igor on 11.11.2015.
@@ -42,6 +43,10 @@ public class Square extends Field<Direction> {
     public void addNeighbour(Field neighbour, Direction direction) {
         if (neighbours.stream().filter(squareNeighbourModel -> squareNeighbourModel.direction.equals(direction)).count() == 0)
             neighbours.add(new SquareNeighbourModel((Square) neighbour, direction));
+    }
+
+    public Optional<Square> getNeighbourByDirection(Direction direction) {
+        return neighbours.stream().filter(squareNeighbourModel -> squareNeighbourModel.direction.equals(direction)).map(SquareNeighbourModel::getSquare).findFirst();
     }
 
     @JsonIgnore
