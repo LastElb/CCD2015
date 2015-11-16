@@ -59,4 +59,6 @@ public abstract class Chessboard<T extends Field> {
     public Game getParentGame() {
         return parentGame;
     }
+
+    public abstract boolean areFieldsOccupied(List<T> positions);
 }

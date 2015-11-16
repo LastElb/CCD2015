@@ -9,6 +9,7 @@ import de.mki.jchess.server.model.websocket.MovementEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,8 +21,8 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         super(parentGame);
     }
 
-    public Hexagon getFieldByNotation(int x, int y) throws Exception {
-        return fields.stream().filter(field -> field.column == x && field.row == y).findFirst().orElseThrow(() -> new Exception("Notation not found"));
+    public Hexagon getFieldByNotation(int column, int row) throws Exception {
+        return fields.stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new Exception("Notation not found"));
     }
 
     @Override
@@ -70,6 +71,22 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 });
         // TODO: Add history
         historyEntry.getChessboardEvents().stream().forEach(chessboardEvent -> simpMessagingTemplate.convertAndSend("/websocket/" + getParentGame().getId(), chessboardEvent));
+    }
+
+    /**
+     * Returns true if all positions are occupied. Returns false if at least one position is not occupied.
+     * @param positions
+     * @return
+     */
+    @Override
+    public boolean areFieldsOccupied(List<Hexagon> positions) {
+        return getFigures().stream().filter(hexagonFigure -> {
+            for (Hexagon position : positions) {
+                if (hexagonFigure.getPosition().getNotation().equals(position.getNotation()))
+                    return true;
+            }
+            return false;
+        }).count() != positions.size();
     }
 
 

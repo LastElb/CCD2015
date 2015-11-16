@@ -64,4 +64,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
         // TODO: Add history
         historyEntry.getChessboardEvents().stream().forEach(chessboardEvent -> simpMessagingTemplate.convertAndSend("/websocket/" + getParentGame().getId(), chessboardEvent));
     }
+
+    @Override
+    public boolean areFieldsOccupied(List<Square> positions) {
+        return false;
+    }
 }
