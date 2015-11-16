@@ -1,5 +1,7 @@
 package de.mki.jchess.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,7 @@ public abstract class Figure<T extends Field> {
     T position;
     String name;
     String pictureId;
+    @JsonIgnore
     Client client;
 
     public Figure(Client client) {
@@ -75,5 +78,9 @@ public abstract class Figure<T extends Field> {
     public Figure setId(String id) {
         this.id = id;
         return this;
+    }
+
+    public Client getClient() {
+        return client;
     }
 }

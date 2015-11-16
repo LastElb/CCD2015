@@ -15,10 +15,13 @@ public abstract class Chessboard<T extends Field> {
     public List<T> fields;
     @JsonIgnore
     Client currentPlayer;
+    @JsonIgnore
+    Game parentGame;
 
-    public Chessboard() {
+    public Chessboard(Game parentGame) {
         fields = new ArrayList<>();
         figures = new ArrayList<>();
+        this.parentGame = parentGame;
     }
 
     public List<Figure<T>> getFigures() {
@@ -52,4 +55,8 @@ public abstract class Chessboard<T extends Field> {
     public abstract List<T> getPossibleFieldsToMove(String figureId);
 
     public abstract void performMovement(String figureId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException;
+
+    public Game getParentGame() {
+        return parentGame;
+    }
 }
