@@ -29,7 +29,7 @@ public class Queen extends Figure<Hexagon> {
     }
 
     @Override
-    public List<Hexagon> getAttackableFields() {
+    public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         return null;
     }
 

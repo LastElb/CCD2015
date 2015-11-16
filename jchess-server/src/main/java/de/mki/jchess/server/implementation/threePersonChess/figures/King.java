@@ -32,7 +32,7 @@ public class King extends Figure<Hexagon> {
     }
 
     @Override
-    public List<Hexagon> getAttackableFields() {
+    public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         return null;
     }
 }

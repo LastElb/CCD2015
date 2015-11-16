@@ -33,7 +33,7 @@ public class Pawn extends Figure<Square> {
     }
 
     @Override
-    public List<Square> getAttackableFields() {
+    public List<Square> getAttackableFields(Chessboard chessboard) {
         return null;
     }
 }

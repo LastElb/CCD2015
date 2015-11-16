@@ -28,7 +28,7 @@ public class TwoPersonGame extends Game {
 
     @Override
     public void initializeGame() {
-        chessboard = new Chessboard();
+        chessboard = new Chessboard(this);
         for (int row = 0; row <= 7; row++)
             for (int column = 0; column <= 7; column++) {
                 Square square = new Square(column, row);
