@@ -35,4 +35,9 @@ public class King extends Figure<Hexagon> {
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         return null;
     }
+
+    @Override
+    public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
+        return null;
+    }
 }

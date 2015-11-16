@@ -1,6 +1,7 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
+import de.mki.jchess.server.implementation.threePersonChess.figures.King;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.model.HistoryEntry;
@@ -9,7 +10,6 @@ import de.mki.jchess.server.model.websocket.MovementEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,9 +25,53 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         return fields.stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new Exception("Notation not found"));
     }
 
-    @Override
-    public boolean isKingCheckedAtPosition(Figure<Hexagon> king, Hexagon field) {
-        return false;
+    /**
+     * Returns if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} of a {@link de.mki.jchess.server.model.Client} is checked with the current figure layout.
+     * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
+     * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} is checked.
+     */
+    public boolean isKingChecked(String clientId) throws Exception {
+        // The king
+        final boolean[] output = {false};
+        King king = getFigures().stream()
+                .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
+                .filter(hexagonFigure -> hexagonFigure instanceof King)
+                .map(hexagonFigure -> (King) hexagonFigure)
+                .findFirst().orElseThrow(() -> new Exception("This should not happen. If the player has no king he is defeated and cannot receive movement suggestions"));
+        // Check if any figure can attack our kings hexagon
+        getFigures().stream()
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved()) // Only active figures
+                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId)) // Enemy players
+                .forEach(hexagonFigure -> hexagonFigure.getAttackableFields(this).forEach(hexagon -> {
+                    if (hexagon.getNotation().equals(king.getPosition().getNotation()))
+                        output[0] = true;
+                }));
+        return output[0];
+    }
+
+    /**
+     * Returns if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} of a
+     * {@link de.mki.jchess.server.model.Client} is checked with a hypothetical figure layout. Used for predetermination if a movement is valid.
+     * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
+     * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} would be checked.
+     */
+    public boolean willKingBeChecked(String clientId) throws Exception {
+        // The king
+        final boolean[] output = {false};
+        King king = getFigures().stream()
+                .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
+                .filter(hexagonFigure -> hexagonFigure instanceof King)
+                .map(hexagonFigure -> (King) hexagonFigure)
+                .findFirst().orElseThrow(() -> new Exception("This should not happen. If the player has no king he is defeated and cannot receive movement suggestions"));
+        // Check if any figure could attack our kings hexagon
+        getFigures().stream()
+                .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved()) // Only active figures
+                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId)) // Enemy players
+                .forEach(hexagonFigure -> hexagonFigure.getHypotheticalAttackableFields(this).forEach(hexagon -> {
+                    if (hexagon.getNotation().equals(king.getHypotheticalPosition().getNotation()))
+                        output[0] = true;
+                }));
+        return output[0];
     }
 
     @Override

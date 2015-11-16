@@ -34,4 +34,9 @@ public class Queen extends Figure<Square> {
         return null;
     }
 
+    @Override
+    public List<Square> getHypotheticalAttackableFields(Chessboard chessboard) {
+        return null;
+    }
+
 }

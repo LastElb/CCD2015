@@ -36,4 +36,9 @@ public class King extends Figure<Square> {
     public List<Square> getAttackableFields(Chessboard chessboard) {
         return null;
     }
+
+    @Override
+    public List<Square> getHypotheticalAttackableFields(Chessboard chessboard) {
+        return null;
+    }
 }

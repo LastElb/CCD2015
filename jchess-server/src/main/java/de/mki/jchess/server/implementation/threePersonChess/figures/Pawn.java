@@ -80,4 +80,9 @@ public class Pawn extends Figure<Hexagon> {
         });
         return output;
     }
+
+    @Override
+    public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
+        return null;
+    }
 }

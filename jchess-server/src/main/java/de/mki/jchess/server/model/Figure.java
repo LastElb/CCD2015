@@ -82,6 +82,11 @@ public abstract class Figure<T extends Field> {
      */
     public abstract List<T> getAttackableFields(Chessboard chessboard);
 
+    /**
+     * @return This method returns a list of all fields the figure could attack with the hypothetical layout.
+     */
+    public abstract List<T> getHypotheticalAttackableFields(Chessboard chessboard);
+
     public String getId() {
         return id;
     }

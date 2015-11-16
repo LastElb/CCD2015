@@ -33,4 +33,9 @@ public class Queen extends Figure<Hexagon> {
         return null;
     }
 
+    @Override
+    public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
+        return null;
+    }
+
 }

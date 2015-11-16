@@ -50,8 +50,6 @@ public abstract class Chessboard<T extends Field> {
         return this;
     }
 
-    public abstract boolean isKingCheckedAtPosition(Figure<T> king, T field);
-
     public abstract List<T> getPossibleFieldsToMove(String figureId);
 
     public abstract void performMovement(String figureId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException;

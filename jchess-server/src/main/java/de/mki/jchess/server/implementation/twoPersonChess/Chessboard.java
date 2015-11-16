@@ -24,8 +24,22 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
         return fields.stream().filter(field -> field.x == x && field.y == y).findFirst().orElseThrow(() -> new Exception("Notation not found"));
     }
 
-    @Override
-    public boolean isKingCheckedAtPosition(Figure<Square> king, Square field) {
+    /**
+     * Returns if the {@link de.mki.jchess.server.implementation.twoPersonChess.figures.King} of a {@link de.mki.jchess.server.model.Client} is checked with the current figure layout.
+     * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
+     * @return Returns true if the {@link de.mki.jchess.server.implementation.twoPersonChess.figures.King} is checked.
+     */
+    public boolean isKingChecked(String clientId) {
+        return false;
+    }
+
+    /**
+     * Returns if the {@link de.mki.jchess.server.implementation.twoPersonChess.figures.King} of a
+     * {@link de.mki.jchess.server.model.Client} is checked with a hypothetical figure layout. Used for predetermination if a movement is valid.
+     * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
+     * @return Returns true if the {@link de.mki.jchess.server.implementation.twoPersonChess.figures.King} would be checked.
+     */
+    public boolean willKingBeChecked(String clientId) {
         return false;
     }
 
