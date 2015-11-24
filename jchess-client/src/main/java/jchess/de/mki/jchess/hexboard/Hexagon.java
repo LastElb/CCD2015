@@ -1,6 +1,4 @@
-package jchess;
-
-import java.util.ArrayList;
+package jchess.de.mki.jchess.hexboard;
 
 /**
  *
