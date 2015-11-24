@@ -17,7 +17,9 @@ public abstract class Figure<T extends Field> {
     String pictureId;
     @JsonIgnore
     Client client;
+    @JsonIgnore
     Optional<T> hypotheticalPosition;
+    @JsonIgnore
     Optional<Boolean> hypotheticalRemoved;
 
     public Figure(Client client) {

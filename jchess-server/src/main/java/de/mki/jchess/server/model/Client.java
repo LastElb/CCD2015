@@ -1,5 +1,7 @@
 package de.mki.jchess.server.model;
 
+import de.mki.jchess.server.service.RandomStringService;
+
 /**
  * Created by Igor on 11.11.2015.
  */
@@ -46,5 +48,6 @@ public class Client {
     }
 
     public Client() {
+        this.id = RandomStringService.getRandomString();
     }
 }
