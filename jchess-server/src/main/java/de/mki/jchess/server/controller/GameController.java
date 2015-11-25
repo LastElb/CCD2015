@@ -2,6 +2,7 @@ package de.mki.jchess.server.controller;
 
 import de.mki.jchess.server.exception.HostedGameNotFoundException;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
+import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.HostedGamesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,12 @@ public class GameController {
         if (!game.hasSufficientPlayers())
             return new PollInformation().setInfo("Waiting for more players.").addAction("poll");
         return new PollInformation();
+    }
+
+    @RequestMapping("/test")
+    public void test(@PathVariable String gameId) throws HostedGameNotFoundException {
+        Game game = hostedGamesService.getHostedGameByID(gameId);
+        game.getChessboard().getFigures().stream().forEach(o -> ((Figure)o).setHypotheticalRemoved(true));
     }
 
     @RequestMapping("/full")
