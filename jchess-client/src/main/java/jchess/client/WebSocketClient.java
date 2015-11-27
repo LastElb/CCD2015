@@ -34,7 +34,7 @@ public class WebSocketClient {
      * @return Returns a boolean whether the websocket client is connected or not
      */
     public boolean isConnected() {
-        return stompSession.isConnected();
+        return stompSession != null && stompSession.isConnected();
     }
 
     /**
