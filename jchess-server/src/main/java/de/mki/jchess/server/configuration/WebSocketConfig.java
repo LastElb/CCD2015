@@ -22,7 +22,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // use the /topic prefix for outgoing WebSocket communication
-        config.enableSimpleBroker("/websocket");
+        config.enableSimpleBroker("/game");
 
         // use the /app prefix for others
         config.setApplicationDestinationPrefixes("/app");
