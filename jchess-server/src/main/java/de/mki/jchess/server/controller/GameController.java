@@ -51,8 +51,8 @@ public class GameController {
         return game.getChessboard().getPossibleFieldsToMove(figureId);
     }
 
-    @RequestMapping("/performMove/{figureId}/{targetNotation}")
-    public void performMove(@PathVariable String gameId, @PathVariable String figureId, @PathVariable String targetNotation) throws HostedGameNotFoundException, MoveNotAllowedException {
+    @RequestMapping("/performMove/{figureId}/{clientId}/{targetNotation}")
+    public void performMove(@PathVariable String gameId, @PathVariable String figureId, @PathVariable String clientId, @PathVariable String targetNotation) throws HostedGameNotFoundException, MoveNotAllowedException {
         Game game = hostedGamesService.getHostedGameByID(gameId);
         game.getChessboard().performMovement(figureId, targetNotation, simpMessagingTemplate);
     }
