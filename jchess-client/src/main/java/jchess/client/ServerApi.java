@@ -45,7 +45,12 @@ public class ServerApi {
     public Optional<Client> connectToGame(String nickname, String gameId) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-        Future<Response> future = asyncHttpClient.preparePost("http://" + host + ":" + port + "/host/joinAsPlayer/" + gameId).setBody("{\"nickname\":\"" + nickname + "\"}").execute();
+        Future<Response> future = asyncHttpClient
+                .preparePost("http://" + host + ":" + port + "/host/joinAsPlayer/" + gameId)
+                .setBody("{\"nickname\":\"" + nickname + "\"}")
+                .setHeader("Content-Type", "application/json")
+                .setHeader("Accept", "application/json")
+                .execute();
         Response response = future.get();
         asyncHttpClient.close();
         if (response.getStatusCode() == 200) {
@@ -67,7 +72,7 @@ public class ServerApi {
         Response response = future.get();
         asyncHttpClient.close();
         if (response.getStatusCode() == 200) {
-            return objectMapper.readValue(response.getResponseBody(), new TypeReference<Set<String>>() {});
+            return objectMapper.readValue(response.getResponseBody(), new TypeReference<List<String>>() {});
         } else {
             throw new Exception(response.getResponseBody());
         }
