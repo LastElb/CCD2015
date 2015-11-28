@@ -135,49 +135,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         if (target == newGameItem) {
             this.newGameFrame = new NewGameWindow();
             JChessApp.getApplication().show(this.newGameFrame);
-        } else if (target == saveGameItem) { //saveGame
-            if (this.gamesPane.getTabCount() == 0) {
-                JOptionPane.showMessageDialog(null, Settings.lang("save_not_called_for_tab"));
-                return;
-            }
-            while (true) {//until
-                JFileChooser fc = new JFileChooser();
-                int retVal = fc.showSaveDialog(this.gamesPane);
-                if (retVal == JFileChooser.APPROVE_OPTION) {
-                    File selFile = fc.getSelectedFile();
-                    Game tempGUI = (Game) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
-                    if (!selFile.exists()) {
-                        try {
-                            selFile.createNewFile();
-                        } catch (IOException exc) {
-                            System.out.println("error creating file: " + exc);
-                        }
-                    } else if (selFile.exists()) {
-                        int opt = JOptionPane.showConfirmDialog(tempGUI, Settings.lang("file_exists"), Settings.lang("file_exists"), JOptionPane.YES_NO_OPTION);
-                        if (opt == JOptionPane.NO_OPTION)//if user choose to now overwrite
-                        {
-                            continue; // go back to file choose
-                        }
-                    }
-                    if (selFile.canWrite()) {
-                        tempGUI.saveGame(selFile);
-                    }
-                    System.out.println(fc.getSelectedFile().isFile());
-                    break;
-                } else if (retVal == JFileChooser.CANCEL_OPTION) {
-                    break;
-                }
-                ///JChessView.gui.game.saveGame(fc.);
-            }
-        } else if (target == loadGameItem) { //loadGame
-            JFileChooser fc = new JFileChooser();
-            int retVal = fc.showOpenDialog(this.gamesPane);
-            if (retVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                if (file.exists() && file.canRead()) {
-                    Game.loadGame(file);
-                }
-            }
         } else if (target == this.themeSettingsMenu) {
             try {
                 ThemeChooseWindow choose = new ThemeChooseWindow(this.getFrame());
@@ -236,8 +193,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newGameItem = new javax.swing.JMenuItem();
-        loadGameItem = new javax.swing.JMenuItem();
-        saveGameItem = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         gameMenu = new javax.swing.JMenu();
         moveBackItem = new javax.swing.JMenuItem();
@@ -288,18 +243,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         newGameItem.setName("newGameItem"); // NOI18N
         fileMenu.add(newGameItem);
         newGameItem.addActionListener(this);
-
-        loadGameItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        loadGameItem.setText(resourceMap.getString("loadGameItem.text")); // NOI18N
-        loadGameItem.setName("loadGameItem"); // NOI18N
-        fileMenu.add(loadGameItem);
-        loadGameItem.addActionListener(this);
-
-        saveGameItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        saveGameItem.setText(resourceMap.getString("saveGameItem.text")); // NOI18N
-        saveGameItem.setName("saveGameItem"); // NOI18N
-        fileMenu.add(saveGameItem);
-        saveGameItem.addActionListener(this);
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(jchess.JChessApp.class).getContext().getActionMap(JChessView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N

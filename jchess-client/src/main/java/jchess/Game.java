@@ -102,6 +102,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     super.setSize(width, height);
     }
     }*/
+    /*
     static public void loadGame(File file) {
         FileReader fileR = null;
         try {
@@ -139,6 +140,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         newGUI.chessboard.repaint();
         //newGUI.chessboard.draw();
     }
+    */
 
     /**
      * Method checking in with of line there is an error
@@ -190,38 +192,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         return result;
     }
 
-    /**
-     * Method to save actual state of game
-     *
-     * @param path address of place where game will be saved
-     */
-    public void saveGame(File path) {
-        File file = path;
-        FileWriter fileW = null;
-        try {
-            fileW = new FileWriter(file);
-        } catch (java.io.IOException exc) {
-            System.err.println("error creating fileWriter: " + exc);
-            JOptionPane.showMessageDialog(this, Settings.lang("error_writing_to_file") + ": " + exc);
-            return;
-        }
-        Calendar cal = Calendar.getInstance();
-        String str = new String("");
-        String info = new String("[Event \"Game\"]\n[Date \"" + cal.get(cal.YEAR) + "." + (cal.get(cal.MONTH) + 1) + "." + cal.get(cal.DAY_OF_MONTH) + "\"]\n"
-                + "[White \"" + this.settings.playerWhite.name + "\"]\n[Black \"" + this.settings.playerBlack.name + "\"]\n\n");
-        str += info;
-        str += this.moves.getMovesInString();
-        try {
-            fileW.write(str);
-            fileW.flush();
-            fileW.close();
-        } catch (java.io.IOException exc) {
-            System.out.println("error writing to file: " + exc);
-            JOptionPane.showMessageDialog(this, Settings.lang("error_writing_to_file") + ": " + exc);
-            return;
-        }
-        JOptionPane.showMessageDialog(this, Settings.lang("game_saved_properly"));
-    }
 
     /**
      * Method to Start new game
