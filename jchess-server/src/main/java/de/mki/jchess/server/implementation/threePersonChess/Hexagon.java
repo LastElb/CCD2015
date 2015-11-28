@@ -87,4 +87,13 @@ public class Hexagon extends Field<Direction> {
             return this;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Hexagon{" +
+                "row=" + row +
+                ", column=" + column +
+                ", notation=" + getNotation() +
+                '}';
+    }
 }

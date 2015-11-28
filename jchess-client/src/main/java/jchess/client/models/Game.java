@@ -14,12 +14,13 @@ public class Game {
 
     String id;
     String gameMode;
-    @JsonIgnore
-    List<Client> playerList;
-    @JsonIgnore
-    List<Client> observerList;
     int maximumPlayers;
     List<HistoryEntry> gameHistory;
+    Object chessboard;
+
+    public Game() {
+        this.gameHistory = new ArrayList<>();
+    }
 
     /**
      * Default constructor for creating a new game.
@@ -29,8 +30,6 @@ public class Game {
     public Game(String id, int maximumPlayers) {
         this.id = id;
         this.maximumPlayers = maximumPlayers;
-        this.playerList = new ArrayList<>();
-        this.observerList = new ArrayList<>();
         this.gameHistory = new ArrayList<>();
     }
 
@@ -56,34 +55,22 @@ public class Game {
     }
 
     /**
-     * @return Returns a {@link List} of {@link Client}s that are registered as player.
-     */
-    public List<Client> getPlayerList() {
-        return playerList;
-    }
-
-    /**
-     * @return Returns a {@link List} of {@link Client}s that are registered as observer.
-     */
-    public List<Client> getObserverList() {
-        return observerList;
-    }
-
-    /**
      * @return Returns an integer with indicating the maximum count of players for this game.
      */
     public int getMaximumPlayers() {
         return maximumPlayers;
     }
 
-    /**
-     * @return Returns a boolean indication if there are enough players registered to start the game.
-     */
-    public boolean hasSufficientPlayers() {
-        return playerList.size() >= maximumPlayers;
-    }
-
     public List<HistoryEntry> getGameHistory() {
         return gameHistory;
+    }
+
+    public Object getChessboard() {
+        return chessboard;
+    }
+
+    public Game setChessboard(Object chessboard) {
+        this.chessboard = chessboard;
+        return this;
     }
 }

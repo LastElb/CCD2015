@@ -49,10 +49,12 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
     }
 
     @Override
-    public void performMovement(String figureId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException {
+    public void performMovement(String figureId, String clientId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException {
         List<Square> possibleMovements = getPossibleFieldsToMove(figureId);
         //TODO implement special moves
-        if (possibleMovements.stream().filter(square -> square.getNotation().equals(targetFieldNotation)).count() == 0)
+        // Throw an exception when the client ID does not match the figures owner id or when the target field is not in the list of possible moves.
+        if (possibleMovements.stream().filter(square -> square.getNotation().equals(targetFieldNotation)).count() == 0 ||
+                getFigures().stream().filter(squareFigure -> squareFigure.getId().equals(figureId)).filter(squareFigure -> squareFigure.getClient().equals(clientId)).count() == 0)
             throw new MoveNotAllowedException();
 
         HistoryEntry historyEntry = new HistoryEntry();
@@ -76,7 +78,8 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
             }
         });
         // TODO: Add history
-        historyEntry.getChessboardEvents().stream().forEach(chessboardEvent -> simpMessagingTemplate.convertAndSend("/websocket/" + getParentGame().getId(), chessboardEvent));
+        // TODO: Send event through websocket
+        //historyEntry.getChessboardEvents().stream().forEach(chessboardEvent -> simpMessagingTemplate.convertAndSend("/websocket/" + getParentGame().getId(), chessboardEvent));
     }
 
     @Override
