@@ -22,6 +22,13 @@ public class Pawn extends Figure<Hexagon> {
     List<Direction> attackableDirections;
     List<Direction> movableDirections;
 
+    /**
+     * Creates a new instance of a pawn
+     * @param id
+     * @param client
+     * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
+     * @throws Exception
+     */
     public Pawn(String id, Client client, Direction direction) throws Exception {
         super(client);
         setId(id);
