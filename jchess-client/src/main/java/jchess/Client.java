@@ -20,7 +20,6 @@
  */
 package jchess;
 
-import jchess.server.Connection_info;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
@@ -82,6 +81,7 @@ public class Client implements Runnable {
                 output.flush();
 
                 int servCode = input.readInt(); //server returning code
+                /*
                 logger.debug("connection info: " + Connection_info.get(servCode).name());
                 if (Connection_info.get(servCode).name().startsWith("err_")) {
                     throw new Error(Connection_info.get(servCode).name());
@@ -91,7 +91,8 @@ public class Client implements Runnable {
                 } else //is any bug
                 {
                     return false;
-                }
+                }*/
+                return true;
             } catch (Error err) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, err);
                 return false;

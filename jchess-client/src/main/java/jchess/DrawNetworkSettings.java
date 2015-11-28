@@ -19,8 +19,6 @@
  */
 package jchess;
 
-import jchess.server.Server;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,7 +31,6 @@ import java.util.regex.Pattern;
  * Class responible for drawing Network Settings, when player want to start
  * a game on a network
  *
- * @param parent Where are saved default settings
  */
 public class DrawNetworkSettings extends JPanel implements ActionListener {
 
@@ -201,8 +198,8 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
             }
             String pass = this.textPassword.getText().toString();
             if (this.radioServer.isSelected()) {
-                Server server = new Server(); //create server
-                server.newTable(Integer.parseInt(textGameID.getText()), pass, !servOptions.checkWitchoutObserver.isSelected(), !servOptions.checkDisableChat.isSelected()); //create new table
+                //Server server = new Server(); //create server
+                //server.newTable(Integer.parseInt(textGameID.getText()), pass, !servOptions.checkWitchoutObserver.isSelected(), !servOptions.checkDisableChat.isSelected()); //create new table
                 //set client options
                 clientOptions.textServIP.setText("127.0.0.1");
 
@@ -214,7 +211,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
             }
             Client client;
             try {
-                client = new Client(clientOptions.textServIP.getText(), Server.port);//create client
+                client = new Client(clientOptions.textServIP.getText(), 8080);//create client
                 boolean isJoining = client.join(Integer.parseInt(textGameID.getText()), !clientOptions.checkOnlyWatch.isSelected(), textNick.getText(), MD5.encrypt(textPassword.getText()));//join and wait for all players
 
                 if (isJoining) //Client connection: succesful

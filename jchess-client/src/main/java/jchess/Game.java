@@ -253,10 +253,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param message what to show player(s) at end of the game (for example "draw", "black wins" etc.)
      */
-    public void endGame(String massage) {
+    public void endGame(String message) {
         this.blockedChessboard = true;
-        System.out.println(massage);
-        JOptionPane.showMessageDialog(null, massage);
+        System.out.println(message);
+        JOptionPane.showMessageDialog(null, message);
     }
 
     /**
@@ -436,6 +436,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         this.nextMove();
 
                         //checkmate or stalemate
+                        /*
                         King king;
                         if (this.activePlayer == settings.playerWhite) {
                             king = chessboard.kingWhite;
@@ -451,6 +452,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                                 this.endGame("Stalemate! Draw!");
                                 break;
                         }
+                        */
                     }
 
                 } catch (NullPointerException exc) {

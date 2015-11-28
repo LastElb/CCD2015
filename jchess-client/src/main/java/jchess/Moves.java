@@ -234,6 +234,7 @@ public class Moves extends AbstractTableModel {
             locMove += "(e.p)";//pawn take down opponent en passant
             wasEnPassant = true;
         }
+        /*
         if ((!this.enterBlack && this.game.chessboard.kingBlack.isChecked())
                 || (this.enterBlack && this.game.chessboard.kingWhite.isChecked())) {//if checked
 
@@ -244,6 +245,7 @@ public class Moves extends AbstractTableModel {
                 locMove += "+";//check
             }
         }
+        */
         if (castlingMove == castling.shortCastling) {
             this.addCastling("0-0");
         } else if (castlingMove == castling.longCastling) {
