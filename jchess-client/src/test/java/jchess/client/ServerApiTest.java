@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  */
 public class ServerApiTest {
 
-    @Test
+//    @Test
     public void testConnectToGame() throws Exception {
         ServerApi serverApi = new ServerApi("localhost", 8080);
         Optional<Game> game = serverApi.hostGame("default-3-person-chess");
@@ -22,13 +22,13 @@ public class ServerApiTest {
         client.orElseThrow(() -> new Exception("No valid client instance from object mapper"));
     }
 
-    @Test
+//    @Test
     public void testGetAvailableGameModes() throws Exception {
         ServerApi serverApi = new ServerApi("localhost", 8080);
         serverApi.getAvailableGameModes();
     }
 
-    @Test
+//    @Test
     public void testHostGame() throws Exception {
         ServerApi serverApi = new ServerApi("localhost", 8080);
         Optional<Game> game = serverApi.hostGame("default-3-person-chess");
