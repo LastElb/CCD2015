@@ -20,6 +20,8 @@
  */
 package jchess;
 
+import jchess.client.ServerApi;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
@@ -27,10 +29,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Calendar;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +41,11 @@ import java.util.logging.Logger;
  */
 public class Game extends JPanel implements MouseListener, ComponentListener {
 
+    private ServerApi serverApi;
+    private Optional<jchess.client.models.Game> gameModel;
+    private Optional<jchess.client.models.Client> clientModel;
+
+
     public Settings settings;
     public boolean blockedChessboard;
     public Chessboard chessboard;
@@ -52,6 +56,14 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     private Player activePlayer;
 
     Game() {
+        serverApi = new ServerApi("localhost", 8080);
+
+        try {
+            this.initiaizeAndJoinHostedGame();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.setLayout(null);
         this.moves = new Moves(this);
         settings = new Settings();
@@ -298,6 +310,15 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         } finally {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, "ERROR");
         }
+    }
+
+    /**
+     * Initialize a game on the server and joins it
+     * @throws Exception
+     */
+    private void initiaizeAndJoinHostedGame() throws Exception {
+        gameModel = serverApi.hostGame("default-3-person-chess");
+        clientModel = serverApi.connectToGame("Malte", gameModel.get().getId());
     }
 
     // MouseListener:
