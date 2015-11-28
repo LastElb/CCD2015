@@ -52,7 +52,7 @@ public abstract class Chessboard<T extends Field> {
 
     public abstract List<T> getPossibleFieldsToMove(String figureId);
 
-    public abstract void performMovement(String figureId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException;
+    public abstract void performMovement(String figureId, String clientId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException;
 
     public Game getParentGame() {
         return parentGame;
