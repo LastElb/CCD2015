@@ -49,7 +49,6 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     private JPasswordField textPassword;
     private JTextField textGameID;
     private JButton buttonStart;
-    private ServOptionsPanel servOptions;
     private ClientOptionsPanel clientOptions;
 
     DrawNetworkSettings(JDialog parent) {
@@ -67,17 +66,16 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         this.radioClient.addActionListener(this);
 
         this.labelNick = new JLabel(Settings.lang("nickname"));
-        this.labelPassword = new JLabel(Settings.lang("password"));
         this.labelGameID = new JLabel(Settings.lang("game_id"));
+
         this.labelOptions = new JLabel(Settings.lang("server_options"));
 
         this.textNick = new JTextField();
-        this.textPassword = new JPasswordField();
         this.textGameID = new JTextField();
+        this.textGameID.setEnabled(false);
 
         this.panelOptions = new JPanel();
         this.clientOptions = new ClientOptionsPanel();
-        this.servOptions = new ServOptionsPanel();
 
         this.buttonStart = new JButton(Settings.lang("start"));
         this.buttonStart.addActionListener(this);
@@ -125,34 +123,20 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         this.gbc.gridx = 0;
         this.gbc.gridy = 5;
         this.gbc.gridwidth = 2;
-        this.gbl.setConstraints(labelPassword, gbc);
-        this.add(labelPassword);
-
-        this.gbc.gridx = 0;
-        this.gbc.gridy = 6;
-        this.gbc.gridwidth = 2;
-        this.gbl.setConstraints(textPassword, gbc);
-        this.add(textPassword);
-
-        this.gbc.gridx = 0;
-        this.gbc.gridy = 7;
-        this.gbc.gridwidth = 2;
         this.gbl.setConstraints(labelOptions, gbc);
         this.add(labelOptions);
 
         this.gbc.gridx = 0;
-        this.gbc.gridy = 8;
+        this.gbc.gridy = 6;
         this.gbc.gridwidth = 2;
         this.gbl.setConstraints(panelOptions, gbc);
         this.add(panelOptions);
 
         this.gbc.gridx = 0;
-        this.gbc.gridy = 9;
+        this.gbc.gridy = 7;
         this.gbc.gridwidth = 2;
         this.gbl.setConstraints(buttonStart, gbc);
         this.add(buttonStart);
-
-        this.panelOptions.add(servOptions);
     }
 
     /*Method for showing settings which the player is intrested with
@@ -160,13 +144,14 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getSource() == this.radioServer) //show options for server
         {
+            this.textGameID.setEnabled(false); // disable gameID
             this.panelOptions.removeAll();
-            this.panelOptions.add(servOptions);
             this.panelOptions.revalidate();
             this.panelOptions.requestFocus();
             this.panelOptions.repaint();
         } else if (arg0.getSource() == this.radioClient) //show options for client
         {
+            this.textGameID.setEnabled(true); // disable gameID
             this.panelOptions.removeAll();
             this.panelOptions.add(clientOptions);
             this.panelOptions.revalidate();
@@ -181,9 +166,6 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
             if (this.textNick.getText().length() == 0) {
                 error += Settings.lang("fill_name") + "\n";
             }
-            if (this.textPassword.getText().length() <= 4) {
-                error += Settings.lang("fill_pass_with_more_than_4_signs") + "\n";
-            }
             if (this.radioClient.isSelected() && this.clientOptions.textServIP.getText().length() == 0) {
                 error += Settings.lang("please_fill_field") + " IP \n";
             } else if (this.radioClient.isSelected()) {
@@ -196,7 +178,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, error);
                 return;
             }
-            String pass = this.textPassword.getText().toString();
+
             if (this.radioServer.isSelected()) {
                 // @ToDo Start server
             }
@@ -234,63 +216,6 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, err);
             }
         */
-        }
-    }
-
-    /* Method witch is saving the latest network settings
-     */
-    private class ServOptionsPanel extends JPanel //options for server
-    {
-
-        public JTextField textGameTime;
-        public JCheckBox checkWitchoutObserver;
-        public JCheckBox checkDisableChat;
-        private GridBagLayout gbl;
-        private GridBagConstraints gbc;
-        private JLabel labelGameTime;
-
-        ServOptionsPanel() {
-            super();
-
-            labelGameTime = new JLabel(Settings.lang("time_game_min"));
-            textGameTime = new JTextField();
-            checkWitchoutObserver = new JCheckBox(Settings.lang("without_observers"));
-            checkDisableChat = new JCheckBox(Settings.lang("without_chat"));
-
-            //temporary disabled options
-            this.labelGameTime.setEnabled(false);
-            this.textGameTime.setEnabled(false);
-            this.checkDisableChat.setEnabled(false);
-            //------------------------
-
-            this.gbl = new GridBagLayout();
-            this.gbc = new GridBagConstraints();
-            this.gbc.fill = GridBagConstraints.BOTH;
-            this.setLayout(gbl);
-
-            this.gbc.gridx = 0;
-            this.gbc.gridy = 0;
-            this.gbc.gridwidth = 2;
-            this.gbl.setConstraints(labelGameTime, gbc);
-            this.add(labelGameTime);
-
-            this.gbc.gridx = 0;
-            this.gbc.gridy = 1;
-            this.gbc.gridwidth = 2;
-            this.gbl.setConstraints(textGameTime, gbc);
-            this.add(textGameTime);
-
-            this.gbc.gridx = 0;
-            this.gbc.gridy = 2;
-            this.gbc.gridwidth = 1;
-            this.gbl.setConstraints(checkWitchoutObserver, gbc);
-            this.add(checkWitchoutObserver);
-
-            this.gbc.gridx = 1;
-            this.gbc.gridy = 2;
-            this.gbc.gridwidth = 1;
-            this.gbl.setConstraints(checkDisableChat, gbc);
-            this.add(checkDisableChat);
         }
     }
 
