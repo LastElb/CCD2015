@@ -2,8 +2,6 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.King;
-import de.mki.jchess.server.model.Client;
-import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.model.HistoryEntry;
 import de.mki.jchess.server.model.websocket.FigureEvent;

@@ -1,8 +1,5 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.mki.jchess.server.model.Field;
 
 import java.util.ArrayList;
