@@ -2,6 +2,7 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.King;
+import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.model.HistoryEntry;
@@ -81,6 +82,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         List<Hexagon> hexagons = new ArrayList<>();
         getFigures().stream()
                 .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 .findFirst().ifPresent(hexagonFigure -> {
             hexagons.addAll(hexagonFigure.getPossibleMovements(this));
             hexagons.addAll(hexagonFigure.getPossibleSpecialMovements(this));
@@ -91,7 +93,6 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     @Override
     public void performMovement(String figureId, String clientId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException {
         List<Hexagon> possibleMovements = getPossibleFieldsToMove(figureId);
-        //TODO implement special moves
         // Throw an exception when the client ID does not match the figures owner id or when the target field is not in the list of possible moves.
         if (possibleMovements.stream()
                 .filter(hexagon -> hexagon.getNotation().equals(targetFieldNotation))
@@ -123,9 +124,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                         e.printStackTrace();
                     }
                 });
-        // TODO: Add history
         // TODO: Send event through websocket
-        //historyEntry.getChessboardEvents().stream().forEach(chessboardEvent -> simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), chessboardEvent));
+        getParentGame().getGameHistory().add(historyEntry);
+        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry);
     }
 
     /**
