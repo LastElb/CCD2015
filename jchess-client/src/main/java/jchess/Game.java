@@ -52,7 +52,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public GameClock gameClock;
     public Client client;
     public Moves moves;
-    public Chat chat;
     private Player activePlayer;
 
     Game() {
@@ -83,11 +82,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         movesHistory.setSize(new Dimension(180, 350));
         movesHistory.setLocation(new Point(500, 121));
         this.add(movesHistory);
-
-        this.chat = new Chat();
-        this.chat.setSize(new Dimension(380, 100));
-        this.chat.setLocation(new Point(0, 500));
-        this.chat.setMinimumSize(new Dimension(400, 100));
 
         this.blockedChessboard = false;
         this.setLayout(null);
@@ -475,10 +469,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         this.moves.getScrollPane().setLocation(new Point(chess_height + 5, 100));
         this.moves.getScrollPane().setSize(this.moves.getScrollPane().getWidth(), chess_height - 100);
         this.gameClock.setLocation(new Point(chess_height + 5, 0));
-        if (this.chat != null) {
-            this.chat.setLocation(new Point(0, chess_height + 5));
-            this.chat.setSize(new Dimension(chess_height, this.getHeight() - (chess_height + 5)));
-        }
     }
 
     public void componentMoved(ComponentEvent e) {

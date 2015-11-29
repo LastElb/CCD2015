@@ -128,11 +128,6 @@ public class Client implements Runnable {
                     int endY = input.readInt();
 
                     game.simulateMove(beginX, beginY, endX, endY);
-                } else if (in.equals("#message")) //getting message from server
-                {
-                    String str = input.readUTF();
-
-                    game.chat.addMessage(str);
                 } else if (in.equals("#settings")) //getting settings from server
                 {
                     try {
@@ -143,11 +138,8 @@ public class Client implements Runnable {
 
                     game.settings = this.sett;
                     game.client = this;
-                    game.chat.client = this;
                     game.newGame();//start new Game
                     game.chessboard.draw();
-                } else if (in.equals("#errorConnection")) {
-                    game.chat.addMessage("** " + Settings.lang("error_connecting_one_of_player") + " **");
                 } else if (in.equals("#undoAsk") && !this.isObserver) {
                     int result = JOptionPane.showConfirmDialog(
                             null,
@@ -166,14 +158,11 @@ public class Client implements Runnable {
                 } else if (in.equals("#undoAnswerPositive") && (this.wait4undoAnswer || this.isObserver)) {
                     this.wait4undoAnswer = false;
                     String lastMove = game.moves.getMoves().get(game.moves.getMoves().size() - 1);
-                    game.chat.addMessage("** " + Settings.lang("permision_ok_4_undo_move") + ": " + lastMove + "**");
                     game.chessboard.undo();
                 } else if (in.equals("#undoAnswerNegative") && this.wait4undoAnswer) {
-                    game.chat.addMessage(Settings.lang("no_permision_4_undo_move"));
                 }
             } catch (IOException ex) {
                 isOK = false;
-                game.chat.addMessage("** " + Settings.lang("error_connecting_to_server") + " **");
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
