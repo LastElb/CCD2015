@@ -8,6 +8,7 @@ import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.model.HistoryEntry;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
+import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -124,9 +125,16 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                         e.printStackTrace();
                     }
                 });
-        // TODO: Send event through websocket
+        // Add action to history
         getParentGame().getGameHistory().add(historyEntry);
+        // Send event through websocket
         simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry);
+        // Change the active player and send it through websocket
+        setCurrentPlayer(getCurrentPlayer().getNextClient());
+        getParentGame().getPlayerList().forEach(client1 -> {
+            PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client1.equals(getCurrentPlayer()));
+            simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client1.getId(), playerChangedEvent);
+        });
     }
 
     /**

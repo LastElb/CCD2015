@@ -105,7 +105,6 @@ public class TwoPersonGame extends Game {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        chessboard.setCurrentPlayer(getPlayerList().get(0));
     }
 
     @Override

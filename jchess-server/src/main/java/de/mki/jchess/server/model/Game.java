@@ -3,10 +3,12 @@ package de.mki.jchess.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.controller.GameModeController;
 import de.mki.jchess.server.exception.TooManyPlayersException;
+import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Abstract class to implement a specific game mode.
@@ -66,14 +68,21 @@ public abstract class Game {
      * @throws TooManyPlayersException If you want to add a player and the count of sufficient players is exceeded an exception is thrown.
      */
     public Client addClientAsPlayer(Client client, SimpMessagingTemplate simpMessagingTemplate) throws TooManyPlayersException {
-        if (!hasSufficientPlayers())
+        if (!hasSufficientPlayers()) {
             playerList.add(client);
-        else
+            if (playerList.size() - 2 >= 0)
+                playerList.get(playerList.size() - 2).setNextClient(client);
+        } else
             throw new TooManyPlayersException();
         client.setConnectedGameId(getId());
         if (hasSufficientPlayers()) {
+            client.setNextClient(playerList.get(0));
             initializeGame();
-            simpMessagingTemplate.convertAndSend("/websocket/" + getId(), "game ready");
+            getChessboard().setCurrentPlayer(playerList.get(0));
+            playerList.forEach(client1 -> {
+                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client1.equals(getChessboard().getCurrentPlayer()));
+                simpMessagingTemplate.convertAndSend("/game/" + getId() + "/" + client1.getId(), playerChangedEvent);
+            });
         }
         return client;
     }
