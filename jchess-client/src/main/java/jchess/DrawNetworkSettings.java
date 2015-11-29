@@ -198,17 +198,16 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
             }
             String pass = this.textPassword.getText().toString();
             if (this.radioServer.isSelected()) {
-                //Server server = new Server(); //create server
-                //server.newTable(Integer.parseInt(textGameID.getText()), pass, !servOptions.checkWitchoutObserver.isSelected(), !servOptions.checkDisableChat.isSelected()); //create new table
-                //set client options
-                clientOptions.textServIP.setText("127.0.0.1");
-
-                try {
-                    Thread.sleep(100); //wait 100 ms
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(DrawNetworkSettings.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                // @ToDo Start server
             }
+
+            // @ToDo Start Client (do we really want to do it here?)
+            // Start Client an Join Game
+            // GameID: textGameID.getText()
+            // view only: clientOptions.checkOnlyWatch.isSelected()
+            // nickname: textNick.getText()
+
+           /*
             Client client;
             try {
                 client = new Client(clientOptions.textServIP.getText(), 8080);//create client
@@ -218,7 +217,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 {
                     System.out.println("Client connection: succesful");
                     //create new game and draw chessboard
-                    Game newGUI = JChessApp.jcv.addNewTab("Network game, table: " + textGameID.getText()/*client.sett.playerWhite.getName()+" vs "+client.sett.playerBlack.getName()*/);
+                    Game newGUI = JChessApp.jcv.addNewTab("Network game, table: " + textGameID.getText());
                     client.game = newGUI;
                     newGUI.chessboard.draw();
 
@@ -234,6 +233,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 System.out.println("Client connection: failure");
                 JOptionPane.showMessageDialog(this, err);
             }
+        */
         }
     }
 

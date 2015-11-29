@@ -50,7 +50,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public boolean blockedChessboard;
     public Chessboard chessboard;
     public GameClock gameClock;
-    public Client client;
     public Moves moves;
     private Player activePlayer;
 
@@ -330,7 +329,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                 chessboard.repaint();//repaint for sure
             }
         } else if (this.settings.gameType == Settings.gameTypes.network) {
-            this.client.sendUndoAsk();
+            //this.client.sendUndoAsk();
             status = true;
         }
         return status;
@@ -411,7 +410,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         if (settings.gameType == Settings.gameTypes.local) {
                             chessboard.move(chessboard.activeSquare, sq);
                         } else if (settings.gameType == Settings.gameTypes.network) {
-                            client.sendMove(chessboard.activeSquare.pozX, chessboard.activeSquare.pozY, sq.pozX, sq.pozY);
+                            //client.sendMove(chessboard.activeSquare.pozX, chessboard.activeSquare.pozY, sq.pozX, sq.pozY);
                             chessboard.move(chessboard.activeSquare, sq);
                         }
 
