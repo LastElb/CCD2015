@@ -7,6 +7,8 @@ import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.model.HistoryEntry;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
  * Created by Igor on 11.11.2015.
  */
 public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Chessboard(Game parentGame) {
         super(parentGame);
@@ -74,7 +78,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
             try {
                 squareFigure.setPosition((Square) getFieldByNotation(targetFieldNotation));
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
         });
         // TODO: Add history

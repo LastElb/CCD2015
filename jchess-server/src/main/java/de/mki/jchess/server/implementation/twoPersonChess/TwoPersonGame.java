@@ -6,6 +6,8 @@ import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.RandomStringService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class TwoPersonGame extends Game {
     Chessboard chessboard;
     List<Figure<Square>> playerWhiteFigures;
     List<Figure<Square>> playerBlackFigures;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public TwoPersonGame(String id) {
         super(id, 2);
@@ -73,12 +76,12 @@ public class TwoPersonGame extends Game {
                     pawn.setPosition(chessboard.getFieldByNotation(value, 1));
                     playerWhiteFigures.add(pawn);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             });
             chessboard.getFigures().addAll(playerWhiteFigures);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         // Player Black \\
         try {
@@ -98,12 +101,12 @@ public class TwoPersonGame extends Game {
                     pawn.setPosition(chessboard.getFieldByNotation(value, 6));
                     playerBlackFigures.add(pawn);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             });
             chessboard.getFigures().addAll(playerBlackFigures);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 

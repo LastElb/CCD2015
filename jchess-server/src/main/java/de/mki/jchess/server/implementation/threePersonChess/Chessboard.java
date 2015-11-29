@@ -9,6 +9,8 @@ import de.mki.jchess.server.model.HistoryEntry;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
 import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import java.util.List;
  * Created by Igor on 13.11.2015.
  */
 public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Chessboard(Game parentGame) {
         super(parentGame);
@@ -122,7 +126,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     try {
                         hexagonFigure.setPosition((Hexagon) getFieldByNotation(targetFieldNotation));
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("", e);
                     }
                 });
         // Add action to history
