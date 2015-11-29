@@ -575,3 +575,7 @@ To get all available game information request ```game/{game id}/full```
 }
 ```
 All these information are generated after all players joined the game.
+
+### 7. Websockets
+
+You can subscribe to following URLs ```game/{gameid}``` and ```game/{gameid}/{clientId}``` for player specific events.
