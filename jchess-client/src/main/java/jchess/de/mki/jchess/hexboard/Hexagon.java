@@ -1,7 +1,7 @@
 package jchess.de.mki.jchess.hexboard;
 
 /**
- *
+ * TODO: cleanup directions -> are they needed here?
  */
 public class Hexagon {
 
