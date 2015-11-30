@@ -45,18 +45,11 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     public JDialog newGameFrame;
     GUI activeGUI;//in future it will be reference to active tab
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu gameMenu;
     private javax.swing.JTabbedPane gamesPane;
-    private javax.swing.JMenuItem loadGameItem;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem moveBackItem;
-    private javax.swing.JMenuItem moveForwardItem;
     private javax.swing.JMenuItem newGameItem;
     private javax.swing.JMenu optionsMenu;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JMenuItem rewindToBegin;
-    private javax.swing.JMenuItem rewindToEnd;
-    private javax.swing.JMenuItem saveGameItem;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
@@ -194,11 +187,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newGameItem = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
-        gameMenu = new javax.swing.JMenu();
-        moveBackItem = new javax.swing.JMenuItem();
-        moveForwardItem = new javax.swing.JMenuItem();
-        rewindToBegin = new javax.swing.JMenuItem();
-        rewindToEnd = new javax.swing.JMenuItem();
         optionsMenu = new javax.swing.JMenu();
         themeSettingsMenu = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
@@ -250,61 +238,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
-
-        gameMenu.setText(resourceMap.getString("gameMenu.text")); // NOI18N
-        gameMenu.setName("gameMenu"); // NOI18N
-
-        moveBackItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-        moveBackItem.setText(resourceMap.getString("moveBackItem.text")); // NOI18N
-        moveBackItem.setName("moveBackItem"); // NOI18N
-        moveBackItem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                moveBackItemMouseClicked(evt);
-            }
-        });
-        moveBackItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                moveBackItemActionPerformed(evt);
-            }
-        });
-        gameMenu.add(moveBackItem);
-
-        moveForwardItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
-        moveForwardItem.setText(resourceMap.getString("moveForwardItem.text")); // NOI18N
-        moveForwardItem.setName("moveForwardItem"); // NOI18N
-        moveForwardItem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                moveForwardItemMouseClicked(evt);
-            }
-        });
-        moveForwardItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                moveForwardItemActionPerformed(evt);
-            }
-        });
-        gameMenu.add(moveForwardItem);
-
-        rewindToBegin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        rewindToBegin.setText(resourceMap.getString("rewindToBegin.text")); // NOI18N
-        rewindToBegin.setName("rewindToBegin"); // NOI18N
-        rewindToBegin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rewindToBeginActionPerformed(evt);
-            }
-        });
-        gameMenu.add(rewindToBegin);
-
-        rewindToEnd.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        rewindToEnd.setText(resourceMap.getString("rewindToEnd.text")); // NOI18N
-        rewindToEnd.setName("rewindToEnd"); // NOI18N
-        rewindToEnd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rewindToEndActionPerformed(evt);
-            }
-        });
-        gameMenu.add(rewindToEnd);
-
-        menuBar.add(gameMenu);
 
         optionsMenu.setText(resourceMap.getString("optionsMenu.text")); // NOI18N
         optionsMenu.setName("optionsMenu"); // NOI18N
@@ -367,24 +300,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void moveBackItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveBackItemActionPerformed
-    {//GEN-HEADEREND:event_moveBackItemActionPerformed
-        if (gui != null && gui.game != null) {
-            gui.game.undo();
-        } else {
-            try {
-                Game activeGame = this.getActiveTabGame();
-                if (!activeGame.undo()) {
-                    JOptionPane.showMessageDialog(null, "Nie da sie cofnac!");
-                }
-            } catch (java.lang.ArrayIndexOutOfBoundsException exc) {
-                JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-            } catch (UnsupportedOperationException exc) {
-                JOptionPane.showMessageDialog(null, exc.getMessage());
-            }
-        }
-
-    }//GEN-LAST:event_moveBackItemActionPerformed
 
     private void moveBackItemMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_moveBackItemMouseClicked
     {//GEN-HEADEREND:event_moveBackItemMouseClicked
@@ -397,53 +312,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         // TODO add your handling code here:
 
     }//GEN-LAST:event_moveForwardItemMouseClicked
-
-    private void moveForwardItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveForwardItemActionPerformed
-    {//GEN-HEADEREND:event_moveForwardItemActionPerformed
-        // TODO add your handling code here:
-        if (gui != null && gui.game != null) {
-            gui.game.redo();
-        } else {
-            try {
-                Game activeGame = this.getActiveTabGame();
-                if (!activeGame.redo()) {
-                    JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
-                }
-            } catch (java.lang.ArrayIndexOutOfBoundsException exc) {
-                JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-            } catch (UnsupportedOperationException exc) {
-                JOptionPane.showMessageDialog(null, exc.getMessage());
-            }
-        }
-    }//GEN-LAST:event_moveForwardItemActionPerformed
-
-    private void rewindToBeginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToBeginActionPerformed
-    {//GEN-HEADEREND:event_rewindToBeginActionPerformed
-        try {
-            Game activeGame = this.getActiveTabGame();
-            if (!activeGame.rewindToBegin()) {
-                JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
-            }
-        } catch (ArrayIndexOutOfBoundsException exc) {
-            JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-        } catch (UnsupportedOperationException exc) {
-            JOptionPane.showMessageDialog(null, exc.getMessage());
-        }
-    }//GEN-LAST:event_rewindToBeginActionPerformed
-
-    private void rewindToEndActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToEndActionPerformed
-    {//GEN-HEADEREND:event_rewindToEndActionPerformed
-        try {
-            Game activeGame = this.getActiveTabGame();
-            if (!activeGame.rewindToEnd()) {
-                JOptionPane.showMessageDialog(null, "W pamieci brak ruchow wstecz!");
-            }
-        } catch (ArrayIndexOutOfBoundsException exc) {
-            JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-        } catch (UnsupportedOperationException exc) {
-            JOptionPane.showMessageDialog(null, exc.getMessage());
-        }
-    }//GEN-LAST:event_rewindToEndActionPerformed
 
     public void componentResized(ComponentEvent e) {
         System.out.println("jchessView resized!!;");

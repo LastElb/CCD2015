@@ -57,18 +57,18 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         //components
         this.parent = parent;
 
-        this.radioServer = new JRadioButton(Settings.lang("create_server"), true);
-        this.radioClient = new JRadioButton(Settings.lang("connect_2_server"), false);
+        this.radioServer = new JRadioButton("Server starten", true);
+        this.radioClient = new JRadioButton("Mit Sevrer verbinden", false);
         this.serverORclient = new ButtonGroup();
         this.serverORclient.add(this.radioServer);
         this.serverORclient.add(this.radioClient);
         this.radioServer.addActionListener(this);
         this.radioClient.addActionListener(this);
 
-        this.labelNick = new JLabel(Settings.lang("nickname"));
-        this.labelGameID = new JLabel(Settings.lang("game_id"));
+        this.labelNick = new JLabel("Nutzername");
+        this.labelGameID = new JLabel("Game-ID");
 
-        this.labelOptions = new JLabel(Settings.lang("server_options"));
+        this.labelOptions = new JLabel("Server Optionen");
 
         this.textNick = new JTextField();
         this.textGameID = new JTextField();
@@ -77,7 +77,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         this.panelOptions = new JPanel();
         this.clientOptions = new ClientOptionsPanel();
 
-        this.buttonStart = new JButton(Settings.lang("start"));
+        this.buttonStart = new JButton("Start");
         this.buttonStart.addActionListener(this);
 
         //add components
@@ -161,17 +161,17 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         {
             String error = "";
             if (this.textGameID.getText().isEmpty()) {
-                error = Settings.lang("fill_game_id") + "\n";
+                error = "Bitte geben Sie eine Game ID an.\n";
             }
             if (this.textNick.getText().length() == 0) {
-                error += Settings.lang("fill_name") + "\n";
+                error += "Bitte geben Sie einen Nickname an.\n";
             }
             if (this.radioClient.isSelected() && this.clientOptions.textServIP.getText().length() == 0) {
-                error += Settings.lang("please_fill_field") + " IP \n";
+                error += "Bitte geben Sie eine IP an.\n";
             } else if (this.radioClient.isSelected()) {
                 Pattern ipPattern = Pattern.compile("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}");
                 if (!ipPattern.matcher(this.clientOptions.textServIP.getText()).matches()) {
-                    error += Settings.lang("bad_ip_format") + "\n";
+                    error += "Bitte geben Sie eine gültige IP an.\n";
                 }
             }
             if (error.length() > 0) {
@@ -233,9 +233,9 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         ClientOptionsPanel() {
             super();
 
-            this.labelServIP = new JLabel(Settings.lang("server_ip"));
+            this.labelServIP = new JLabel("Server IP");
             this.textServIP = new JTextField();
-            this.checkOnlyWatch = new JCheckBox(Settings.lang("only_observe"));
+            this.checkOnlyWatch = new JCheckBox("Spiel beobachten");
 
             this.gbl = new GridBagLayout();
             this.gbc = new GridBagConstraints();

@@ -54,7 +54,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
 
         File[] files = dir.listFiles();
         if (files != null && dir.exists()) {
-            this.setTitle(Settings.lang("choose_theme_window_title"));
+            this.setTitle("Theme wählen");
             Dimension winDim = new Dimension(550, 230);
             this.setMinimumSize(winDim);
             this.setMaximumSize(winDim);
@@ -95,7 +95,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             this.okButton.addActionListener(this);
             this.setModal(true);
         } else {
-            throw new Exception(Settings.lang("error_when_creating_theme_config_window"));
+            throw new Exception("Fehler beim Erstellen des Theme-Auswahl-Fensters");
         }
     }
 
@@ -127,7 +127,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
                     } catch (java.io.IOException exc) {
                         logger.error("", exc);
                     }
-                    JOptionPane.showMessageDialog(this, Settings.lang("changes_visible_after_restart"));
+                    JOptionPane.showMessageDialog(this, "Die Änderungen sind erst nach einem Neustart sichtbar.");
                 }
             }
             this.dispose();
