@@ -5,19 +5,16 @@ import de.mki.chessboard.model.Chessboard;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * todo: implement abstract chessboard class. todo.
- */
 public class Hexboard extends Chessboard {
 
     /* default values for 600px x 600px hexagonal chessboard */
-    int width = 600;
-    int height = 600;
-    int hexWidth = 46;
-    int hexHeight = 54;
-    int hexSize = hexHeight / 2;  //TODO: hexSize has to be a Point.
-    Point origin = new Point(0,0); //TODO: find the actual origin point in the gui
-    Layout layout = new Layout(Layout.pointy, new Point(hexSize, hexSize), origin);
+    int width;
+    int height;
+    int hexWidth;
+    int hexHeight;
+    int hexSize;  //TODO: hexSize has to be a Point.
+    Point origin; //TODO: find the actual origin point in the gui
+    Layout layout;
     public ArrayList<Hexagon> fields = new ArrayList<Hexagon>();
 
     public Hexboard() {
@@ -27,15 +24,6 @@ public class Hexboard extends Chessboard {
 
     }
 
-
-    public int getChessboardWidth() {
-        return width;
-    }
-
-
-    public int getChessboardHeight() {
-        return height;
-    }
 
     public int getHexWidth() {
         return hexWidth;
@@ -57,6 +45,7 @@ public class Hexboard extends Chessboard {
         return layout;
     }
 
+    @Override
     public void generateFields() {
         /* Generate Fields */
         // generate right half from x=0 to x=7
@@ -74,6 +63,14 @@ public class Hexboard extends Chessboard {
 
     @Override
     public void drawBoard() {
- //Todo: draw the Board.
+        //Todo: draw the Board.
+    }
+
+    @Override
+    public Hexagon getClickedField(int x, int y) {
+        System.out.println("You clicked on x=" + x + " and y=" + y);
+        Hexagon clickedHexagon = this.layout.pixelToHexagon(new Point(x, y));
+        System.out.println("You clicked on Hexagon: q=" + clickedHexagon.q + " and r=" + clickedHexagon.r);
+        return clickedHexagon;
     }
 }
