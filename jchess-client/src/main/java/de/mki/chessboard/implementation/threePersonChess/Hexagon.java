@@ -1,9 +1,11 @@
-package jchess.de.mki.jchess.hexboard;
+package de.mki.chessboard.implementation.threePersonChess;
+
+import de.mki.chessboard.model.Field;
 
 /**
  * TODO: cleanup directions -> are they needed here?
  */
-public class Hexagon {
+public class Hexagon extends Field {
 
     public final int q;
     public final int r;

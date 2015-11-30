@@ -1,4 +1,4 @@
-package jchess.de.mki.jchess.hexboard;
+package de.mki.chessboard.implementation.threePersonChess;
 
 /**
  * Created by Kevin on 24.11.15.
