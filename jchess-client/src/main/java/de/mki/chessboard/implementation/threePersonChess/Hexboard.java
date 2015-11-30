@@ -7,23 +7,18 @@ import java.util.ArrayList;
 
 public class Hexboard extends Chessboard {
 
-    /* default values for 600px x 600px hexagonal chessboard */
-    int width;
-    int height;
     int hexWidth;
     int hexHeight;
-    int hexSize;  //TODO: hexSize has to be a Point.
+    Point hexSize;
     Point origin; //TODO: find the actual origin point in the gui
     Layout layout;
     public ArrayList<Hexagon> fields = new ArrayList<Hexagon>();
 
     public Hexboard() {
-
         this.generateFields();
         this.drawBoard();
 
     }
-
 
     public int getHexWidth() {
         return hexWidth;
@@ -33,7 +28,7 @@ public class Hexboard extends Chessboard {
         return hexHeight;
     }
 
-    public int getHexSize() {
+    public Point getHexSize() {
         return hexSize;
     }
 
@@ -43,6 +38,26 @@ public class Hexboard extends Chessboard {
 
     public Layout getChessboardLayout() {
         return layout;
+    }
+
+    public void setHexWidth(int hexWidth) {
+        this.hexWidth = hexWidth;
+    }
+
+    public void setHexHeight(int hexHeight) {
+        this.hexHeight = hexHeight;
+    }
+
+    public void setHexSize(Point hexSize) {
+        this.hexSize = hexSize;
+    }
+
+    public void setOrigin(Point origin) {
+        this.origin = origin;
+    }
+
+    public void setLayout(Layout layout) {
+        this.layout = layout;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package de.mki.chessboard.implementation.threePersonChess;
 
+import jchess.GUI;
+
 import java.awt.*;
 
 public class smallHexboard extends Hexboard {
@@ -8,11 +10,14 @@ public class smallHexboard extends Hexboard {
      * default values for 600px x 600px hexagonal chessboard
      */
 
-    int width = 600;
-    int height = 600;
-    int hexWidth = 46;
-    int hexHeight = 54;
-    int hexSize = hexHeight / 2;  //TODO: hexSize has to be a Point.
-    Point origin = new Point(0, 0); //TODO: find the actual origin point in the gui
-    Layout layout = new Layout(Layout.pointy, new Point(hexSize, hexSize), origin);
+    public smallHexboard() {
+        this.setWidth(600);
+        this.setHeight(600);
+        this.setHexHeight(46);
+        this.setHexSize(new Point(27, 27));  //TODO: find fitting size.
+        this.setOrigin(new Point(0, 0));     //TODO: find the actual origin point in the gui
+        this.setLayout(new Layout(Layout.pointy, getHexSize(), getOrigin()));
+        //TODO: set image
+    }
+
 }
