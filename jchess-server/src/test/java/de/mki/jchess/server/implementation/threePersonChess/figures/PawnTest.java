@@ -17,13 +17,12 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Igor on 17.11.2015.
@@ -32,6 +31,16 @@ import static org.junit.Assert.*;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class PawnTest extends FigureTest {
+
+    @Test
+    public void testInvalidFacingDirection() throws Exception {
+        setUpGame();
+        try {
+            new Pawn(RandomStringService.getRandomString(), game.getPlayerList().get(0), Direction.DIAGONALTOP);
+            fail("Pawn created with invalid facing direction");
+        } catch (Exception ignore) {
+        }
+    }
 
     @Test
     public void testGetPossibleMovements1() throws Exception {

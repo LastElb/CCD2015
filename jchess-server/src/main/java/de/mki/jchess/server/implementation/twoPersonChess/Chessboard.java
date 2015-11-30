@@ -1,8 +1,6 @@
 package de.mki.jchess.server.implementation.twoPersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
-import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
-import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.model.HistoryEntry;
 import de.mki.jchess.server.model.websocket.FigureEvent;

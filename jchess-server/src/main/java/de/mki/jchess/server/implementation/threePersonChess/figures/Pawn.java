@@ -1,7 +1,7 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
-import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
+import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
