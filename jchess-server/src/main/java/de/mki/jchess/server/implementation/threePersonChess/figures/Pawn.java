@@ -6,6 +6,7 @@ import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.websocket.MovementEvent;
+import de.mki.jchess.server.service.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,10 @@ public class Pawn extends Figure<Hexagon> {
                 break;
             default: throw new Exception("Invalid facing direction " + direction.toString() + " for a pawn.");
         }
+    }
+
+    public Pawn(Client client, Direction direction) throws Exception {
+        this(RandomStringService.getRandomString(), client, direction);
     }
 
     @Override

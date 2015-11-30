@@ -31,25 +31,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class PawnTest {
-
-    Game game;
-
-    @Autowired
-    SimpMessagingTemplate simpMessagingTemplate;
-
-    void setUpGame() throws Exception {
-        game = new ThreePersonGame(RandomStringService.getRandomString());
-        game.addClientAsPlayer(new Client().setNickname("foo"), simpMessagingTemplate);
-        game.addClientAsPlayer(new Client().setNickname("foo"), simpMessagingTemplate);
-        game.addClientAsPlayer(new Client().setNickname("foo"), simpMessagingTemplate);
-        game.initializeGame();
-        // Reset figures
-        game.getChessboard().getFigures().clear();
-        game.getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), game.getPlayerList().get(0)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a5")));
-        game.getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), game.getPlayerList().get(1)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("j13")));
-        game.getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), game.getPlayerList().get(2)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("i4")));
-    }
+public class PawnTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements1() throws Exception {

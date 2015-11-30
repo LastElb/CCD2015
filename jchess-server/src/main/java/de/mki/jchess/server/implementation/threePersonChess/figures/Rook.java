@@ -6,6 +6,7 @@ import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.websocket.MovementEvent;
+import de.mki.jchess.server.service.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,10 @@ public class Rook extends Figure<Hexagon> {
         setId(id);
         setName("Rook");
         directions = Arrays.asList(Direction.TOPRIGHT, Direction.RIGHT, Direction.BOTTOMRIGHT, Direction.BOTTOMLEFT, Direction.LEFT, Direction.TOPLEFT);
+    }
+
+    public Rook(Client client) {
+        this(RandomStringService.getRandomString(), client);
     }
 
     /**
