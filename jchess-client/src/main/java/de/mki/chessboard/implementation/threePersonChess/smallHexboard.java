@@ -4,6 +4,8 @@ import jchess.GUI;
 
 import java.awt.*;
 
+import static de.mki.chessboard.controller.GraphicsController.loadImage;
+
 public class smallHexboard extends Hexboard {
 
     /**
@@ -17,7 +19,7 @@ public class smallHexboard extends Hexboard {
         this.setHexSize(new Point(27, 27));  //TODO: find fitting size.
         this.setOrigin(new Point(0, 0));     //TODO: find the actual origin point in the gui
         this.setLayout(new Layout(Layout.pointy, getHexSize(), getOrigin()));
-        //TODO: set image
+        this.setImage(loadImage("chessboard600x600.png"));
     }
 
 }

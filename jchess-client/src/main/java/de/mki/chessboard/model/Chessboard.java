@@ -2,14 +2,16 @@ package de.mki.chessboard.model;
 
 import de.mki.chessboard.implementation.threePersonChess.Hexagon;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 /**
  *
  */
-public abstract class Chessboard<T extends Field> {
+public abstract class Chessboard<T extends Field> extends JPanel {
 
+    /* height and width of the image */
     int width;
     int height;
     List<T> fields;
@@ -60,4 +62,19 @@ public abstract class Chessboard<T extends Field> {
         return null;
     }
 
+    /**
+     * Graphics
+     */
+    @Override
+    public void paintComponent(Graphics g) {
+        System.out.println("someone used paint Component. He used Graphics g=" + g.toString());
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.drawImage(image, 0, 0, null);
+    }
+
+    @Override
+    public void update(Graphics g) {
+        repaint();
+    }
 }
