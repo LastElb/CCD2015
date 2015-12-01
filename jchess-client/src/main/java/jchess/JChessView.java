@@ -23,8 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.io.File;
-import java.io.IOException;
 
 
 /**
@@ -48,12 +46,10 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private javax.swing.JTabbedPane gamesPane;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem newGameItem;
-    private javax.swing.JMenu optionsMenu;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
-    private javax.swing.JMenuItem themeSettingsMenu;
     private int busyIconIndex = 0;
     private JDialog aboutBox;
     private PawnPromotionWindow promotionBox;
@@ -128,17 +124,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         if (target == newGameItem) {
             this.newGameFrame = new NewGameWindow();
             JChessApp.getApplication().show(this.newGameFrame);
-        } else if (target == this.themeSettingsMenu) {
-            try {
-                ThemeChooseWindow choose = new ThemeChooseWindow(this.getFrame());
-                JChessApp.getApplication().show(choose);
-            } catch (Exception exc) {
-                JOptionPane.showMessageDialog(
-                        JChessApp.getApplication().getMainFrame(),
-                        exc.getMessage()
-                );
-                System.out.println("Something wrong creating window - perhaps themeList is null");
-            }
         }
     }
 
@@ -187,8 +172,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newGameItem = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
-        optionsMenu = new javax.swing.JMenu();
-        themeSettingsMenu = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -238,16 +221,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
-
-        optionsMenu.setText(resourceMap.getString("optionsMenu.text")); // NOI18N
-        optionsMenu.setName("optionsMenu"); // NOI18N
-
-        themeSettingsMenu.setText(resourceMap.getString("themeSettingsMenu.text")); // NOI18N
-        themeSettingsMenu.setName("themeSettingsMenu"); // NOI18N
-        optionsMenu.add(themeSettingsMenu);
-        themeSettingsMenu.addActionListener(this);
-
-        menuBar.add(optionsMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
