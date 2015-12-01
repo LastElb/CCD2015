@@ -20,6 +20,15 @@ public class Layout {
         this.origin = origin;
     }
 
+    public Point hexagonToPixel(Hexagon h) {
+        Orientation M = this.orientation;
+        Point size = this.size;
+        Point origin = this.origin;
+        double x = (M.f0 * h.q + M.f1 * h.r) * size.x;
+        double y = (M.f2 * h.q + M.f3 * h.r) * size.y;
+        return new Point((int) x + origin.x, (int) y + origin.y);
+    }
+
     public Hexagon pixelToHexagon(Point p)
     {
         Orientation M = this.orientation;
