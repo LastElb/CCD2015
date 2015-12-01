@@ -10,13 +10,13 @@ public class Hexboard extends Chessboard {
     int hexWidth;
     int hexHeight;
     Point hexSize;
-    Point origin; //TODO: find the actual origin point in the gui
+    Point origin;
     Layout layout;
     public ArrayList<Hexagon> fields = new ArrayList<Hexagon>();
 
     public Hexboard() {
         this.generateFields();
-        this.drawBoard();
+        this.repaint();
 
     }
 
@@ -74,11 +74,6 @@ public class Hexboard extends Chessboard {
             for(int y=startY; y<=12; y++)
                 fields.add(new Hexagon(x,y));
         }
-    }
-
-    @Override
-    public void drawBoard() {
-        //Todo: draw the Board.
     }
 
     @Override

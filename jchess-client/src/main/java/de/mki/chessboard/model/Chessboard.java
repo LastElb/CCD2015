@@ -11,11 +11,11 @@ import java.util.List;
  */
 public abstract class Chessboard<T extends Field> extends JPanel {
 
-    /* height and width of the image */
-    int width;
-    int height;
-    List<T> fields;
     Image image;
+    int width;  //correlates with image width
+    int height; //correlates with image width
+    List<T> fields;
+    // TODO: List<figures> figures;
 
 
     public Chessboard() {
@@ -54,9 +54,6 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     public void generateFields(){
 
     }
-    public void drawBoard() {
-
-    }
 
     public T getClickedField(int x, int y) {
         return null;
@@ -67,14 +64,22 @@ public abstract class Chessboard<T extends Field> extends JPanel {
      */
     @Override
     public void paintComponent(Graphics g) {
-        System.out.println("someone used paint Component. He used Graphics g=" + g.toString());
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(image, 0, 0, null);
+        drawBoard(g);
+        drawFigures(g);
     }
 
     @Override
     public void update(Graphics g) {
         repaint();
+    }
+
+    private void drawBoard(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.drawImage(image, 0, 0, null);
+    }
+
+    private void drawFigures(Graphics g) {
+        //TODO: draw figures on board
     }
 }
