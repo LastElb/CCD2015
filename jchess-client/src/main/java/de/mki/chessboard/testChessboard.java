@@ -12,7 +12,7 @@ public class testChessboard {
 
         for (Hexagon hex: hexboard.fields
              ) {
-            System.out.println(""+hex.q + hex.r);
+            System.out.println("q:" + hex.q + " | r:" + hex.r + " = " + hex.getNotation());
         }
 
     }
