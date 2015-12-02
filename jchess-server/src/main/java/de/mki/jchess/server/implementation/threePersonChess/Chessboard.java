@@ -140,7 +140,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     }
 
     /**
-     * Returns true if all positions are occupied. Returns false if at least one position is not occupied.
+     * Returns true if at least one position is occupied. Returns false if no position is occupied.
      * @param positions
      * @return
      */

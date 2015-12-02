@@ -155,12 +155,14 @@ public class Pawn extends Figure<Hexagon> {
         attackableDirections.forEach(direction -> {
             Optional<Hexagon> optional = getPosition().getNeighbourByDirection(direction);
             // Check if this neighbour field does exist and if the bordering fields are free
-            if (optional.isPresent() && (!chessboard.areFieldsOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
-                    .stream()
-                    .map(freeDirection -> getPosition().getNeighbourByDirection(freeDirection))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList()))))
+            if (optional.isPresent() &&
+                    direction.getNecessaryFreeDirectionsForDiagonal().isPresent() &&
+                    (!chessboard.areFieldsOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
+                        .stream()
+                        .map(freeDirection -> getPosition().getNeighbourByDirection(freeDirection))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList()))))
                 output.add(optional.get());
         });
         return output;

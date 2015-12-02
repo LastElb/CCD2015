@@ -295,11 +295,6 @@ public class RookTest extends FigureTest {
     }
 
     @Test
-    public void testGetHypotheticalAttackableFields() throws Exception {
-        setUpGame();
-    }
-
-    @Test
     public void testGetHypotheticalAttackableFields1() throws Exception {
         setUpGame();
         Rook rook = new Rook(game.getPlayerList().get(0));

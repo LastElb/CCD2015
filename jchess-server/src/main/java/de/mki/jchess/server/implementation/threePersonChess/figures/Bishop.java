@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Igor on 12.11.2015.
@@ -87,7 +88,12 @@ public class Bishop extends Figure<Hexagon> {
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getPosition().getNeighbourByDirection(direction);
-            while (hexagonOptional.isPresent()) {
+            while (hexagonOptional.isPresent() && (!chessboard.areFieldsOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
+                    .stream()
+                    .map(freeDirection -> getPosition().getNeighbourByDirection(freeDirection))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toList())))) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
                 if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
                     final Optional<Hexagon> finalHexagonOptional = hexagonOptional;
