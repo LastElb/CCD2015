@@ -1,7 +1,6 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
-import de.mki.jchess.server.implementation.twoPersonChess.Square;
 import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
@@ -22,9 +21,6 @@ public class King extends Figure<Hexagon> {
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
         return new ArrayList<>();
-//        List<Square> output = new ArrayList<>();
-//        output.addAll(getPosition().getNeighbours().stream().map(Square.SquareNeighbourModel::getSquare).collect(Collectors.toList()));
-//        return output;
     }
 
     @Override

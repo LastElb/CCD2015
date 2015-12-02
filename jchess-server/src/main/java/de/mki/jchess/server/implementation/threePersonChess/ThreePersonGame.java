@@ -5,6 +5,8 @@ import de.mki.jchess.server.implementation.threePersonChess.figures.*;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.RandomStringService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.stream.IntStream;
@@ -15,6 +17,7 @@ import java.util.stream.IntStream;
 public class ThreePersonGame extends Game {
 
     Chessboard chessboard;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Default constructor for creating a new three person chess game.
@@ -108,11 +111,11 @@ public class ThreePersonGame extends Game {
                 try {
                     getChessboard().getFigures().add(new Pawn(RandomStringService.getRandomString(), playerWhite, Direction.DIAGONALBOTTOM).setPosition(chessboard.getFieldByNotation(column, 1)).setPictureId("pawn-white"));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         // Grey figures
@@ -130,11 +133,11 @@ public class ThreePersonGame extends Game {
                 try {
                     getChessboard().getFigures().add(new Pawn(RandomStringService.getRandomString(), playerGrey, Direction.DIAGONALTOPLEFT).setPosition(chessboard.getFieldByNotation(11, row)).setPictureId("pawn-grey"));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         // Black figures
@@ -152,11 +155,11 @@ public class ThreePersonGame extends Game {
                 try {
                     getChessboard().getFigures().add(new Pawn(RandomStringService.getRandomString(), playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-grey"));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 
