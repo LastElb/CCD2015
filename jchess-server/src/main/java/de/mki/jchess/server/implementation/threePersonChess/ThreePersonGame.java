@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 public class ThreePersonGame extends Game {
 
     Chessboard chessboard;
-    private static Logger logger = LoggerFactory.getLogger(ThreePersonGame.class);
+    private static final Logger logger = LoggerFactory.getLogger(ThreePersonGame.class);
 
     /**
      * Default constructor for creating a new three person chess game.

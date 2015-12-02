@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class Bishop extends Figure<Hexagon> {
 
-    private static Logger logger = LoggerFactory.getLogger(Bishop.class);
+    private static final Logger logger = LoggerFactory.getLogger(Bishop.class);
     List<Direction> directions;
 
     public Bishop(String id, Client client) {
