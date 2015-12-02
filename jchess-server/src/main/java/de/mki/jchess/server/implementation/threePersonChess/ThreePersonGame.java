@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 public class ThreePersonGame extends Game {
 
     Chessboard chessboard;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static Logger logger = LoggerFactory.getLogger(ThreePersonGame.class);
 
     /**
      * Default constructor for creating a new three person chess game.
@@ -38,60 +38,12 @@ public class ThreePersonGame extends Game {
             if (row <= 5) {
                 // Upper half
                 IntStream.range(0, 8 + row).forEach(column -> {
-                    Hexagon hexagon = new Hexagon(column, row);
-                    for (Direction direction : Direction.values()) {
-                        try {
-                            int difX = 0;
-                            int difY = 0;
-                            switch (direction) {
-                                case DIAGONALTOP: difY = -2; difX = -1; break;
-                                case TOPRIGHT: difY = -1; break;
-                                case DIAGONALTOPRIGHT: difY = -1; difX = 1; break;
-                                case RIGHT: difX = 1; break;
-                                case DIAGONALBOTTOMRIGHT: difY = 1; difX = 2; break;
-                                case BOTTOMRIGHT: difY = 1; difX = 1; break;
-                                case DIAGONALBOTTOM: difY = 2; difX = 1; break;
-                                case BOTTOMLEFT: difY = 1; break;
-                                case DIAGONALBOTTOMLEFT: difY = 1; difX = -1; break;
-                                case LEFT: difX = -1; break;
-                                case DIAGONALTOPLEFT: difY = -1; difX = -2; break;
-                                case TOPLEFT: difY = -1; difX = -1; break;
-                            }
-                            Hexagon neighbour = chessboard.getFieldByNotation(column + difX, row + difY);
-                            hexagon.addNeighbour(neighbour, direction);
-                            neighbour.addNeighbour(hexagon, direction.getOppositeDirection());
-                        } catch (Exception ignore) {};
-                    }
-                    chessboard.addField(hexagon);
+                    chessboard.addField(generateNeighbours(new Hexagon(column, row)));
                 });
             } else {
                 // Lower half
                 IntStream.range(row - 5, 13).forEach(column -> {
-                    Hexagon hexagon = new Hexagon(column, row);
-                    for (Direction direction : Direction.values()) {
-                        try {
-                            int difX = 0;
-                            int difY = 0;
-                            switch (direction) {
-                                case DIAGONALTOP: difY = -2; difX = -1; break;
-                                case TOPRIGHT: difY = -1; break;
-                                case DIAGONALTOPRIGHT: difY = -1; difX = 1; break;
-                                case RIGHT: difX = 1; break;
-                                case DIAGONALBOTTOMRIGHT: difY = 1; difX = 2; break;
-                                case BOTTOMRIGHT: difY = 1; difX = 1; break;
-                                case DIAGONALBOTTOM: difY = 2; difX = 1; break;
-                                case BOTTOMLEFT: difY = 1; break;
-                                case DIAGONALBOTTOMLEFT: difY = 1; difX = -1; break;
-                                case LEFT: difX = -1; break;
-                                case DIAGONALTOPLEFT: difY = -1; difX = -2; break;
-                                case TOPLEFT: difY = -1; difX = -1; break;
-                            }
-                            Hexagon neighbour = chessboard.getFieldByNotation(column + difX, row + difY);
-                            hexagon.addNeighbour(neighbour, direction);
-                            neighbour.addNeighbour(hexagon, direction.getOppositeDirection());
-                        } catch (Exception ignore) {};
-                    }
-                    chessboard.addField(hexagon);
+                    chessboard.addField(generateNeighbours(new Hexagon(column, row)));
                 });
             }
         });
@@ -171,10 +123,47 @@ public class ThreePersonGame extends Game {
     @Override
     public Client addClientAsPlayer(Client client, SimpMessagingTemplate simpMessagingTemplate) throws TooManyPlayersException {
         switch (getPlayerList().size()) {
-            case 0: client.setTeam("white"); break;
-            case 1: client.setTeam("grey"); break;
-            case 2: client.setTeam("black"); break;
+            case 0:
+                client.setTeam("white");
+                break;
+            case 1:
+                client.setTeam("grey");
+                break;
+            case 2:
+                client.setTeam("black");
+                break;
+            default:
+                throw new TooManyPlayersException();
         }
         return super.addClientAsPlayer(client, simpMessagingTemplate);
+    }
+
+    private Hexagon generateNeighbours(Hexagon hexagon) {
+        for (Direction direction : Direction.values()) {
+            try {
+                int difX = 0;
+                int difY = 0;
+                switch (direction) {
+                    case DIAGONALTOP: difY = -2; difX = -1; break;
+                    case TOPRIGHT: difY = -1; break;
+                    case DIAGONALTOPRIGHT: difY = -1; difX = 1; break;
+                    case RIGHT: difX = 1; break;
+                    case DIAGONALBOTTOMRIGHT: difY = 1; difX = 2; break;
+                    case BOTTOMRIGHT: difY = 1; difX = 1; break;
+                    case DIAGONALBOTTOM: difY = 2; difX = 1; break;
+                    case BOTTOMLEFT: difY = 1; break;
+                    case DIAGONALBOTTOMLEFT: difY = 1; difX = -1; break;
+                    case LEFT: difX = -1; break;
+                    case DIAGONALTOPLEFT: difY = -1; difX = -2; break;
+                    case TOPLEFT: difY = -1; difX = -1; break;
+                }
+                Hexagon neighbour = chessboard.getFieldByNotation(hexagon.column + difX, hexagon.row + difY);
+                hexagon.addNeighbour(neighbour, direction);
+                neighbour.addNeighbour(hexagon, direction.getOppositeDirection());
+            } catch (Exception e) {
+                logger.trace("", e);
+            };
+        }
+        return hexagon;
     }
 }
