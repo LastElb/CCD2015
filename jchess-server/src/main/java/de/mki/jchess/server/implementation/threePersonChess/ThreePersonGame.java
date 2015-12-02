@@ -37,14 +37,10 @@ public class ThreePersonGame extends Game {
             // But for code understandability I'll just cut it half.
             if (row <= 5) {
                 // Upper half
-                IntStream.range(0, 8 + row).forEach(column -> {
-                    chessboard.addField(generateNeighbours(new Hexagon(column, row)));
-                });
+                IntStream.range(0, 8 + row).forEach(column -> chessboard.addField(generateNeighbours(new Hexagon(column, row))));
             } else {
                 // Lower half
-                IntStream.range(row - 5, 13).forEach(column -> {
-                    chessboard.addField(generateNeighbours(new Hexagon(column, row)));
-                });
+                IntStream.range(row - 5, 13).forEach(column -> chessboard.addField(generateNeighbours(new Hexagon(column, row))));
             }
         });
 
@@ -162,7 +158,7 @@ public class ThreePersonGame extends Game {
                 neighbour.addNeighbour(hexagon, direction.getOppositeDirection());
             } catch (Exception ignore) {
                 // Don't log it. Exceptions happen when an invalid field is called
-            };
+            }
         }
         return hexagon;
     }
