@@ -1,7 +1,5 @@
 package de.mki.chessboard.model;
 
-import de.mki.chessboard.implementation.threePersonChess.Hexagon;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -51,13 +49,9 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         this.image = image;
     }
 
-    public void generateFields(){
+    public abstract void generateFields();
 
-    }
-
-    public T getClickedField(int x, int y) {
-        return null;
-    }
+    public abstract T getClickedField(int x, int y);
 
     /**
      * Graphics
