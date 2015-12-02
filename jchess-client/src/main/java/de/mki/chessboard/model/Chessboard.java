@@ -1,7 +1,9 @@
 package de.mki.chessboard.model;
 
 import jchess.client.models.Figure;
+import jchess.client.models.Position;
 
+import static de.mki.chessboard.controller.GraphicsController.loadImage;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -72,11 +74,24 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         repaint();
     }
 
-    private void drawBoard(Graphics g2d) {
+    private void drawBoard(Graphics2D g2d) {
         g2d.drawImage(this.image, 0, 0, null);
     }
 
-    private void drawFigures(Graphics g) {
-        //TODO: draw figures on board
+    private void drawFigures(Graphics2D g2d) {
+
+        for (Figure figure : figures
+                ) {
+            Image figureImage = loadImage(figure.getPictureId());
+            String position = figure.getPositionObject().getNotation();
+            Field field = getFieldByNotation(position);
+
+            /** TODO: implement X and Y in Hexagon, so image can be drawn
+             * g2d.drawImage(figureImage, field.getX(), field.getY(), null);
+             */
+
+        }
     }
+
+    protected abstract Field getFieldByNotation(String position);
 }
