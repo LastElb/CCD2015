@@ -22,7 +22,7 @@ import org.jdesktop.application.SingleFrameApplication;
  * The main class of the application.
  */
 public class JChessApp extends SingleFrameApplication {
-    static JChessView jcv;
+    private static JChessView jChessView;
 
     /**
      * A convenient static getter for the application instance.
@@ -40,13 +40,17 @@ public class JChessApp extends SingleFrameApplication {
         launch(JChessApp.class, args);
     }
 
+    public static JChessView getjChessView(){
+        return jChessView;
+    }
+
     /**
      * At startup create and show the main frame of the application.
      */
     @Override
     protected void startup() {
-        jcv = new JChessView(this);
-        show(jcv);
+        jChessView = new JChessView(this);
+        show(jChessView);
     }
 
     /**
