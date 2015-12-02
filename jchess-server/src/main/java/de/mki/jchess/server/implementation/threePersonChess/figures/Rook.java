@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class Rook extends Figure<Hexagon> {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(Rook.class);
     List<Direction> directions;
 
     public Rook(String id, Client client) {

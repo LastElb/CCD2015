@@ -10,14 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by Igor on 12.11.2015.
  */
 public class Queen extends Figure<Hexagon> {
 
-    private static Logger logger = LoggerFactory.getLogger(Queen.class);
+    private static final Logger logger = LoggerFactory.getLogger(Queen.class);
     List<Direction> directions;
 
     public Queen(String id, Client client) {

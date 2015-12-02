@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(Chessboard.class);
 
     public Chessboard(Game parentGame) {
         super(parentGame);

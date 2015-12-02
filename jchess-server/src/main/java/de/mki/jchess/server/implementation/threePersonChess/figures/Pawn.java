@@ -1,5 +1,6 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
+import de.mki.jchess.server.exception.InvalidFacingDirection;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class Pawn extends Figure<Hexagon> {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(Pawn.class);
     Direction facingDirection;
     List<Direction> attackableDirections;
     List<Direction> movableDirections;
@@ -28,9 +29,9 @@ public class Pawn extends Figure<Hexagon> {
      * @param id
      * @param client
      * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
-     * @throws Exception
+     * @throws InvalidFacingDirection
      */
-    public Pawn(String id, Client client, Direction direction) throws Exception {
+    public Pawn(String id, Client client, Direction direction) throws InvalidFacingDirection {
         super(client);
         setId(id);
         setName("Pawn");
@@ -48,7 +49,7 @@ public class Pawn extends Figure<Hexagon> {
                 attackableDirections = Arrays.asList(Direction.DIAGONALTOP, Direction.DIAGONALTOPRIGHT, Direction.DIAGONALBOTTOMRIGHT);
                 movableDirections = Arrays.asList(Direction.RIGHT, Direction.TOPRIGHT);
                 break;
-            default: throw new Exception("Invalid facing direction " + direction.toString() + " for a pawn.");
+            default: throw new InvalidFacingDirection(direction, this);
         }
     }
 
@@ -56,35 +57,33 @@ public class Pawn extends Figure<Hexagon> {
      *
      * @param client
      * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
-     * @throws Exception
+     * @throws InvalidFacingDirection
      */
-    public Pawn(Client client, Direction direction) throws Exception {
+    public Pawn(Client client, Direction direction) throws InvalidFacingDirection {
         this(RandomStringService.getRandomString(), client, direction);
     }
 
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
         List<Hexagon> output = new ArrayList<>();
-        movableDirections.forEach(direction -> {
-            getPosition().getNeighbourByDirection(direction)
-                    .ifPresent(hexagon -> {
-                        try {
-                            if (!chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
-                                logger.trace("Field " + hexagon.getNotation() + " is not occupied.");
-                                setHypotheticalPosition(hexagon);
-                                if (!chessboard.willKingBeChecked(getClient().getId())) {
-                                    output.add(hexagon);
-                                    logger.trace("King will not be checked with this move.");
-                                } else
-                                    logger.trace("King will be checked with this move.");
-                                setHypotheticalPosition(null);
+        movableDirections.forEach(direction -> getPosition().getNeighbourByDirection(direction)
+                .ifPresent(hexagon -> {
+                    try {
+                        if (!chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
+                            logger.trace("Field " + hexagon.getNotation() + " is not occupied.");
+                            setHypotheticalPosition(hexagon);
+                            if (!chessboard.willKingBeChecked(getClient().getId())) {
+                                output.add(hexagon);
+                                logger.trace("King will not be checked with this move.");
                             } else
-                                logger.trace("Field " + hexagon.getNotation() + " is occupied.");
-                        } catch (Exception e) {
-                            logger.error("", e);
-                        }
-                    });
-        });
+                                logger.trace("King will be checked with this move.");
+                            setHypotheticalPosition(null);
+                        } else
+                            logger.trace("Field " + hexagon.getNotation() + " is occupied.");
+                    } catch (Exception e) {
+                        logger.error("", e);
+                    }
+                }));
         return output;
     }
 
@@ -115,7 +114,7 @@ public class Pawn extends Figure<Hexagon> {
                                             logger.trace("King will be checked with this move.");
                                         setHypotheticalPosition(null);
                                     } else {
-                                        logger.trace("Fields " + hexagon.getNotation() + " and " + targetHexagon.getNotation() + " are occupied");
+                                        logger.trace("Fields " + hexagon.getNotation() + " or " + targetHexagon.getNotation() + " are occupied");
                                     }
                                 } catch (Exception e) {
                                     logger.error("", e);
@@ -124,33 +123,29 @@ public class Pawn extends Figure<Hexagon> {
         }
         // Attack move on pawns are special moves, as they are diagonal
         attackableDirections.forEach(direction -> getPosition().getNeighbourByDirection(direction)
-                .ifPresent(hexagon -> {
-                    getAttackableFields(chessboard).stream()
-                            .filter(attackableHexagon -> attackableHexagon.getNotation().equals(hexagon.getNotation()))
-                            .findFirst()
-                            .ifPresent(hexagon1 -> {
-                                chessboard.getFigures().stream()
-                                        .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
-                                        .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
-                                        .findFirst()
-                                        .ifPresent(o -> {
-                                            Figure figure = (Figure) o;
-                                            figure.setHypotheticalRemoved(true);
+                .ifPresent(hexagon -> getAttackableFields(chessboard).stream()
+                        .filter(attackableHexagon -> attackableHexagon.getNotation().equals(hexagon.getNotation()))
+                        .findFirst()
+                        .ifPresent(hexagon1 -> chessboard.getFigures().stream()
+                                .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
+                                .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
+                                .findFirst()
+                                .ifPresent(o -> {
+                                    Figure figure = (Figure) o;
+                                    figure.setHypotheticalRemoved(true);
 
-                                            logger.trace("Found beatable figure (" + figure.getName() + ") at field " + hexagon.getNotation());
+                                    logger.trace("Found beatable figure (" + figure.getName() + ") at field " + hexagon.getNotation());
 
-                                            setHypotheticalPosition(hexagon);
-                                            try {
-                                                if (!chessboard.willKingBeChecked(getClient().getId()))
-                                                    output.add(hexagon);
-                                            } catch (Exception e) {
-                                                logger.error("", e);
-                                            }
-                                            setHypotheticalPosition(null);
-                                            figure.setHypotheticalRemoved(null);
-                                        });
-                            });
-                }));
+                                    setHypotheticalPosition(hexagon);
+                                    try {
+                                        if (!chessboard.willKingBeChecked(getClient().getId()))
+                                            output.add(hexagon);
+                                    } catch (Exception e) {
+                                        logger.error("", e);
+                                    }
+                                    setHypotheticalPosition(null);
+                                    figure.setHypotheticalRemoved(null);
+                                }))));
 
         return output;
     }
