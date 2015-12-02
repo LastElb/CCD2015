@@ -125,7 +125,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
                 // @Todo: Pass position to chessboard
 
-            } else if (blockedChessboard) {
+            } else {
                 System.out.println("Chessboard is blocked");
             }
         }
