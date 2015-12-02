@@ -1,7 +1,6 @@
 package de.mki.chessboard.implementation.threePersonChess;
 
 import de.mki.chessboard.model.Chessboard;
-import de.mki.chessboard.model.Field;
 
 import java.awt.*;
 import java.util.*;

@@ -1,7 +1,5 @@
 package de.mki.chessboard.implementation.threePersonChess;
 
-import jchess.GUI;
-
 import java.awt.*;
 import java.util.List;
 

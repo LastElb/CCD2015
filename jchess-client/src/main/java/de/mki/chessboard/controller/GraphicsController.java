@@ -7,7 +7,7 @@ import java.net.URL;
 
 public class GraphicsController {
 
-    /*Method load image by a given name with extension
+    /** load image by a given name with extension
     * @name     : string of image to load for ex. "chessboard.jpg"
     * @returns  : image or null if cannot load
     * */

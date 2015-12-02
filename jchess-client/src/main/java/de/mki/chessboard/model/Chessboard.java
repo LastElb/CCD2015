@@ -7,9 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- *
- */
 public abstract class Chessboard<T extends Field> extends JPanel {
 
     Image image;
@@ -45,22 +42,36 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         this.height = height;
     }
 
-    public void setFields(List<T> fields) {
-        this.fields = fields;
-    }
-
     public void setImage(Image image) {
         this.image = image;
     }
 
+
     public abstract List<T> generateFields();
 
+    /**
+     * get a field object (e.g. Hexagon) by its pixel coordinates
+     */
     public abstract T getField(int x, int y);
 
+    /**
+     * get a field by its chess notation
+     */
+    protected abstract Field getFieldByNotation(String position);
+
+    /**
+     * get the clicked field by x and y pixel coordinates
+     *
+     * @return clicked field in chess notation
+     */
     public String getClickedField(int x, int y) {
         return getField(x,y).getNotation();
     }
 
+    /**
+     * push changes to chessboard and repaint it
+     * @param figures
+     */
     public void updateChessboard(List<Figure> figures) {
         this.figures = figures;
         this.repaint();
@@ -88,18 +99,13 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     private void drawFigures(Graphics2D g2d) {
 
-        for (Figure figure : figures
-                ) {
+    /* TODO: implement X and Y in Hexagon, so image can be drawn
+        for (Figure figure : figures) {
             Image figureImage = loadImage(figure.getPictureId());
             String position = figure.getPositionObject().getNotation();
             Field field = getFieldByNotation(position);
-
-            /** TODO: implement X and Y in Hexagon, so image can be drawn
-             * g2d.drawImage(figureImage, field.getX(), field.getY(), null);
-             */
-
-        }
+            g2d.drawImage(figureImage, field.getX(), field.getY(), null);
+            }
+    */
     }
-
-    protected abstract Field getFieldByNotation(String position);
 }
