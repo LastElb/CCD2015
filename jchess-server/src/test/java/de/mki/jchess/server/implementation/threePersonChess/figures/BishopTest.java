@@ -392,6 +392,32 @@ public class BishopTest extends FigureTest {
     }
 
     @Test
+    public void testGetHypotheticalAttackableFields7() throws Exception {
+        setUpGame();
+        Bishop bishop = new Bishop(game.getPlayerList().get(0));
+        bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c2")));
+        game.getChessboard().getFigures().add(bishop);
+
+        List<Hexagon> possibleMovements = bishop.getHypotheticalAttackableFields(game.getChessboard());
+        List<Hexagon> expectedMovements = Arrays.asList(
+                (Hexagon) game.getChessboard().getFieldByNotation("b2"),
+                (Hexagon) game.getChessboard().getFieldByNotation("c4"),
+                (Hexagon) game.getChessboard().getFieldByNotation("e5"),
+                (Hexagon) game.getChessboard().getFieldByNotation("g6"),
+                (Hexagon) game.getChessboard().getFieldByNotation("i7"),
+                (Hexagon) game.getChessboard().getFieldByNotation("k8"),
+                (Hexagon) game.getChessboard().getFieldByNotation("m9"),
+                (Hexagon) game.getChessboard().getFieldByNotation("b5"),
+                (Hexagon) game.getChessboard().getFieldByNotation("c7"),
+                (Hexagon) game.getChessboard().getFieldByNotation("d9"),
+                (Hexagon) game.getChessboard().getFieldByNotation("e11"),
+                (Hexagon) game.getChessboard().getFieldByNotation("f13"));
+        ListAssert.assertEquals(expectedMovements, possibleMovements);
+    }
+
+    @Test
     public void testGetHypotheticalAttackableFields() throws Exception {
         setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
