@@ -52,6 +52,12 @@ public class Pawn extends Figure<Hexagon> {
         }
     }
 
+    /**
+     *
+     * @param client
+     * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
+     * @throws Exception
+     */
     public Pawn(Client client, Direction direction) throws Exception {
         this(RandomStringService.getRandomString(), client, direction);
     }

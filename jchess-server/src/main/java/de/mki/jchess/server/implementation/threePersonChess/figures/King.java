@@ -4,6 +4,7 @@ import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
+import de.mki.jchess.server.service.RandomStringService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,10 @@ public class King extends Figure<Hexagon> {
         super(client);
         setId(id);
         setName("King");
+    }
+
+    public King(Client client) {
+        this(RandomStringService.getRandomString(), client);
     }
 
     @Override
