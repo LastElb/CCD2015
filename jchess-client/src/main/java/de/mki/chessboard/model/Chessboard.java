@@ -1,7 +1,6 @@
 package de.mki.chessboard.model;
 
 import jchess.client.models.Figure;
-import jchess.client.models.Position;
 
 import static de.mki.chessboard.controller.GraphicsController.loadImage;
 import javax.swing.*;
@@ -15,7 +14,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     Image image;
     int width;  //correlates with image width
-    int height; //correlates with image width
+    int height; //correlates with image height
     List<T> fields;
     List<Figure> figures;
 
@@ -60,6 +59,11 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     public String getClickedField(int x, int y) {
         return getField(x,y).getNotation();
+    }
+
+    public void updateChessboard(List<Figure> figures) {
+        this.figures = figures;
+        this.repaint();
     }
 
     /**
