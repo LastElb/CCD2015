@@ -79,7 +79,7 @@ public class Hexboard extends Chessboard {
     }
 
     @Override
-    public Hexagon getClickedField(int x, int y) {
+    public Hexagon getField(int x, int y) {
         return this.layout.pixelToHexagon(new Point(x, y));
     }
 

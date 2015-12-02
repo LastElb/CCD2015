@@ -56,7 +56,11 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     public abstract List<T> generateFields();
 
-    public abstract T getClickedField(int x, int y);
+    public abstract T getField(int x, int y);
+
+    public String getClickedField(int x, int y) {
+        return getField(x,y).getNotation();
+    }
 
     /**
      * Graphics

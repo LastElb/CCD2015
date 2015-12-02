@@ -21,5 +21,6 @@ public class testChessboard {
             System.out.println("q:" + hex.q + " | r:" + hex.r + " = " + hex.getNotation());
         }
 
+        System.out.println(hexboard.getClickedField(100,20));
     }
 }
