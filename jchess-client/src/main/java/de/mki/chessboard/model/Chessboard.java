@@ -1,5 +1,9 @@
 package de.mki.chessboard.model;
 
+import jchess.client.models.Figure;
+import jchess.client.models.Position;
+
+import static de.mki.chessboard.controller.GraphicsController.loadImage;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -13,13 +17,14 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     int width;  //correlates with image width
     int height; //correlates with image width
     List<T> fields;
-    // TODO: List<figures> figures;
+    List<Figure> figures;
 
 
-    public Chessboard() {
-
+    public Chessboard(List<Figure> figures) {
+        this.figures = figures;
+        this.fields = generateFields();
+        this.repaint();
     }
-
 
     public int getWidth() {
         return width;
@@ -49,17 +54,23 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         this.image = image;
     }
 
-    public abstract void generateFields();
+    public abstract List<T> generateFields();
 
-    public abstract T getClickedField(int x, int y);
+    public abstract T getField(int x, int y);
+
+    public String getClickedField(int x, int y) {
+        return getField(x,y).getNotation();
+    }
 
     /**
      * Graphics
      */
     @Override
     public void paintComponent(Graphics g) {
-        drawBoard(g);
-        drawFigures(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        drawBoard(g2d);
+        drawFigures(g2d);
     }
 
     @Override
@@ -67,13 +78,24 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         repaint();
     }
 
-    private void drawBoard(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(image, 0, 0, null);
+    private void drawBoard(Graphics2D g2d) {
+        g2d.drawImage(this.image, 0, 0, null);
     }
 
-    private void drawFigures(Graphics g) {
-        //TODO: draw figures on board
+    private void drawFigures(Graphics2D g2d) {
+
+        for (Figure figure : figures
+                ) {
+            Image figureImage = loadImage(figure.getPictureId());
+            String position = figure.getPositionObject().getNotation();
+            Field field = getFieldByNotation(position);
+
+            /** TODO: implement X and Y in Hexagon, so image can be drawn
+             * g2d.drawImage(figureImage, field.getX(), field.getY(), null);
+             */
+
+        }
     }
+
+    protected abstract Field getFieldByNotation(String position);
 }

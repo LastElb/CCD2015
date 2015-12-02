@@ -3,16 +3,19 @@ package de.mki.chessboard.implementation.threePersonChess;
 import jchess.GUI;
 
 import java.awt.*;
+import java.util.List;
 
 import static de.mki.chessboard.controller.GraphicsController.loadImage;
 
 public class smallHexboard extends Hexboard {
 
     /**
-     * default values for 600px x 600px hexagonal chessboard
+     * default constructor for 600px x 600px hexagonal chessboard
+     * @param list
+     *
      */
-
-    public smallHexboard() {
+    public smallHexboard(List list) {
+        super(list);
         this.setWidth(600);
         this.setHeight(600);
         this.setHexHeight(46);
@@ -21,5 +24,4 @@ public class smallHexboard extends Hexboard {
         this.setLayout(new Layout(Layout.pointy, getHexSize(), getOrigin()));
         this.setImage(loadImage("chessboard600x600.png"));
     }
-
 }

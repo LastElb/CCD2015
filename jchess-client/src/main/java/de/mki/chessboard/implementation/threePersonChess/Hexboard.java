@@ -1,9 +1,11 @@
 package de.mki.chessboard.implementation.threePersonChess;
 
 import de.mki.chessboard.model.Chessboard;
+import de.mki.chessboard.model.Field;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 public class Hexboard extends Chessboard {
 
@@ -12,12 +14,10 @@ public class Hexboard extends Chessboard {
     Point hexSize;
     Point origin;
     Layout layout;
-    public ArrayList<Hexagon> fields = new ArrayList<Hexagon>();
+    ArrayList<Hexagon> fields;
 
-    public Hexboard() {
-        this.generateFields();
-        this.repaint();
-
+    public Hexboard(List list) {
+        super(list);
     }
 
     public int getHexWidth() {
@@ -60,13 +60,14 @@ public class Hexboard extends Chessboard {
         this.layout = layout;
     }
 
-    @Override
-    public void generateFields() {
+
+    public ArrayList<Hexagon> generateFields() {
         /* Generate Fields */
+        ArrayList<Hexagon> fields = new ArrayList<Hexagon>();
         // generate right half from x=0 to x=7
         for (int x=0, maxY=12; x<=7; x++, maxY-- ) {
             for (int y=0; y<=maxY; y++) {
-                this.fields.add(new Hexagon(x, y));
+                fields.add(new Hexagon(x, y));
             }
         }
         //generate left half from x=-1 to x=-5
@@ -74,10 +75,17 @@ public class Hexboard extends Chessboard {
             for(int y=startY; y<=12; y++)
                 fields.add(new Hexagon(x,y));
         }
+        return fields;
     }
 
     @Override
-    public Hexagon getClickedField(int x, int y) {
+    public Hexagon getField(int x, int y) {
         return this.layout.pixelToHexagon(new Point(x, y));
+    }
+
+    @Override
+    protected Hexagon getFieldByNotation(String position) {
+        // TODO: implement getting the right hexagon by notation
+        return new Hexagon(0, 0);
     }
 }
