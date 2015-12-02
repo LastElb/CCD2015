@@ -1,5 +1,6 @@
 package de.mki.jchess.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.service.RandomStringService;
 
 /**
@@ -10,6 +11,8 @@ public class Client {
     String nickname;
     String connectedGameId;
     String team;
+    @JsonIgnore
+    Client nextClient;
 
     public String getId() {
         return id;
@@ -44,6 +47,15 @@ public class Client {
 
     public Client setTeam(String team) {
         this.team = team;
+        return this;
+    }
+
+    public Client getNextClient() {
+        return nextClient;
+    }
+
+    public Client setNextClient(Client nextClient) {
+        this.nextClient = nextClient;
         return this;
     }
 

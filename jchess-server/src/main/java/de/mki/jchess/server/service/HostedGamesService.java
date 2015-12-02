@@ -2,7 +2,6 @@ package de.mki.jchess.server.service;
 
 import de.mki.jchess.server.exception.HostedGameNotFoundException;
 import de.mki.jchess.server.model.Game;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

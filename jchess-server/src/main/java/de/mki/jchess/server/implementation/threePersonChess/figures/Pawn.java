@@ -1,11 +1,12 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
-import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
+import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.websocket.MovementEvent;
+import de.mki.jchess.server.service.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,16 @@ public class Pawn extends Figure<Hexagon> {
                 break;
             default: throw new Exception("Invalid facing direction " + direction.toString() + " for a pawn.");
         }
+    }
+
+    /**
+     *
+     * @param client
+     * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
+     * @throws Exception
+     */
+    public Pawn(Client client, Direction direction) throws Exception {
+        this(RandomStringService.getRandomString(), client, direction);
     }
 
     @Override
@@ -150,12 +161,14 @@ public class Pawn extends Figure<Hexagon> {
         attackableDirections.forEach(direction -> {
             Optional<Hexagon> optional = getPosition().getNeighbourByDirection(direction);
             // Check if this neighbour field does exist and if the bordering fields are free
-            if (optional.isPresent() && (!chessboard.areFieldsOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
-                    .stream()
-                    .map(freeDirection -> getPosition().getNeighbourByDirection(freeDirection))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList()))))
+            if (optional.isPresent() &&
+                    direction.getNecessaryFreeDirectionsForDiagonal().isPresent() &&
+                    (!chessboard.areFieldsOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
+                        .stream()
+                        .map(freeDirection -> getPosition().getNeighbourByDirection(freeDirection))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList()))))
                 output.add(optional.get());
         });
         return output;

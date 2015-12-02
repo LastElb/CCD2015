@@ -2,11 +2,13 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.King;
-import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.model.HistoryEntry;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
+import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import java.util.List;
  * Created by Igor on 13.11.2015.
  */
 public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Chessboard(Game parentGame) {
         super(parentGame);
@@ -81,6 +85,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         List<Hexagon> hexagons = new ArrayList<>();
         getFigures().stream()
                 .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 .findFirst().ifPresent(hexagonFigure -> {
             hexagons.addAll(hexagonFigure.getPossibleMovements(this));
             hexagons.addAll(hexagonFigure.getPossibleSpecialMovements(this));
@@ -91,7 +96,6 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     @Override
     public void performMovement(String figureId, String clientId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException {
         List<Hexagon> possibleMovements = getPossibleFieldsToMove(figureId);
-        //TODO implement special moves
         // Throw an exception when the client ID does not match the figures owner id or when the target field is not in the list of possible moves.
         if (possibleMovements.stream()
                 .filter(hexagon -> hexagon.getNotation().equals(targetFieldNotation))
@@ -120,16 +124,23 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     try {
                         hexagonFigure.setPosition((Hexagon) getFieldByNotation(targetFieldNotation));
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("", e);
                     }
                 });
-        // TODO: Add history
-        // TODO: Send event through websocket
-        //historyEntry.getChessboardEvents().stream().forEach(chessboardEvent -> simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), chessboardEvent));
+        // Add action to history
+        getParentGame().getGameHistory().add(historyEntry);
+        // Send event through websocket
+        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry);
+        // Change the active player and send it through websocket
+        setCurrentPlayer(getCurrentPlayer().getNextClient());
+        getParentGame().getPlayerList().forEach(client1 -> {
+            PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client1.equals(getCurrentPlayer()));
+            simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client1.getId(), playerChangedEvent);
+        });
     }
 
     /**
-     * Returns true if all positions are occupied. Returns false if at least one position is not occupied.
+     * Returns true if at least one position is occupied. Returns false if no position is occupied.
      * @param positions
      * @return
      */

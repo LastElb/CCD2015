@@ -17,13 +17,12 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Igor on 17.11.2015.
@@ -31,24 +30,16 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class PawnTest {
+public class PawnTest extends FigureTest {
 
-    Game game;
-
-    @Autowired
-    SimpMessagingTemplate simpMessagingTemplate;
-
-    void setUpGame() throws Exception {
-        game = new ThreePersonGame(RandomStringService.getRandomString());
-        game.addClientAsPlayer(new Client().setNickname("foo"), simpMessagingTemplate);
-        game.addClientAsPlayer(new Client().setNickname("foo"), simpMessagingTemplate);
-        game.addClientAsPlayer(new Client().setNickname("foo"), simpMessagingTemplate);
-        game.initializeGame();
-        // Reset figures
-        game.getChessboard().getFigures().clear();
-        game.getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), game.getPlayerList().get(0)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a5")));
-        game.getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), game.getPlayerList().get(1)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("j13")));
-        game.getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), game.getPlayerList().get(2)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("i4")));
+    @Test
+    public void testInvalidFacingDirection() throws Exception {
+        setUpGame();
+        try {
+            new Pawn(RandomStringService.getRandomString(), game.getPlayerList().get(0), Direction.DIAGONALTOP);
+            fail("Pawn created with invalid facing direction");
+        } catch (Exception ignore) {
+        }
     }
 
     @Test
