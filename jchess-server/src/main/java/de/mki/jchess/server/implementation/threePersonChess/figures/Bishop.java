@@ -4,6 +4,7 @@ import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
+import de.mki.jchess.server.model.Field;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.service.RandomStringService;
 import org.slf4j.Logger;
@@ -88,19 +89,12 @@ public class Bishop extends Figure<Hexagon> {
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getPosition().getNeighbourByDirection(direction);
-            while (hexagonOptional.isPresent() && (!chessboard.areFieldsOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
-                    .stream()
-                    .map(freeDirection -> getPosition().getNeighbourByDirection(freeDirection))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList())))) {
+
+            while (hexagonOptional.isPresent() && (!chessboard.areFieldsOccupied(getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction)))) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
                 if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
-                    final Optional<Hexagon> finalHexagonOptional = hexagonOptional;
                     // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (chessboard.getFigures().stream()
-                            .filter(o -> ((Figure) o).getPosition().getNotation().equals(finalHexagonOptional.get().getNotation()))
-                            .filter(o -> ((Figure) o).getClient().getId().equals(getClient().getId())).count() == 0) {
+                    if (isFigureOwnedByEnemy(chessboard, hexagonOptional.get())) {
                         // It's an enemy figure
                         output.add(hexagonOptional.get());
                     }
@@ -119,14 +113,12 @@ public class Bishop extends Figure<Hexagon> {
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getHypotheticalPosition().getNeighbourByDirection(direction);
-            while (hexagonOptional.isPresent()) {
+            // Not nice on the second part to get the reverse direction. But I don't want do add another variable
+            while (hexagonOptional.isPresent() && (!chessboard.areFieldsOccupied(getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction)))) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getHypotheticalPosition().getNotation(), hexagonOptional.get());
                 if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
-                    final Optional<Hexagon> finalHexagonOptional = hexagonOptional;
                     // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (chessboard.getFigures().stream()
-                            .filter(o -> ((Figure) o).getHypotheticalPosition().getNotation().equals(finalHexagonOptional.get().getNotation()))
-                            .filter(o -> ((Figure) o).getClient().getId().equals(getClient().getId())).count() == 0) {
+                    if (isFigureOwnedByEnemy(chessboard, hexagonOptional.get())) {
                         // It's an enemy figure
                         output.add(hexagonOptional.get());
                     }
@@ -140,4 +132,19 @@ public class Bishop extends Figure<Hexagon> {
         return output;
     }
 
+    List<Hexagon> getFreeFieldsForDiagonalMove(Hexagon sourceField, Direction direction) {
+        return direction.getNecessaryFreeDirectionsForDiagonal().get()
+                .stream()
+                // That's not nice, what im doing here next. But I see no better way at the moment
+                .map(freeDirection -> sourceField.getNeighbourByDirection(freeDirection))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    boolean isFigureOwnedByEnemy(Chessboard chessboard, Field targetField) {
+        return chessboard.getFigures().stream()
+                .filter(o -> ((Figure) o).getHypotheticalPosition().getNotation().equals(targetField.getNotation()))
+                .filter(o -> ((Figure) o).getClient().getId().equals(getClient().getId())).count() == 0;
+    }
 }
