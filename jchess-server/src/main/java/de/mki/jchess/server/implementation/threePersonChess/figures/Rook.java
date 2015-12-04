@@ -110,17 +110,15 @@ public class Rook extends Figure<Hexagon> {
      */
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
+        de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getPosition().getNeighbourByDirection(direction);
             while (hexagonOptional.isPresent()) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
                 if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
-                    final Optional<Hexagon> finalHexagonOptional = hexagonOptional;
                     // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (chessboard.getFigures().stream()
-                            .filter(o -> ((Figure) o).getPosition().getNotation().equals(finalHexagonOptional.get().getNotation()))
-                            .filter(o -> ((Figure) o).getClient().getId().equals(getClient().getId())).count() == 0) {
+                    if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
                         // It's an enemy figure
                         output.add(hexagonOptional.get());
                     }
@@ -141,17 +139,15 @@ public class Rook extends Figure<Hexagon> {
      */
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
+        de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getHypotheticalPosition().getNeighbourByDirection(direction);
             while (hexagonOptional.isPresent()) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getHypotheticalPosition().getNotation(), hexagonOptional.get());
-                if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
-                    final Optional<Hexagon> finalHexagonOptional = hexagonOptional;
+                if (chessboard.willFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
                     // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (chessboard.getFigures().stream()
-                            .filter(o -> ((Figure) o).getHypotheticalPosition().getNotation().equals(finalHexagonOptional.get().getNotation()))
-                            .filter(o -> ((Figure) o).getClient().getId().equals(getClient().getId())).count() == 0) {
+                    if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
                         // It's an enemy figure
                         output.add(hexagonOptional.get());
                     }

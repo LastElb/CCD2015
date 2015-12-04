@@ -2,8 +2,7 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.King;
-import de.mki.jchess.server.model.Game;
-import de.mki.jchess.server.model.HistoryEntry;
+import de.mki.jchess.server.model.*;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
 import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
@@ -13,6 +12,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Igor on 13.11.2015.
@@ -146,14 +147,42 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      */
     @Override
     public boolean areFieldsOccupied(List<Hexagon> positions) {
-        return getFigures().stream().filter(hexagonFigure -> {
-            for (Hexagon position : positions) {
-                if (hexagonFigure.getPosition().getNotation().equals(position.getNotation()))
-                    return true;
-            }
-            return false;
-        }).count() == positions.size();
+        return getFigures().stream()
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                .filter(hexagonFigure -> {
+                    for (Hexagon position : positions) {
+                        if (hexagonFigure.getPosition().getNotation().equals(position.getNotation()))
+                            return true;
+                    }
+                    return false;
+                }).count() == positions.size();
     }
 
+    @Override
+    public boolean willFieldsOccupied(List<Hexagon> positions) {
+        return getFigures().stream()
+                .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved())
+                .filter(hexagonFigure -> {
+                    for (Hexagon position : positions) {
+                        if (hexagonFigure.getHypotheticalPosition().getNotation().equals(position.getNotation()))
+                            return true;
+                    }
+                    return false;
+                }).count() == positions.size();
+    }
 
+    public List<Hexagon> getFreeFieldsForDiagonalMove(Hexagon sourceField, Direction direction) {
+        return direction.getNecessaryFreeDirectionsForDiagonal().get()
+                .stream()
+                .map(freeDirection -> sourceField.getNeighbourByDirection(freeDirection))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isFigureOwnedByEnemy(Field targetField, Client client) {
+        return getFigures().stream()
+                .filter(o -> ((Figure) o).getHypotheticalPosition().getNotation().equals(targetField.getNotation()))
+                .filter(o -> ((Figure) o).getClient().getId().equals(client.getId())).count() == 0;
+    }
 }
