@@ -12,6 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -77,7 +78,7 @@ public class QueenTest extends FigureTest {
         getGame().getChessboard().getFigures().add(queen);
         getGame().getChessboard().getFigures().add(new Queen(getGame().getPlayerList().get(1)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("i13")));
         List<Hexagon> possibleMovements = queen.getPossibleMovements(game.getChessboard());
-        List<Hexagon> expectedMovements = new ArrayList<>();
+        List<Hexagon> expectedMovements = Collections.singletonList((Hexagon) game.getChessboard().getFieldByNotation("b6"));
         ListAssert.assertEquals(expectedMovements, possibleMovements);
     }
 

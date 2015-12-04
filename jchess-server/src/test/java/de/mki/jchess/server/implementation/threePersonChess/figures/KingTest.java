@@ -1,10 +1,15 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
+import de.mki.jchess.server.Application;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Figure;
 import junitx.framework.ListAssert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +21,9 @@ import static org.junit.Assert.*;
 /**
  * Created by Igor on 02.12.2015.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Application.class)
+@WebAppConfiguration
 public class KingTest extends FigureTest {
 
     @Test
@@ -32,7 +40,7 @@ public class KingTest extends FigureTest {
                 (Hexagon) game.getChessboard().getFieldByNotation("b7"),
                 (Hexagon) game.getChessboard().getFieldByNotation("a4"),
                 (Hexagon) game.getChessboard().getFieldByNotation("a6"),
-                (Hexagon) game.getChessboard().getFieldByNotation("c5")
+                (Hexagon) game.getChessboard().getFieldByNotation("c6")
         );
         ListAssert.assertEquals(expectedMovements, possibleMovements);
     }
@@ -48,10 +56,10 @@ public class KingTest extends FigureTest {
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b4"),
                 (Hexagon) game.getChessboard().getFieldByNotation("b5"),
-                (Hexagon) game.getChessboard().getFieldByNotation("b6"),
                 (Hexagon) game.getChessboard().getFieldByNotation("b7"),
                 (Hexagon) game.getChessboard().getFieldByNotation("a4"),
-                (Hexagon) game.getChessboard().getFieldByNotation("a6")
+                (Hexagon) game.getChessboard().getFieldByNotation("a6"),
+                (Hexagon) game.getChessboard().getFieldByNotation("c6")
         );
         ListAssert.assertEquals(expectedMovements, possibleMovements);
     }
@@ -101,7 +109,7 @@ public class KingTest extends FigureTest {
                 (Hexagon) game.getChessboard().getFieldByNotation("b7"),
                 (Hexagon) game.getChessboard().getFieldByNotation("a4"),
                 (Hexagon) game.getChessboard().getFieldByNotation("a6"),
-                (Hexagon) game.getChessboard().getFieldByNotation("c5")
+                (Hexagon) game.getChessboard().getFieldByNotation("c6")
         );
         ListAssert.assertEquals(expectedMovements, possibleMovements);
     }
@@ -138,7 +146,7 @@ public class KingTest extends FigureTest {
                 (Hexagon) game.getChessboard().getFieldByNotation("b7"),
                 (Hexagon) game.getChessboard().getFieldByNotation("a4"),
                 (Hexagon) game.getChessboard().getFieldByNotation("a6"),
-                (Hexagon) game.getChessboard().getFieldByNotation("c5")
+                (Hexagon) game.getChessboard().getFieldByNotation("c6")
         );
         ListAssert.assertEquals(expectedMovements, possibleMovements);
     }
