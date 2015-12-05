@@ -65,6 +65,21 @@ public class KingTest extends FigureTest {
     }
 
     @Test
+    public void testGetPossibleMovements3() throws Exception {
+        setUpGame();
+        King king = (King) getGame().getChessboard().getFigures().stream()
+                .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
+                .filter(o -> o instanceof King).findFirst().get();
+        game.getChessboard().getFigures().add(new Queen(getGame().getPlayerList().get(1)).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4")));
+        List<Hexagon> possibleMovements = king.getPossibleMovements(game.getChessboard());
+        List<Hexagon> expectedMovements = Arrays.asList(
+                (Hexagon) game.getChessboard().getFieldByNotation("a4"),
+                (Hexagon) game.getChessboard().getFieldByNotation("b7")
+        );
+        ListAssert.assertEquals(expectedMovements, possibleMovements);
+    }
+
+    @Test
     public void testGetPossibleSpecialMovements1() throws Exception {
         setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
