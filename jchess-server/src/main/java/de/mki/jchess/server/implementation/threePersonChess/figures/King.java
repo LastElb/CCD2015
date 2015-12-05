@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class King extends Figure<Hexagon> {
 
-    private static final Logger logger = LoggerFactory.getLogger(Queen.class);
+    private static final Logger logger = LoggerFactory.getLogger(King.class);
     List<Direction> directions;
 
     public King(String id, Client client) {
