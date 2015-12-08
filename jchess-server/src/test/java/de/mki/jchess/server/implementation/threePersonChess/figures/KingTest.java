@@ -28,7 +28,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements1() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -47,7 +46,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements2() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -66,7 +64,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements3() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -81,7 +78,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetPossibleSpecialMovements1() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -95,7 +91,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetPossibleSpecialMovements2() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -112,7 +107,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields1() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -131,7 +125,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields2() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -149,7 +142,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields1() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
@@ -168,7 +160,6 @@ public class KingTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields2() throws Exception {
-        setUpGame();
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();

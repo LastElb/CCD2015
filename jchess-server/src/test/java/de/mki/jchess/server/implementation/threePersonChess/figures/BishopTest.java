@@ -4,6 +4,7 @@ import de.mki.jchess.server.Application;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import junitx.framework.ListAssert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -26,7 +27,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements1() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(bishop);
@@ -51,7 +51,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements2() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(bishop);
@@ -65,7 +64,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements3() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(bishop);
@@ -88,7 +86,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements4() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(bishop);
@@ -112,7 +109,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetPossibleSpecialMovements() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         List<Hexagon> possibleMovements = bishop.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
@@ -121,7 +117,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields1() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(bishop);
@@ -146,7 +141,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields2() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
@@ -170,7 +164,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields3() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b3")));
@@ -195,7 +188,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields4() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Knight(game.getPlayerList().get(0)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
@@ -221,7 +213,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields5() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
@@ -241,7 +232,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields6() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
@@ -257,7 +247,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields1() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(bishop);
@@ -282,7 +271,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields2() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
@@ -306,7 +294,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields3() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b3")));
@@ -331,7 +318,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields4() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Knight(game.getPlayerList().get(0)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
@@ -357,7 +343,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields5() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
@@ -377,7 +362,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields6() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
@@ -393,7 +377,6 @@ public class BishopTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields7() throws Exception {
-        setUpGame();
         Bishop bishop = new Bishop(game.getPlayerList().get(0));
         bishop.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a3"));
         game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
@@ -415,11 +398,5 @@ public class BishopTest extends FigureTest {
                 (Hexagon) game.getChessboard().getFieldByNotation("e11"),
                 (Hexagon) game.getChessboard().getFieldByNotation("f13"));
         ListAssert.assertEquals(expectedMovements, possibleMovements);
-    }
-
-    @Test
-    public void testGetHypotheticalAttackableFields() throws Exception {
-        setUpGame();
-        Bishop bishop = new Bishop(game.getPlayerList().get(0));
     }
 }

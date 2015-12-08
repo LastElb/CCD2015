@@ -27,7 +27,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements1() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -72,7 +71,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetPossibleMovements2() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -84,7 +82,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetPossibleSpecialMovements() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -95,7 +92,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields1() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -140,7 +136,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields2() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -183,7 +178,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields3() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -216,7 +210,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields4() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -257,7 +250,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetAttackableFields5() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -317,7 +309,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields2() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -360,7 +351,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields3() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -393,7 +383,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields4() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
@@ -434,7 +423,6 @@ public class QueenTest extends FigureTest {
 
     @Test
     public void testGetHypotheticalAttackableFields5() throws Exception {
-        setUpGame();
         Queen queen = new Queen(game.getPlayerList().get(0));
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);

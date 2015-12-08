@@ -5,6 +5,7 @@ import de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.RandomStringService;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
@@ -17,6 +18,7 @@ public abstract class FigureTest {
     @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
 
+    @Before
     public void setUpGame() throws Exception {
         game = new ThreePersonGame(RandomStringService.getRandomString());
         game.addClientAsPlayer(new Client().setNickname("Client1"), simpMessagingTemplate);
