@@ -6,13 +6,14 @@ import static de.mki.chessboard.controller.GraphicsController.loadImage;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Chessboard<T extends Field> extends JPanel {
 
     Image image;
     int width;  //correlates with image width
     int height; //correlates with image height
-    List<T> fields;
+    Map<String, T> fields;
     List<Figure> figures;
 
 
@@ -30,7 +31,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         return height;
     }
 
-    public List<T> getFields() {
+    public Map getFields() {
         return fields;
     }
 
@@ -47,7 +48,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     }
 
 
-    public abstract List<T> generateFields();
+    public abstract Map generateFields();
 
     /**
      * get a field object (e.g. Hexagon) by its pixel coordinates

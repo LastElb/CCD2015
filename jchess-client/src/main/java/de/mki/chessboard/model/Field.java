@@ -7,8 +7,11 @@ public abstract class Field {
      */
     int x;
     int y;
+    String notation;
 
-    public abstract String getNotation();
+    public String getNotation() {
+        return notation;
+    }
 
     public int getX() {
         return x;
@@ -17,4 +20,5 @@ public abstract class Field {
     public int getY() {
         return y;
     }
+
 }
