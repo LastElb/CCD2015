@@ -66,16 +66,22 @@ public class Hexboard extends Chessboard {
         /* Generate Fields */
         Map fields = new HashMap<>();
         // generate right half from x=0 to x=7
-        for (int x=0, maxY=12; x<=7; x++, maxY-- ) {
-            for (int y=0; y<=maxY; y++) {
-                Hexagon field = new Hexagon(x, y);
+        for (int q = 0, maxR = 12; q <= 7; q++, maxR--) {
+            for (int r = 0; r <= maxR; r++) {
+                Hexagon field = new Hexagon(q, r);
+                Point center = layout.hexagonToPixel(field);
+                field.setX(center.x);
+                field.setY(center.y);
                 fields.put(field.getNotation(), field);
             }
         }
         //generate left half from x=-1 to x=-5
-        for(int x=-1, startY=1; x>=-5; x--,startY++ ) {
-            for (int y = startY; y <= 12; y++) {
-                Hexagon field = new Hexagon(x, y);
+        for (int q = -1, startR = 1; q >= -5; q--, startR++) {
+            for (int r = startR; r <= 12; r++) {
+                Hexagon field = new Hexagon(q, r);
+                Point center = layout.hexagonToPixel(field);
+                field.setX(center.x);
+                field.setY(center.y);
                 fields.put(field.getNotation(), field);
             }
         }

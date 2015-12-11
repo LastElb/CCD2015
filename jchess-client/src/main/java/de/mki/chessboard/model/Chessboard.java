@@ -100,13 +100,12 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     private void drawFigures(Graphics2D g2d) {
 
-    /* TODO: implement X and Y in Hexagon, so image can be drawn
         for (Figure figure : figures) {
             Image figureImage = loadImage(figure.getPictureId());
             String position = figure.getPositionObject().getNotation();
             Field field = getFieldByNotation(position);
             g2d.drawImage(figureImage, field.getX(), field.getY(), null);
             }
-    */
+
     }
 }
