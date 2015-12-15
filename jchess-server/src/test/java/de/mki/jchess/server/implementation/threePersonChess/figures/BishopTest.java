@@ -459,7 +459,6 @@ public class BishopTest extends FigureTest {
 
     /**
      * The {@link Bishop} is located on one of its starting positions.
-     * Similar to {@link #testGetAttackableFields7()}
      * @throws Exception
      */
     @Test
