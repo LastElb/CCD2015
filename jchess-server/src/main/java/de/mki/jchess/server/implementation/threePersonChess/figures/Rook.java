@@ -6,6 +6,7 @@ import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.model.websocket.MovementEvent;
+import de.mki.jchess.server.service.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ import java.util.*;
  */
 public class Rook extends Figure<Hexagon> {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(Rook.class);
     List<Direction> directions;
 
     public Rook(String id, Client client) {
@@ -24,6 +25,10 @@ public class Rook extends Figure<Hexagon> {
         setId(id);
         setName("Rook");
         directions = Arrays.asList(Direction.TOPRIGHT, Direction.RIGHT, Direction.BOTTOMRIGHT, Direction.BOTTOMLEFT, Direction.LEFT, Direction.TOPLEFT);
+    }
+
+    public Rook(Client client) {
+        this(RandomStringService.getRandomString(), client);
     }
 
     /**
@@ -105,15 +110,21 @@ public class Rook extends Figure<Hexagon> {
      */
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
+        de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getPosition().getNeighbourByDirection(direction);
             while (hexagonOptional.isPresent()) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
-                output.add(hexagonOptional.get());
                 if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
+                    // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
+                    if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
+                        // It's an enemy figure
+                        output.add(hexagonOptional.get());
+                    }
                     break;
                 } else {
+                    output.add(hexagonOptional.get());
                     hexagonOptional = hexagonOptional.get().getNeighbourByDirection(direction);
                 }
             }
@@ -128,15 +139,21 @@ public class Rook extends Figure<Hexagon> {
      */
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
+        de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getHypotheticalPosition().getNeighbourByDirection(direction);
             while (hexagonOptional.isPresent()) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getHypotheticalPosition().getNotation(), hexagonOptional.get());
-                output.add(hexagonOptional.get());
-                if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
+                if (chessboard.willFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
+                    // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
+                    if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
+                        // It's an enemy figure
+                        output.add(hexagonOptional.get());
+                    }
                     break;
                 } else {
+                    output.add(hexagonOptional.get());
                     hexagonOptional = hexagonOptional.get().getNeighbourByDirection(direction);
                 }
             }

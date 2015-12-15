@@ -61,7 +61,7 @@ If the ID of the hosted game is wrong, the server responds with the status code 
     "path": "/host/joinAsPlayer"
 }
 ```
-If there already joined enough players (no observer limit) the server responds with the status code ````500``` as well:
+If there already joined enough players (no observer limit) the server responds with the status code ```500``` as well:
 ```
 {
     "timestamp": 1447451653607,
@@ -74,10 +74,10 @@ If there already joined enough players (no observer limit) the server responds w
 ```
 
 ### 4. Request possible movements
-To get a list of possible fields a figure can walk to, request ```game/{game id}/possibleMoves/{figure id}```. The server responds with an array of target locations represented by their notation.
+To get a list of possible fields a figure can walk to, request ```game/{game id}/possibleMoves/{figure id}``` or ```game/{game id}/possibleMovesByField/{field notation}```. The server responds with an array of target locations represented by their notation.
 
 ### 5. Perform movement
-To perform a figure movement call ```game/{game id}/possibleMoves/{figure id}/{client id}/{target field notation}```. The server just generates a response if the move is not valid. In every other case all changes are notified through websockets.
+To perform a figure movement call ```game/{game id}/performMove/{figure id}/{client id}/{target field notation}``` or ```game/{game id}/performMoveByField/{source field notation}/{client id}/{target field notation}```. The server just generates a response if the move is not valid. In every other case all changes are notified through websockets.
 
 ### 6. Full game information
 To get all available game information request ```game/{game id}/full```

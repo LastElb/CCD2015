@@ -60,6 +60,8 @@ public abstract class Chessboard<T extends Field> {
 
     public abstract boolean areFieldsOccupied(List<T> positions);
 
+    public abstract boolean willFieldsOccupied(List<T> positions);
+
     public abstract boolean isKingChecked(String clientId) throws Exception;
 
     public abstract boolean willKingBeChecked(String clientId) throws Exception;

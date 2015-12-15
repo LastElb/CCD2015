@@ -2,8 +2,7 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.King;
-import de.mki.jchess.server.model.Game;
-import de.mki.jchess.server.model.HistoryEntry;
+import de.mki.jchess.server.model.*;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
 import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
@@ -12,14 +11,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Igor on 13.11.2015.
  */
 public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(Chessboard.class);
 
     public Chessboard(Game parentGame) {
         super(parentGame);
@@ -35,22 +37,22 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} is checked.
      */
     @Override
-    public boolean isKingChecked(String clientId) throws Exception {
+    public boolean isKingChecked(String clientId) {
         // The king
         final boolean[] output = {false};
-        King king = getFigures().stream()
+        Optional<King> king = getFigures().stream()
                 .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
                 .filter(hexagonFigure -> hexagonFigure instanceof King)
                 .map(hexagonFigure -> (King) hexagonFigure)
-                .findFirst().orElseThrow(() -> new Exception("This should not happen. If the player has no king he is defeated and cannot receive movement suggestions"));
+                .findFirst();
         // Check if any figure can attack our kings hexagon
-        getFigures().stream()
+        king.ifPresent(king1 -> getFigures().stream()
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved()) // Only active figures
                 .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId)) // Enemy players
                 .forEach(hexagonFigure -> hexagonFigure.getAttackableFields(this).forEach(hexagon -> {
-                    if (hexagon.getNotation().equals(king.getPosition().getNotation()))
+                    if (hexagon.getNotation().equals(king1.getPosition().getNotation()))
                         output[0] = true;
-                }));
+                })));
         return output[0];
     }
 
@@ -61,22 +63,22 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} would be checked.
      */
     @Override
-    public boolean willKingBeChecked(String clientId) throws Exception {
+    public boolean willKingBeChecked(String clientId) {
         // The king
         final boolean[] output = {false};
-        King king = getFigures().stream()
+        Optional<King> king = getFigures().stream()
                 .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
                 .filter(hexagonFigure -> hexagonFigure instanceof King)
                 .map(hexagonFigure -> (King) hexagonFigure)
-                .findFirst().orElseThrow(() -> new Exception("This should not happen. If the player has no king he is defeated and cannot receive movement suggestions"));
+                .findFirst();
         // Check if any figure could attack our kings hexagon
-        getFigures().stream()
+        king.ifPresent(king1 -> getFigures().stream()
                 .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved()) // Only active figures
                 .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId)) // Enemy players
                 .forEach(hexagonFigure -> hexagonFigure.getHypotheticalAttackableFields(this).forEach(hexagon -> {
-                    if (hexagon.getNotation().equals(king.getHypotheticalPosition().getNotation()))
+                    if (hexagon.getNotation().equals(king1.getHypotheticalPosition().getNotation()))
                         output[0] = true;
-                }));
+                })));
         return output[0];
     }
 
@@ -133,27 +135,80 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry);
         // Change the active player and send it through websocket
         setCurrentPlayer(getCurrentPlayer().getNextClient());
-        getParentGame().getPlayerList().forEach(client1 -> {
-            PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client1.equals(getCurrentPlayer()));
-            simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client1.getId(), playerChangedEvent);
-        });
+        checkIfCurrentPlayerIsDefeated();
+        while (getCurrentPlayer().isDefeated()) {
+            setCurrentPlayer(getCurrentPlayer().getNextClient());
+            checkIfCurrentPlayerIsDefeated();
+        }
+        getParentGame().getPlayerList().stream()
+                .filter(client -> !client.isDefeated())
+                .forEach(client -> {
+                    PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client.equals(getCurrentPlayer()));
+                    simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client.getId(), playerChangedEvent);
+                });
     }
 
     /**
-     * Returns true if all positions are occupied. Returns false if at least one position is not occupied.
+     * Returns true if at least one position is occupied. Returns false if no position is occupied.
      * @param positions
      * @return
      */
     @Override
     public boolean areFieldsOccupied(List<Hexagon> positions) {
-        return getFigures().stream().filter(hexagonFigure -> {
-            for (Hexagon position : positions) {
-                if (hexagonFigure.getPosition().getNotation().equals(position.getNotation()))
-                    return true;
-            }
-            return false;
-        }).count() == positions.size();
+        return getFigures().stream()
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                .filter(hexagonFigure -> {
+                    for (Hexagon position : positions) {
+                        if (hexagonFigure.getPosition().getNotation().equals(position.getNotation()))
+                            return true;
+                    }
+                    return false;
+                }).count() == positions.size();
     }
 
+    @Override
+    public boolean willFieldsOccupied(List<Hexagon> positions) {
+        return getFigures().stream()
+                .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved())
+                .filter(hexagonFigure -> {
+                    for (Hexagon position : positions) {
+                        if (hexagonFigure.getHypotheticalPosition().getNotation().equals(position.getNotation()))
+                            return true;
+                    }
+                    return false;
+                }).count() == positions.size();
+    }
 
+    public List<Hexagon> getFreeFieldsForDiagonalMove(Hexagon sourceField, Direction direction) {
+        return direction.getNecessaryFreeDirectionsForDiagonal().get()
+                .stream()
+                .map(freeDirection -> sourceField.getNeighbourByDirection(freeDirection))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isFigureOwnedByEnemy(Field targetField, Client client) {
+        return getFigures().stream()
+                .filter(o -> ((Figure) o).getHypotheticalPosition().getNotation().equals(targetField.getNotation()))
+                .filter(o -> ((Figure) o).getClient().getId().equals(client.getId())).count() == 0;
+    }
+
+    void checkIfCurrentPlayerIsDefeated() {
+        Client client = getCurrentPlayer();
+        if (client.isDefeated())
+            return;
+        if (isKingChecked(client.getId())) {
+            // If the king is checked, go through all active figures and check if we can do any moves. If we can't do any moves
+            // the player is defeated
+            if (getFigures().stream()
+                    .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(client.getId()))
+                    .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                    .map(hexagonFigure -> hexagonFigure.getPossibleMovements(this))
+                    .flatMap(Collection::stream)
+                    .count() == 0) {
+                client.setDefeated(true);
+            }
+        }
+    }
 }

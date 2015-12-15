@@ -13,6 +13,12 @@ public class Client {
     String team;
     @JsonIgnore
     Client nextClient;
+    @JsonIgnore
+    boolean isDefeated;
+
+    public Client() {
+        this.id = RandomStringService.getRandomString();
+    }
 
     public String getId() {
         return id;
@@ -59,7 +65,12 @@ public class Client {
         return this;
     }
 
-    public Client() {
-        this.id = RandomStringService.getRandomString();
+    public boolean isDefeated() {
+        return isDefeated;
+    }
+
+    public Client setDefeated(boolean defeated) {
+        isDefeated = defeated;
+        return this;
     }
 }
