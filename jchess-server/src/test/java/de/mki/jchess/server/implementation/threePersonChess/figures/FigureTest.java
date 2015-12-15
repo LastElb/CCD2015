@@ -18,6 +18,10 @@ public abstract class FigureTest {
     @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
 
+    /**
+     * Sets up a chessboard with three players and three kings at their initial position
+     * @throws Exception
+     */
     @Before
     public void setUpGame() throws Exception {
         game = new ThreePersonGame(RandomStringService.getRandomString());
