@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.controller.GameModeController;
 import de.mki.jchess.server.exception.TooManyPlayersException;
 import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import java.util.concurrent.TimeUnit;
  * @since 11.11.2015
  */
 public abstract class Game {
+
+    private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
     String id;
     String gameMode;
@@ -89,7 +93,7 @@ public abstract class Game {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
                 Client lastClient = playerList.get(playerList.size() - 1);
                 PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()));

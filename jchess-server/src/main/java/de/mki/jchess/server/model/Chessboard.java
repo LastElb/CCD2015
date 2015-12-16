@@ -2,7 +2,6 @@ package de.mki.jchess.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
-import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -13,8 +12,8 @@ import java.util.List;
  * @param <T> The {@link Field} implementation of the game mode.
  */
 public abstract class Chessboard<T extends Field> {
-    public List<Figure<T>> figures;
-    public List<T> fields;
+    List<Figure<T>> figures;
+    List<T> fields;
     @JsonIgnore
     Client currentPlayer;
     @JsonIgnore

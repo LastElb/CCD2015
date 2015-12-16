@@ -11,6 +11,12 @@ import java.util.Random;
 public class RandomStringService {
 
     /**
+     * Default empty constructor.
+     */
+    public RandomStringService() {
+    }
+
+    /**
      * Returns a {@link String} containing the lower cased english alphabet and the digits from 0 to 9
      * @return String Returns a {@link String} with the length of 20
      */

@@ -27,14 +27,6 @@ public class GameController {
     @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
 
-    @RequestMapping("/poll")
-    public PollInformation pollGameAction(@PathVariable String gameId) throws HostedGameNotFoundException {
-        Game game = hostedGamesService.getHostedGameByID(gameId);
-        if (!game.hasSufficientPlayers())
-            return new PollInformation().setInfo("Waiting for more players.").addAction("poll");
-        return new PollInformation();
-    }
-
     @RequestMapping("/full")
     public Game getFullGame(@PathVariable String gameId) throws HostedGameNotFoundException {
         return hostedGamesService.getHostedGameByID(gameId);
@@ -73,43 +65,5 @@ public class GameController {
                 .filter(o -> ((Figure) o).getPosition().getNotation().equals(sourceNotation))
                 .findAny();
         game.getChessboard().performMovement(figure.orElseThrow(MoveNotAllowedException::new).getId(), clientId, targetNotation, simpMessagingTemplate);
-    }
-
-
-    public static class PollInformation {
-        List<String> actions;
-        String info;
-
-        public PollInformation() {
-            actions = new ArrayList<>();
-        }
-
-        public PollInformation addAction(String action) {
-            actions.add(action);
-            return this;
-        }
-
-        public PollInformation removeAction(String action) {
-            actions.remove(action);
-            return this;
-        }
-
-        public String getInfo() {
-            return info;
-        }
-
-        public PollInformation setInfo(String info) {
-            this.info = info;
-            return this;
-        }
-
-        public List<String> getActions() {
-            return actions;
-        }
-
-        public PollInformation setActions(List<String> actions) {
-            this.actions = actions;
-            return this;
-        }
     }
 }

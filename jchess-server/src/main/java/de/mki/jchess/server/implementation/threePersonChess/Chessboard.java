@@ -28,7 +28,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     }
 
     public Hexagon getFieldByNotation(int column, int row) throws Exception {
-        return fields.stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new Exception("Notation not found"));
+        return getFields().stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new Exception("Notation not found"));
     }
 
     /**
