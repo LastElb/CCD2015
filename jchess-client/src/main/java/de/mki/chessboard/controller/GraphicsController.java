@@ -8,8 +8,8 @@ import java.net.URL;
 public class GraphicsController {
 
     /** load image by a given name with extension
-    * @name     : string of image to load for ex. "chessboard.jpg"
-    * @returns  : image or null if cannot load
+    * @param name     : string of image to load for ex. "chessboard.jpg"
+    * @return  : image or null if cannot load
     * */
     public static Image loadImage(String name) {
         Image img = null;

@@ -111,7 +111,7 @@ public abstract class Figure<T extends Field> {
     }
 
     /**
-     * Set a hypothetical position or use {@link null} to reset the field.
+     * Set a hypothetical position or use NULL to reset the field.
      * @param position The hypothetical position or null
      */
     public void setHypotheticalPosition(T position) {
@@ -127,7 +127,7 @@ public abstract class Figure<T extends Field> {
     }
 
     /**
-     * Set if the figure is hypothetically removed or use {@link null} to reset the field.
+     * Set if the figure is hypothetically removed or use NULL to reset the field.
      * @param isRemoved If the figure is hypothetically removed or null
      */
     public void setHypotheticalRemoved(Boolean isRemoved) {
