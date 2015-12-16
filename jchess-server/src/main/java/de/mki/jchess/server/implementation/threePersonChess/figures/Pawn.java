@@ -202,7 +202,7 @@ public class Pawn extends Figure<Hexagon> {
         attackableDirections.forEach(direction -> {
             Optional<Hexagon> optional = getHypotheticalPosition().getNeighbourByDirection(direction);
             // Check if this neighbour field does exist and if the bordering fields are free
-            if (optional.isPresent() && (!actualChessboard.willFieldsOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
+            if (optional.isPresent() && (!actualChessboard.willFieldsBeOccupied(direction.getNecessaryFreeDirectionsForDiagonal().get()
                     .stream()
                     .map(freeDirection -> getHypotheticalPosition().getNeighbourByDirection(freeDirection))
                     .filter(Optional::isPresent)

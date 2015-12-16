@@ -136,7 +136,7 @@ public class Knight extends Figure<Hexagon> {
         List<Hexagon> output = new ArrayList<>();
         directionListMap.forEach((direction, directions) -> getHypotheticalPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> directions.forEach(secondDirection -> {
             hexagon.getNeighbourByDirection(secondDirection).ifPresent(targetHexagon -> {
-                if (chessboard.willFieldsOccupied(Collections.singletonList(targetHexagon))) {
+                if (chessboard.willFieldsBeOccupied(Collections.singletonList(targetHexagon))) {
                     if (actualChessboard.isFigureOwnedByEnemy(targetHexagon, getClient()))
                         output.add(targetHexagon);
                 } else

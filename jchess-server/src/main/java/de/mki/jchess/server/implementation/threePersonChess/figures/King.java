@@ -140,11 +140,11 @@ public class King extends Figure<Hexagon> {
         List<Hexagon> output = new ArrayList<>();
         directions.forEach(direction -> {
             getHypotheticalPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> {
-                if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.willFieldsOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagon.getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
+                if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.willFieldsBeOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagon.getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
                     logger.trace("Stopping from {} to {}. Diagonal movement fields are not free {}.", getPosition().getNotation(), hexagon.getNotation(), actualChessboard.getFreeFieldsForDiagonalMove(hexagon, direction).toString());
                     return;
                 }
-                if (chessboard.willFieldsOccupied(Collections.singletonList(hexagon))) {
+                if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagon))) {
                     // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
                     if (actualChessboard.isFigureOwnedByEnemy(hexagon, getClient())) {
                         // It's an enemy figure

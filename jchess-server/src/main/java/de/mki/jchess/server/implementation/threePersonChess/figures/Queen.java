@@ -147,11 +147,11 @@ public class Queen extends Figure<Hexagon> {
             while (hexagonOptional.isPresent()) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
                 // If it is a diagonal move and the path is blocked, break the loop
-                if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.willFieldsOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
+                if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.willFieldsBeOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
                     logger.trace("Stopping from {} to {}. Diagonal movement fields are not free {}. Switching to next direction.", getPosition().getNotation(), hexagonOptional.get().getNotation(), actualChessboard.getFreeFieldsForDiagonalMove(hexagonOptional.get(), direction).toString());
                     break;
                 }
-                if (chessboard.willFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
+                if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagonOptional.get()))) {
                     // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
                     if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
                         // It's an enemy figure

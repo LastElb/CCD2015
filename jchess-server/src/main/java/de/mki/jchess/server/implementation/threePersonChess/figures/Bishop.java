@@ -140,9 +140,9 @@ public class Bishop extends Figure<Hexagon> {
         directions.forEach(direction -> {
             Optional<Hexagon> hexagonOptional = getHypotheticalPosition().getNeighbourByDirection(direction);
             // Not nice on the second part to get the reverse direction. But I don't want do add another variable
-            while (hexagonOptional.isPresent() && (!chessboard.willFieldsOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction)))) {
+            while (hexagonOptional.isPresent() && (!chessboard.willFieldsBeOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction)))) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getHypotheticalPosition().getNotation(), hexagonOptional.get());
-                if (chessboard.willFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
+                if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagonOptional.get()))) {
                     // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
                     if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
                         // It's an enemy figure
