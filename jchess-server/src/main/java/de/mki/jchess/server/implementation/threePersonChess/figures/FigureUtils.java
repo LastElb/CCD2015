@@ -1,6 +1,7 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
 import de.mki.jchess.server.implementation.threePersonChess.Chessboard;
+import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Figure;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Igor on 16.12.2015.
@@ -56,5 +58,33 @@ public class FigureUtils {
                 figure.setHypotheticalPosition(null);
             }
         });
+    }
+
+    public static Optional<Hexagon> addHexagonToListIfFreeOrEnemy(Chessboard chessboard, Optional<Hexagon> hexagonOptional, List<Hexagon> possibleFields, Client client, Direction direction) {
+        if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
+            // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
+            if (chessboard.isFigureOwnedByEnemy(hexagonOptional.get(), client)) {
+                // It's an enemy figure
+                possibleFields.add(hexagonOptional.get());
+            }
+            return Optional.empty();
+        } else {
+            possibleFields.add(hexagonOptional.get());
+            return hexagonOptional.get().getNeighbourByDirection(direction);
+        }
+    }
+
+    public static Optional<Hexagon> addHexagonToListIfFreeOrEnemyHypothetical(Chessboard chessboard, Optional<Hexagon> hexagonOptional, List<Hexagon> possibleFields, Client client, Direction direction) {
+        if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagonOptional.get()))) {
+            // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
+            if (chessboard.isFigureOwnedByEnemy(hexagonOptional.get(), client)) {
+                // It's an enemy figure
+                possibleFields.add(hexagonOptional.get());
+            }
+            return Optional.empty();
+        } else {
+            possibleFields.add(hexagonOptional.get());
+            return hexagonOptional.get().getNeighbourByDirection(direction);
+        }
     }
 }

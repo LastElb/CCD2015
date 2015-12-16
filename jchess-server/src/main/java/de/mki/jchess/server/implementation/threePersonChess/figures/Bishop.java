@@ -77,17 +77,7 @@ public class Bishop extends Figure<Hexagon> {
             Optional<Hexagon> hexagonOptional = getPosition().getNeighbourByDirection(direction);
             while (hexagonOptional.isPresent() && (!chessboard.areFieldsOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction)))) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
-                if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
-                    // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
-                        // It's an enemy figure
-                        output.add(hexagonOptional.get());
-                    }
-                    break;
-                } else {
-                    output.add(hexagonOptional.get());
-                    hexagonOptional = hexagonOptional.get().getNeighbourByDirection(direction);
-                }
+                hexagonOptional = FigureUtils.addHexagonToListIfFreeOrEnemy(actualChessboard, hexagonOptional, output, getClient(), direction);
             }
         });
         return output;
@@ -107,17 +97,7 @@ public class Bishop extends Figure<Hexagon> {
             // Not nice on the second part to get the reverse direction. But I don't want do add another variable
             while (hexagonOptional.isPresent() && (!chessboard.willFieldsBeOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagonOptional.get().getNeighbourByDirection(direction.getOppositeDirection()).get(), direction)))) {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getHypotheticalPosition().getNotation(), hexagonOptional.get());
-                if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagonOptional.get()))) {
-                    // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (actualChessboard.isFigureOwnedByEnemy(hexagonOptional.get(), getClient())) {
-                        // It's an enemy figure
-                        output.add(hexagonOptional.get());
-                    }
-                    break;
-                } else {
-                    output.add(hexagonOptional.get());
-                    hexagonOptional = hexagonOptional.get().getNeighbourByDirection(direction);
-                }
+                hexagonOptional = FigureUtils.addHexagonToListIfFreeOrEnemyHypothetical(actualChessboard, hexagonOptional, output, getClient(), direction);
             }
         });
         return output;
