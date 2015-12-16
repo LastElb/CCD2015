@@ -1,7 +1,5 @@
 package de.mki.jchess.server.service;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Random;
 
 /**

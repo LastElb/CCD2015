@@ -17,12 +17,13 @@ import java.util.Optional;
  */
 public class FigureUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(FigureUtils.class);
+
     /**
      * Don't allow instances of this class
      */
-    private FigureUtils() {}
-
-    private static final Logger logger = LoggerFactory.getLogger(FigureUtils.class);
+    private FigureUtils() {
+    }
 
     public static void evaluatePossibleMovements(Figure<Hexagon> figure, List<Hexagon> attackableFields, Chessboard chessboard, Client client, List<Hexagon> possibleFields) {
         attackableFields.forEach(hexagon -> {
