@@ -49,40 +49,7 @@ public class Bishop extends Figure<Hexagon> {
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
         List<Hexagon> attackableFields = getAttackableFields(chessboard);
         List<Hexagon> output = new ArrayList<>();
-        attackableFields.forEach(hexagon -> {
-            // If the field is occupied, lets assume we beat this figure
-            if (chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
-                chessboard.getFigures().stream()
-                        .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
-                        .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
-                        .findFirst()
-                        .ifPresent(o -> {
-                            Figure figure = (Figure) o;
-                            figure.setHypotheticalRemoved(true);
-
-                            logger.trace("Found beatable figure (" + figure.getName() + ") at field " + hexagon.getNotation());
-
-                            setHypotheticalPosition(hexagon);
-                            try {
-                                if (!chessboard.willKingBeChecked(getClient().getId()))
-                                    output.add(hexagon);
-                            } catch (Exception e) {
-                                logger.error("", e);
-                            }
-                            setHypotheticalPosition(null);
-                            figure.setHypotheticalRemoved(null);
-                        });
-            } else {
-                setHypotheticalPosition(hexagon);
-                try {
-                    if (!chessboard.willKingBeChecked(getClient().getId()))
-                        output.add(hexagon);
-                } catch (Exception e) {
-                    logger.error("", e);
-                }
-                setHypotheticalPosition(null);
-            }
-        });
+        FigureUtils.evaluatePossibleMovements(this, attackableFields, (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard, getClient(), output);
         return output;
     }
 
