@@ -7,13 +7,12 @@ import java.util.Random;
 /**
  * Created by Igor on 11.11.2015.
  */
-@Service
 public class RandomStringService {
 
     /**
-     * Default empty constructor.
+     * Don't allow creation of an instance.
      */
-    public RandomStringService() {
+    private RandomStringService() {
     }
 
     /**
