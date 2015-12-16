@@ -90,7 +90,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Square> {
     }
 
     @Override
-    public boolean willFieldsOccupied(List<Square> positions) {
+    public boolean willFieldsBeOccupied(List<Square> positions) {
         return false;
     }
 }

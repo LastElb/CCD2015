@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * Implementation of moves with a three person pawn.
  * Created by Igor on 12.11.2015.
  */
 public class Pawn extends Figure<Hexagon> {
@@ -25,9 +26,9 @@ public class Pawn extends Figure<Hexagon> {
     List<Direction> movableDirections;
 
     /**
-     * Creates a new instance of a pawn
-     * @param id
-     * @param client
+     * Creates a new instance of a pawn. Constructor with the possibility to pass an own id.
+     * @param id The figures id.
+     * @param client The owner of the {@link Pawn}.
      * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
      * @throws InvalidFacingDirection
      */
@@ -37,25 +38,30 @@ public class Pawn extends Figure<Hexagon> {
         setName("Pawn");
         this.facingDirection = direction;
         switch (facingDirection) {
-            case DIAGONALBOTTOM: // White Player
+            case DIAGONALBOTTOM:
+                // White Player
                 attackableDirections = Arrays.asList(Direction.DIAGONALBOTTOM, Direction.DIAGONALBOTTOMLEFT, Direction.DIAGONALBOTTOMRIGHT);
                 movableDirections = Arrays.asList(Direction.BOTTOMLEFT, Direction.BOTTOMRIGHT);
                 break;
-            case DIAGONALTOPLEFT: // Grey Player
+            case DIAGONALTOPLEFT:
+                // Grey Player
                 attackableDirections = Arrays.asList(Direction.DIAGONALTOP, Direction.DIAGONALTOPLEFT, Direction.DIAGONALBOTTOMLEFT);
                 movableDirections = Arrays.asList(Direction.LEFT, Direction.TOPLEFT);
                 break;
-            case DIAGONALTOPRIGHT: // Black Player
+            case DIAGONALTOPRIGHT:
+                // Black Player
                 attackableDirections = Arrays.asList(Direction.DIAGONALTOP, Direction.DIAGONALTOPRIGHT, Direction.DIAGONALBOTTOMRIGHT);
                 movableDirections = Arrays.asList(Direction.RIGHT, Direction.TOPRIGHT);
                 break;
-            default: throw new InvalidFacingDirection(direction, this);
+            default:
+                // Every other direction is not allowed
+                throw new InvalidFacingDirection(direction, this);
         }
     }
 
     /**
-     *
-     * @param client
+     * Default constructor.
+     * @param client The owner of the {@link Pawn}.
      * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
      * @throws InvalidFacingDirection
      */
@@ -63,6 +69,11 @@ public class Pawn extends Figure<Hexagon> {
         this(RandomStringService.getRandomString(), client, direction);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The instance of the {@link Chessboard} of the current {@link de.mki.jchess.server.model.Game}
+     * @return Returns a {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
         List<Hexagon> output = new ArrayList<>();
@@ -87,6 +98,11 @@ public class Pawn extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
         List<Hexagon> output = new ArrayList<>();
@@ -150,6 +166,11 @@ public class Pawn extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         List<Hexagon> output = new ArrayList<>();
@@ -169,6 +190,11 @@ public class Pawn extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;

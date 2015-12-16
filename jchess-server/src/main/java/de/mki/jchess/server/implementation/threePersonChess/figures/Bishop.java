@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * Implementation of moves with a three person bishop.
  * Created by Igor on 12.11.2015.
  */
 public class Bishop extends Figure<Hexagon> {
@@ -21,6 +22,11 @@ public class Bishop extends Figure<Hexagon> {
     private static final Logger logger = LoggerFactory.getLogger(Bishop.class);
     List<Direction> directions;
 
+    /**
+     * Constructor with the possibility to pass an own id.
+     * @param id The figures id.
+     * @param client The owner of the {@link Bishop}.
+     */
     public Bishop(String id, Client client) {
         super(client);
         setId(id);
@@ -28,10 +34,19 @@ public class Bishop extends Figure<Hexagon> {
         directions = Arrays.asList(Direction.DIAGONALTOP, Direction.DIAGONALTOPRIGHT, Direction.DIAGONALBOTTOMRIGHT, Direction.DIAGONALBOTTOM, Direction.DIAGONALBOTTOMLEFT, Direction.DIAGONALTOPLEFT);
     }
 
+    /**
+     * Default constructor.
+     * @param client The owner of the {@link Bishop}.
+     */
     public Bishop(Client client) {
         this(RandomStringService.getRandomString(), client);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The instance of the {@link Chessboard} of the current {@link de.mki.jchess.server.model.Game}
+     * @return Returns a {@link List} of {@link Hexagon}.
+     */
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
         List<Hexagon> attackableFields = getAttackableFields(chessboard);
@@ -73,6 +88,11 @@ public class Bishop extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}.
+     */
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
         // This figure has no special movements
@@ -81,8 +101,8 @@ public class Bishop extends Figure<Hexagon> {
 
     /**
      * {@inheritDoc}
-     * @param chessboard
-     * @return
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}.
      */
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
@@ -108,6 +128,11 @@ public class Bishop extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}.
+     */
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
@@ -132,6 +157,4 @@ public class Bishop extends Figure<Hexagon> {
         });
         return output;
     }
-
-
 }

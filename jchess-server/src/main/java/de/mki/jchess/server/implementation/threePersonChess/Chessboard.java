@@ -149,9 +149,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     }
 
     /**
-     * Returns true if at least one position is occupied. Returns false if no position is occupied.
-     * @param positions
-     * @return
+     * Determines if at least one {@link Field} is occupied.
+     * @param positions A {@link List} of {@link Hexagon}s to check.
+     * @return Returns true if at least one position is occupied. Returns false if no position is occupied.
      */
     @Override
     public boolean areFieldsOccupied(List<Hexagon> positions) {
@@ -167,7 +167,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     }
 
     @Override
-    public boolean willFieldsOccupied(List<Hexagon> positions) {
+    public boolean willFieldsBeOccupied(List<Hexagon> positions) {
         return getFigures().stream()
                 .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved())
                 .filter(hexagonFigure -> {

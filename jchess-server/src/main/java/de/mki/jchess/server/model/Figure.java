@@ -22,6 +22,10 @@ public abstract class Figure<T extends Field> {
     @JsonIgnore
     Optional<Boolean> hypotheticalRemoved;
 
+    /**
+     * Default constructor. Initializes {@link Optional}s.
+     * @param client The owner of the {@link Figure}.
+     */
     public Figure(Client client) {
         isRemoved = false;
         this.client = client;
@@ -80,11 +84,13 @@ public abstract class Figure<T extends Field> {
     public abstract List<T> getPossibleSpecialMovements(Chessboard chessboard);
 
     /**
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return This method returns a list of all fields the figure could attack.
      */
     public abstract List<T> getAttackableFields(Chessboard chessboard);
 
     /**
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return This method returns a list of all fields the figure could attack with the hypothetical layout.
      */
     public abstract List<T> getHypotheticalAttackableFields(Chessboard chessboard);

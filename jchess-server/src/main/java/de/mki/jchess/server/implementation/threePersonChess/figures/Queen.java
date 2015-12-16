@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
+ * Implementation of moves with a three person queen.
  * Created by Igor on 12.11.2015.
  */
 public class Queen extends Figure<Hexagon> {
@@ -19,6 +20,11 @@ public class Queen extends Figure<Hexagon> {
     private static final Logger logger = LoggerFactory.getLogger(Queen.class);
     List<Direction> directions;
 
+    /**
+     * Constructor with the possibility to pass an own id.
+     * @param id The figures id.
+     * @param client The owner of the {@link Queen}.
+     */
     public Queen(String id, Client client) {
         super(client);
         setId(id);
@@ -27,10 +33,19 @@ public class Queen extends Figure<Hexagon> {
                 Direction.TOPRIGHT, Direction.RIGHT, Direction.BOTTOMRIGHT, Direction.BOTTOMLEFT, Direction.LEFT, Direction.TOPLEFT);
     }
 
+    /**
+     * Default constructor.
+     * @param client The owner of the {@link Queen}.
+     */
     public Queen(Client client) {
         this(RandomStringService.getRandomString(), client);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The instance of the {@link Chessboard} of the current {@link de.mki.jchess.server.model.Game}
+     * @return Returns a {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
         List<Hexagon> attackableFields = getAttackableFields(chessboard);
@@ -71,12 +86,23 @@ public class Queen extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * The {@link Queen} has no special moves.
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns an empty {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
         // Queen has no special moves
         return new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
@@ -107,6 +133,11 @@ public class Queen extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}s.
+     */
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
@@ -136,5 +167,4 @@ public class Queen extends Figure<Hexagon> {
         });
         return output;
     }
-
 }

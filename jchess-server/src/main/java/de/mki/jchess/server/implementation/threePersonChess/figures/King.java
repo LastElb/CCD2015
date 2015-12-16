@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
+ * Implementation of moves with a three person king.
  * Created by Igor on 12.11.2015.
  */
 public class King extends Figure<Hexagon> {
@@ -19,6 +20,11 @@ public class King extends Figure<Hexagon> {
     private static final Logger logger = LoggerFactory.getLogger(King.class);
     List<Direction> directions;
 
+    /**
+     * Constructor with the possibility to pass an own id.
+     * @param id The figures id.
+     * @param client The owner of the {@link King}.
+     */
     public King(String id, Client client) {
         super(client);
         setId(id);
@@ -28,10 +34,19 @@ public class King extends Figure<Hexagon> {
                 Direction.TOPRIGHT, Direction.RIGHT, Direction.BOTTOMRIGHT, Direction.BOTTOMLEFT, Direction.LEFT, Direction.TOPLEFT);
     }
 
+    /**
+     * Default constructor
+     * @param client The owner of the {@link King}.
+     */
     public King(Client client) {
         this(RandomStringService.getRandomString(), client);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The instance of the {@link Chessboard} of the current {@link de.mki.jchess.server.model.Game}.
+     * @return Returns a {@link List} of {@link Hexagon}.
+     */
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
         List<Hexagon> attackableFields = getAttackableFields(chessboard);
@@ -72,12 +87,23 @@ public class King extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     * Implements castling
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}.
+     */
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
         // TODO: Implement Castling
         return new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}.
+     */
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
@@ -103,6 +129,11 @@ public class King extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     *
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}.
+     */
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;

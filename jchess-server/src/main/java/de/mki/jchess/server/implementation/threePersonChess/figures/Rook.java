@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
+ * Implementation of moves with a three person rook.
  * Created by Igor on 12.11.2015.
  */
 public class Rook extends Figure<Hexagon> {
@@ -20,6 +21,11 @@ public class Rook extends Figure<Hexagon> {
     private static final Logger logger = LoggerFactory.getLogger(Rook.class);
     List<Direction> directions;
 
+    /**
+     * Constructor with the possibility to pass an own id.
+     * @param id The figures id.
+     * @param client The owner of the {@link Rook}.
+     */
     public Rook(String id, Client client) {
         super(client);
         setId(id);
@@ -27,6 +33,10 @@ public class Rook extends Figure<Hexagon> {
         directions = Arrays.asList(Direction.TOPRIGHT, Direction.RIGHT, Direction.BOTTOMRIGHT, Direction.BOTTOMLEFT, Direction.LEFT, Direction.TOPLEFT);
     }
 
+    /**
+     * Default constructor.
+     * @param client The owner of the {@link Rook}.
+     */
     public Rook(Client client) {
         this(RandomStringService.getRandomString(), client);
     }
@@ -34,7 +44,7 @@ public class Rook extends Figure<Hexagon> {
     /**
      * {@inheritDoc}
      * @param chessboard The instance of the {@link Chessboard} of the current {@link de.mki.jchess.server.model.Game}
-     * @return
+     * @return Returns a {@link List} of {@link Hexagon}s.
      */
     @Override
     public List<Hexagon> getPossibleMovements(Chessboard chessboard) {
@@ -80,7 +90,7 @@ public class Rook extends Figure<Hexagon> {
     /**
      * {@inheritDoc}
      * @param chessboard The current {@link Chessboard} instance for checking purposes.
-     * @return
+     * @return Returns a {@link List} of {@link Hexagon}s.
      */
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
@@ -105,8 +115,8 @@ public class Rook extends Figure<Hexagon> {
 
     /**
      * {@inheritDoc}
-     * @param chessboard
-     * @return
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}s.
      */
     @Override
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
@@ -134,8 +144,8 @@ public class Rook extends Figure<Hexagon> {
 
     /**
      * {@inheritDoc}
-     * @param chessboard
-     * @return
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
+     * @return Returns a {@link List} of {@link Hexagon}s.
      */
     @Override
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
