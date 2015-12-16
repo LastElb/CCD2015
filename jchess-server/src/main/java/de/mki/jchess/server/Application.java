@@ -6,7 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
-    public Application() {}
+    public Application() {
+        // This constructor needs to be visible for the component scan spring boot does.
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
