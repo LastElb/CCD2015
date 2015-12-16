@@ -113,15 +113,14 @@ public class Knight extends Figure<Hexagon> {
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
-        directionListMap.forEach((direction, directions) -> getPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> {
-            directions.forEach(secondDirection -> hexagon.getNeighbourByDirection(secondDirection).ifPresent(targetHexagon -> {
-                if (chessboard.areFieldsOccupied(Collections.singletonList(targetHexagon))) {
-                    if (actualChessboard.isFigureOwnedByEnemy(targetHexagon, getClient()))
+        directionListMap.forEach((direction, directions) -> getPosition().getNeighbourByDirection(direction)
+                .ifPresent(hexagon -> directions.forEach(secondDirection -> hexagon.getNeighbourByDirection(secondDirection).ifPresent(targetHexagon -> {
+                    if (chessboard.areFieldsOccupied(Collections.singletonList(targetHexagon))) {
+                        if (actualChessboard.isFigureOwnedByEnemy(targetHexagon, getClient()))
+                            output.add(targetHexagon);
+                    } else
                         output.add(targetHexagon);
-                } else
-                    output.add(targetHexagon);
-            }));
-        }));
+                }))));
         return output;
     }
 
@@ -134,15 +133,14 @@ public class Knight extends Figure<Hexagon> {
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
-        directionListMap.forEach((direction, directions) -> getHypotheticalPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> directions.forEach(secondDirection -> {
-            hexagon.getNeighbourByDirection(secondDirection).ifPresent(targetHexagon -> {
-                if (chessboard.willFieldsBeOccupied(Collections.singletonList(targetHexagon))) {
-                    if (actualChessboard.isFigureOwnedByEnemy(targetHexagon, getClient()))
+        directionListMap.forEach((direction, directions) -> getHypotheticalPosition().getNeighbourByDirection(direction)
+                .ifPresent(hexagon -> directions.forEach(secondDirection -> hexagon.getNeighbourByDirection(secondDirection).ifPresent(targetHexagon -> {
+                    if (chessboard.areFieldsOccupied(Collections.singletonList(targetHexagon))) {
+                        if (actualChessboard.isFigureOwnedByEnemy(targetHexagon, getClient()))
+                            output.add(targetHexagon);
+                    } else
                         output.add(targetHexagon);
-                } else
-                    output.add(targetHexagon);
-            });
-        })));
+                }))));
         return output;
     }
 

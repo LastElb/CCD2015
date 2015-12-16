@@ -108,24 +108,22 @@ public class King extends Figure<Hexagon> {
     public List<Hexagon> getAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
-        directions.forEach(direction -> {
-            getPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> {
-                if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.areFieldsOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagon.getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
-                    logger.trace("Stopping from {} to {}. Diagonal movement fields are not free {}.", getPosition().getNotation(), hexagon.getNotation(), actualChessboard.getFreeFieldsForDiagonalMove(hexagon, direction).toString());
-                    return;
-                }
-                if (chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
-                    // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (actualChessboard.isFigureOwnedByEnemy(hexagon, getClient())) {
-                        // It's an enemy figure
-                        output.add(hexagon);
-                    }
-                    logger.trace("Stopping from {} to {}. Field is occupied. Switching to next direction.", getPosition().getNotation(), hexagon.getNotation());
-                } else {
+        directions.forEach(direction -> getPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> {
+            if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.areFieldsOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagon.getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
+                logger.trace("Stopping from {} to {}. Diagonal movement fields are not free {}.", getPosition().getNotation(), hexagon.getNotation(), actualChessboard.getFreeFieldsForDiagonalMove(hexagon, direction).toString());
+                return;
+            }
+            if (chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
+                // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
+                if (actualChessboard.isFigureOwnedByEnemy(hexagon, getClient())) {
+                    // It's an enemy figure
                     output.add(hexagon);
                 }
-            });
-        });
+                logger.trace("Stopping from {} to {}. Field is occupied. Switching to next direction.", getPosition().getNotation(), hexagon.getNotation());
+            } else {
+                output.add(hexagon);
+            }
+        }));
         return output;
     }
 
@@ -138,24 +136,22 @@ public class King extends Figure<Hexagon> {
     public List<Hexagon> getHypotheticalAttackableFields(Chessboard chessboard) {
         de.mki.jchess.server.implementation.threePersonChess.Chessboard actualChessboard = (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard;
         List<Hexagon> output = new ArrayList<>();
-        directions.forEach(direction -> {
-            getHypotheticalPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> {
-                if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.willFieldsBeOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagon.getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
-                    logger.trace("Stopping from {} to {}. Diagonal movement fields are not free {}.", getPosition().getNotation(), hexagon.getNotation(), actualChessboard.getFreeFieldsForDiagonalMove(hexagon, direction).toString());
-                    return;
-                }
-                if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagon))) {
-                    // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
-                    if (actualChessboard.isFigureOwnedByEnemy(hexagon, getClient())) {
-                        // It's an enemy figure
-                        output.add(hexagon);
-                    }
-                    logger.trace("Stopping from {} to {}. Field is occupied. Switching to next direction.", getPosition().getNotation(), hexagon.getNotation());
-                } else {
+        directions.forEach(direction -> getHypotheticalPosition().getNeighbourByDirection(direction).ifPresent(hexagon -> {
+            if (direction.getNecessaryFreeDirectionsForDiagonal().isPresent() && actualChessboard.willFieldsBeOccupied(actualChessboard.getFreeFieldsForDiagonalMove(hexagon.getNeighbourByDirection(direction.getOppositeDirection()).get(), direction))) {
+                logger.trace("Stopping from {} to {}. Diagonal movement fields are not free {}.", getPosition().getNotation(), hexagon.getNotation(), actualChessboard.getFreeFieldsForDiagonalMove(hexagon, direction).toString());
+                return;
+            }
+            if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagon))) {
+                // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
+                if (actualChessboard.isFigureOwnedByEnemy(hexagon, getClient())) {
+                    // It's an enemy figure
                     output.add(hexagon);
                 }
-            });
-        });
+                logger.trace("Stopping from {} to {}. Field is occupied. Switching to next direction.", getPosition().getNotation(), hexagon.getNotation());
+            } else {
+                output.add(hexagon);
+            }
+        }));
         return output;
     }
 }

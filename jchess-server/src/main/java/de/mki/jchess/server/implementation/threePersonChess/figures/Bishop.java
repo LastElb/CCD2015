@@ -4,14 +4,12 @@ import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
 import de.mki.jchess.server.model.Client;
-import de.mki.jchess.server.model.Field;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.service.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of moves with a three person bishop.
