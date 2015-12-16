@@ -29,20 +29,20 @@ public class Hexagon extends Field<Direction> {
     public String getNotation() {
         String letter;
         switch (row){
-            case 0: letter = "a"; break;
-            case 1: letter = "b"; break;
-            case 2: letter = "c"; break;
-            case 3: letter = "d"; break;
-            case 4: letter = "e"; break;
-            case 5: letter = "f"; break;
-            case 6: letter = "g"; break;
-            case 7: letter = "h"; break;
-            case 8: letter = "i"; break;
-            case 9: letter = "j"; break;
+            case 0:  letter = "a"; break;
+            case 1:  letter = "b"; break;
+            case 2:  letter = "c"; break;
+            case 3:  letter = "d"; break;
+            case 4:  letter = "e"; break;
+            case 5:  letter = "f"; break;
+            case 6:  letter = "g"; break;
+            case 7:  letter = "h"; break;
+            case 8:  letter = "i"; break;
+            case 9:  letter = "j"; break;
             case 10: letter = "k"; break;
             case 11: letter = "l"; break;
             case 12: letter = "m"; break;
-            default:letter = "";
+            default: letter = "";
         }
         return letter + (column + 1);
     }

@@ -1,6 +1,7 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.exception.MoveNotAllowedException;
+import de.mki.jchess.server.exception.NotationNotFoundException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.King;
 import de.mki.jchess.server.model.*;
 import de.mki.jchess.server.model.websocket.FigureEvent;
@@ -27,8 +28,8 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         super(parentGame);
     }
 
-    public Hexagon getFieldByNotation(int column, int row) throws Exception {
-        return getFields().stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new Exception("Notation not found"));
+    public Hexagon getFieldByNotation(int column, int row) throws NotationNotFoundException {
+        return getFields().stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new NotationNotFoundException("column=" + column + ", row=" + row));
     }
 
     /**
@@ -182,7 +183,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     public List<Hexagon> getFreeFieldsForDiagonalMove(Hexagon sourceField, Direction direction) {
         return direction.getNecessaryFreeDirectionsForDiagonal().get()
                 .stream()
-                .map(freeDirection -> sourceField.getNeighbourByDirection(freeDirection))
+                .map(sourceField::getNeighbourByDirection)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -198,17 +199,14 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         Client client = getCurrentPlayer();
         if (client.isDefeated())
             return;
-        if (isKingChecked(client.getId())) {
-            // If the king is checked, go through all active figures and check if we can do any moves. If we can't do any moves
-            // the player is defeated
-            if (getFigures().stream()
-                    .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(client.getId()))
-                    .filter(hexagonFigure -> !hexagonFigure.isRemoved())
-                    .map(hexagonFigure -> hexagonFigure.getPossibleMovements(this))
-                    .flatMap(Collection::stream)
-                    .count() == 0) {
-                client.setDefeated(true);
-            }
-        }
+        // If the king is checked, go through all active figures and check if we can do any moves. If we can't do any moves
+        // the player is defeated
+        if (isKingChecked(client.getId()) && getFigures().stream()
+                .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(client.getId()))
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                .map(hexagonFigure -> hexagonFigure.getPossibleMovements(this))
+                .flatMap(Collection::stream)
+                .count() == 0)
+            client.setDefeated(true);
     }
 }

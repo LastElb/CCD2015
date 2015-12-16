@@ -2,6 +2,7 @@ package de.mki.jchess.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
+import de.mki.jchess.server.exception.NotationNotFoundException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -59,10 +60,10 @@ public abstract class Chessboard<T extends Field> {
      * This function is looking for a {@link Field} that has the same notation as the parameter.
      * @param notation The {@link Field}'s notation as {@link String}
      * @return Returns the {@link Field} that has the same {@link Field#getNotation()} as the given parameter.
-     * @throws Exception
+     * @throws NotationNotFoundException
      */
-    public Field getFieldByNotation(String notation) throws Exception {
-        return fields.stream().filter(field -> field.getNotation().equals(notation)).findFirst().orElseThrow(() -> new Exception("Notation not found"));
+    public Field getFieldByNotation(String notation) throws NotationNotFoundException {
+        return fields.stream().filter(field -> field.getNotation().equals(notation)).findFirst().orElseThrow(() -> new NotationNotFoundException(notation));
     }
 
     /**
@@ -126,15 +127,13 @@ public abstract class Chessboard<T extends Field> {
      * Determines if the {@link Client}'s king is checked with the {@link Figure#getPosition()} and {@link Figure#isRemoved()} of every other {@link Figure}.
      * @param clientId The id of the player. The is saved in {@link Client}.
      * @return Returns true if the king is checked.
-     * @throws Exception
      */
-    public abstract boolean isKingChecked(String clientId) throws Exception;
+    public abstract boolean isKingChecked(String clientId);
 
     /**
      * Determines if the {@link Client}'s king will be checked with the {@link Figure#getHypotheticalPosition()} and {@link Figure#getHypotheticalRemoved()} of every other {@link Figure}.
      * @param clientId The id of the player. The is saved in {@link Client}.
      * @return Returns true if the king will be checked.
-     * @throws Exception
      */
-    public abstract boolean willKingBeChecked(String clientId) throws Exception;
+    public abstract boolean willKingBeChecked(String clientId);
 }

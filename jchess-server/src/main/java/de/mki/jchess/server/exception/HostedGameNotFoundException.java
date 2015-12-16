@@ -5,6 +5,6 @@ package de.mki.jchess.server.exception;
  */
 public class HostedGameNotFoundException extends Exception {
     public HostedGameNotFoundException(String id) {
-        super("Game with ID '" + id + "'not found.");
+        super("Game with ID '" + id + "' not found.");
     }
 }
