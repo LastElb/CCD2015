@@ -9,11 +9,9 @@ public class smallHexboard extends Hexboard {
 
     /**
      * default constructor for 600px x 600px hexagonal chessboard
-     * @param list
      *
      */
-    public smallHexboard(List list) {
-        super(list);
+    public smallHexboard() {
         this.setWidth(600);
         this.setHeight(600);
         this.setHexHeight(46);

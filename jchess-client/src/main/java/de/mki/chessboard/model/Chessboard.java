@@ -16,11 +16,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     Map<String, T> fields;
     List<Figure> figures;
 
-
-    public Chessboard(List<Figure> figures) {
-        this.figures = figures;
-        this.fields = generateFields();
-        this.repaint();
+    public Chessboard() {
     }
 
     public int getWidth() {
@@ -47,7 +43,17 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         this.image = image;
     }
 
+    /**
+     * generates fields and puts figures on the board
+     *
+     * @param figures
+     */
+    public abstract void setupBoard(List<Figure> figures);
 
+    /**
+     * initialize field objects of chessboard and put them into a map "fields"
+     * @return Map with fields
+     */
     public abstract Map generateFields();
 
     /**
@@ -81,6 +87,11 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     /**
      * Graphics
      */
+
+    /**
+     * mainly part of the old project (code) and is needed for rendering graphics
+     * @param g
+     */
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -89,15 +100,27 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         drawFigures(g2d);
     }
 
+    /**
+     * also part of the old project (code) and is needed for rendering graphics
+     * @param g
+     */
     @Override
     public void update(Graphics g) {
         repaint();
     }
 
+    /**
+     * draw image of the chessboard
+     * @param g2d
+     */
     private void drawBoard(Graphics2D g2d) {
         g2d.drawImage(this.image, 0, 0, null);
     }
 
+    /**
+     * draw images of the figures onto the board
+     * @param g2d
+     */
     private void drawFigures(Graphics2D g2d) {
 
         for (Figure figure : figures) {
