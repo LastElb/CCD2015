@@ -13,11 +13,18 @@ public class HexboardTest {
     Hexboard hexboard;
 
     @Before
+    /**
+     * set up an empty board
+     */
     public void setUp() {
-        hexboard = new Hexboard(new ArrayList());
+        hexboard = new smallHexboard();
+        hexboard.setupBoard(new ArrayList<>());
     }
 
     @Test
+    /**
+     *  internal (axial) coordinates should match chess notation
+     */
     public void testGetFieldByNotation() throws Exception {
         Hexagon hexagon = hexboard.getFieldByNotation("I8");
         String notation = hexagon.getNotation();
