@@ -47,17 +47,17 @@ public class ThreePersonGame extends Game {
         // White figures
         Client playerWhite = getPlayerList().get(0);
         try {
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(0, 0)).setPictureId("rook-white"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(1, 0)).setPictureId("knight-white"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(2, 0)).setPictureId("bishop-white"));
-            getChessboard().getFigures().add(new Queen(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(3, 0)).setPictureId("queen-white"));
-            getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(4, 0)).setPictureId("king-white"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(5, 0)).setPictureId("knight-white"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(6, 0)).setPictureId("bishop-white"));
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerWhite).setPosition(chessboard.getFieldByNotation(7, 0)).setPictureId("rook-white"));
+            getChessboard().getFigures().add(new Rook(playerWhite).setPosition(chessboard.getFieldByNotation(0, 0)).setPictureId("rook-white"));
+            getChessboard().getFigures().add(new Knight(playerWhite).setPosition(chessboard.getFieldByNotation(1, 0)).setPictureId("knight-white"));
+            getChessboard().getFigures().add(new Bishop(playerWhite).setPosition(chessboard.getFieldByNotation(2, 0)).setPictureId("bishop-white"));
+            getChessboard().getFigures().add(new Queen(playerWhite).setPosition(chessboard.getFieldByNotation(3, 0)).setPictureId("queen-white"));
+            getChessboard().getFigures().add(new King(playerWhite).setPosition(chessboard.getFieldByNotation(4, 0)).setPictureId("king-white"));
+            getChessboard().getFigures().add(new Knight(playerWhite).setPosition(chessboard.getFieldByNotation(5, 0)).setPictureId("knight-white"));
+            getChessboard().getFigures().add(new Bishop(playerWhite).setPosition(chessboard.getFieldByNotation(6, 0)).setPictureId("bishop-white"));
+            getChessboard().getFigures().add(new Rook(playerWhite).setPosition(chessboard.getFieldByNotation(7, 0)).setPictureId("rook-white"));
             IntStream.range(0, 9).forEach(column -> {
                 try {
-                    getChessboard().getFigures().add(new Pawn(RandomStringService.getRandomString(), playerWhite, Direction.DIAGONALBOTTOM).setPosition(chessboard.getFieldByNotation(column, 1)).setPictureId("pawn-white"));
+                    getChessboard().getFigures().add(new Pawn(playerWhite, Direction.DIAGONALBOTTOM).setPosition(chessboard.getFieldByNotation(column, 1)).setPictureId("pawn-white"));
                 } catch (Exception e) {
                     logger.error("", e);
                 }
@@ -69,17 +69,17 @@ public class ThreePersonGame extends Game {
         // Grey figures
         Client playerGrey = getPlayerList().get(1);
         try {
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 5)).setPictureId("rook-grey"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 6)).setPictureId("knight-grey"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 7)).setPictureId("bishop-grey"));
-            getChessboard().getFigures().add(new Queen(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 8)).setPictureId("queen-grey"));
-            getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 9)).setPictureId("king-grey"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 10)).setPictureId("knight-grey"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 11)).setPictureId("bishop-grey"));
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerGrey).setPosition(chessboard.getFieldByNotation(12, 12)).setPictureId("rook-grey"));
+            getChessboard().getFigures().add(new Rook(playerGrey).setPosition(chessboard.getFieldByNotation(12, 5)).setPictureId("rook-grey"));
+            getChessboard().getFigures().add(new Knight(playerGrey).setPosition(chessboard.getFieldByNotation(12, 6)).setPictureId("knight-grey"));
+            getChessboard().getFigures().add(new Bishop(playerGrey).setPosition(chessboard.getFieldByNotation(12, 7)).setPictureId("bishop-grey"));
+            getChessboard().getFigures().add(new Queen(playerGrey).setPosition(chessboard.getFieldByNotation(12, 8)).setPictureId("queen-grey"));
+            getChessboard().getFigures().add(new King(playerGrey).setPosition(chessboard.getFieldByNotation(12, 9)).setPictureId("king-grey"));
+            getChessboard().getFigures().add(new Knight(playerGrey).setPosition(chessboard.getFieldByNotation(12, 10)).setPictureId("knight-grey"));
+            getChessboard().getFigures().add(new Bishop(playerGrey).setPosition(chessboard.getFieldByNotation(12, 11)).setPictureId("bishop-grey"));
+            getChessboard().getFigures().add(new Rook(playerGrey).setPosition(chessboard.getFieldByNotation(12, 12)).setPictureId("rook-grey"));
             IntStream.range(4, 13).forEach(row -> {
                 try {
-                    getChessboard().getFigures().add(new Pawn(RandomStringService.getRandomString(), playerGrey, Direction.DIAGONALTOPLEFT).setPosition(chessboard.getFieldByNotation(11, row)).setPictureId("pawn-grey"));
+                    getChessboard().getFigures().add(new Pawn(playerGrey, Direction.DIAGONALTOPLEFT).setPosition(chessboard.getFieldByNotation(11, row)).setPictureId("pawn-grey"));
                 } catch (Exception e) {
                     logger.error("", e);
                 }
@@ -91,17 +91,17 @@ public class ThreePersonGame extends Game {
         // Black figures
         Client playerBlack = getPlayerList().get(2);
         try {
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 12)).setPictureId("rook-black"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 11)).setPictureId("knight-black"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 10)).setPictureId("bishop-black"));
-            getChessboard().getFigures().add(new Queen(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 9)).setPictureId("queen-black"));
-            getChessboard().getFigures().add(new King(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 8)).setPictureId("king-black"));
-            getChessboard().getFigures().add(new Knight(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 7)).setPictureId("knight-black"));
-            getChessboard().getFigures().add(new Bishop(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 6)).setPictureId("bishop-black"));
-            getChessboard().getFigures().add(new Rook(RandomStringService.getRandomString(), playerBlack).setPosition(chessboard.getFieldByNotation(12, 5)).setPictureId("rook-black"));
+            getChessboard().getFigures().add(new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(12, 12)).setPictureId("rook-black"));
+            getChessboard().getFigures().add(new Knight(playerBlack).setPosition(chessboard.getFieldByNotation(12, 11)).setPictureId("knight-black"));
+            getChessboard().getFigures().add(new Bishop(playerBlack).setPosition(chessboard.getFieldByNotation(12, 10)).setPictureId("bishop-black"));
+            getChessboard().getFigures().add(new Queen(playerBlack).setPosition(chessboard.getFieldByNotation(12, 9)).setPictureId("queen-black"));
+            getChessboard().getFigures().add(new King(playerBlack).setPosition(chessboard.getFieldByNotation(12, 8)).setPictureId("king-black"));
+            getChessboard().getFigures().add(new Knight(playerBlack).setPosition(chessboard.getFieldByNotation(12, 7)).setPictureId("knight-black"));
+            getChessboard().getFigures().add(new Bishop(playerBlack).setPosition(chessboard.getFieldByNotation(12, 6)).setPictureId("bishop-black"));
+            getChessboard().getFigures().add(new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(12, 5)).setPictureId("rook-black"));
             IntStream.range(4, 13).forEach(row -> {
                 try {
-                    getChessboard().getFigures().add(new Pawn(RandomStringService.getRandomString(), playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-grey"));
+                    getChessboard().getFigures().add(new Pawn(playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-grey"));
                 } catch (Exception e) {
                     logger.error("", e);
                 }

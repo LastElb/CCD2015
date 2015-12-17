@@ -1,5 +1,6 @@
 package de.mki.jchess.server.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,6 +10,10 @@ import java.util.List;
 public class HistoryEntry {
     List<ChessboardEvent> chessboardEvents;
     Client player;
+
+    public HistoryEntry() {
+        chessboardEvents = new ArrayList<>();
+    }
 
     public List<ChessboardEvent> getChessboardEvents() {
         return chessboardEvents;
