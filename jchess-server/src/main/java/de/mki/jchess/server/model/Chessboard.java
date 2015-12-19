@@ -119,7 +119,7 @@ public abstract class Chessboard<T extends Field> {
     /**
      * Determines if at least one {@link Field} would be occupied with the {@link Figure#getHypotheticalPosition()} and {@link Figure#getHypotheticalRemoved()} of every {@link Figure}.
      * @param positions A {@link List} of {@link Field}s to check.
-     * @return
+     * @return Returns true if at least one position is occupied. Returns false if no position is occupied.
      */
     public abstract boolean willFieldsBeOccupied(List<T> positions);
 
