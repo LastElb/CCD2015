@@ -4,7 +4,6 @@ import de.mki.jchess.server.exception.TooManyPlayersException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.*;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Game;
-import de.mki.jchess.server.service.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -31,6 +30,8 @@ public class ThreePersonGame extends Game {
 
     @Override
     public void initializeGame() {
+        if (getPlayerList().size() < getMaximumPlayers())
+            return;
         chessboard = new Chessboard(this);
         IntStream.range(0, 13).forEach(row -> {
             // The if clause could be simplified to IntStream.range(Math.max(0, row - 5), Math.min(13, 8 + row)).
