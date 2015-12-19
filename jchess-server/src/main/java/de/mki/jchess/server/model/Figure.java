@@ -78,6 +78,8 @@ public abstract class Figure<T extends Field> {
     public abstract List<T> getPossibleMovements(Chessboard chessboard);
 
     /**
+     * Returns a {@link List} of special movements like en passant, castling, ...
+     * The value is distinct to {@link #getPossibleMovements(Chessboard)}, but will be combined in {@link Chessboard#getPossibleFieldsToMove(String)}.
      * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return Returns a list of possible {@link Field}s for special movements like castling, en passant and pawn promotion.
      */
