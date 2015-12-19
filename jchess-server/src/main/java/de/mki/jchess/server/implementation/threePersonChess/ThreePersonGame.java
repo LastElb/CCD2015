@@ -92,14 +92,14 @@ public class ThreePersonGame extends Game {
         // Black figures
         Client playerBlack = getPlayerList().get(2);
         try {
-            getChessboard().getFigures().add(new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(12, 12)).setPictureId("rook-black"));
-            getChessboard().getFigures().add(new Knight(playerBlack).setPosition(chessboard.getFieldByNotation(12, 11)).setPictureId("knight-black"));
-            getChessboard().getFigures().add(new Bishop(playerBlack).setPosition(chessboard.getFieldByNotation(12, 10)).setPictureId("bishop-black"));
-            getChessboard().getFigures().add(new Queen(playerBlack).setPosition(chessboard.getFieldByNotation(12, 9)).setPictureId("queen-black"));
-            getChessboard().getFigures().add(new King(playerBlack).setPosition(chessboard.getFieldByNotation(12, 8)).setPictureId("king-black"));
-            getChessboard().getFigures().add(new Knight(playerBlack).setPosition(chessboard.getFieldByNotation(12, 7)).setPictureId("knight-black"));
-            getChessboard().getFigures().add(new Bishop(playerBlack).setPosition(chessboard.getFieldByNotation(12, 6)).setPictureId("bishop-black"));
-            getChessboard().getFigures().add(new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(12, 5)).setPictureId("rook-black"));
+            getChessboard().getFigures().add(new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(7, 12)).setPictureId("rook-black"));
+            getChessboard().getFigures().add(new Knight(playerBlack).setPosition(chessboard.getFieldByNotation(6, 11)).setPictureId("knight-black"));
+            getChessboard().getFigures().add(new Bishop(playerBlack).setPosition(chessboard.getFieldByNotation(5, 10)).setPictureId("bishop-black"));
+            getChessboard().getFigures().add(new Queen(playerBlack).setPosition(chessboard.getFieldByNotation(4, 9)).setPictureId("queen-black"));
+            getChessboard().getFigures().add(new King(playerBlack).setPosition(chessboard.getFieldByNotation(3, 8)).setPictureId("king-black"));
+            getChessboard().getFigures().add(new Knight(playerBlack).setPosition(chessboard.getFieldByNotation(2, 7)).setPictureId("knight-black"));
+            getChessboard().getFigures().add(new Bishop(playerBlack).setPosition(chessboard.getFieldByNotation(1, 6)).setPictureId("bishop-black"));
+            getChessboard().getFigures().add(new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(0, 5)).setPictureId("rook-black"));
             IntStream.range(4, 13).forEach(row -> {
                 try {
                     getChessboard().getFigures().add(new Pawn(playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-grey"));
