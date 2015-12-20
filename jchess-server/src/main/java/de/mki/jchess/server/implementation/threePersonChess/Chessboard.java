@@ -139,6 +139,11 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      */
     @Override
     public void performMovement(String figureId, String clientId, String targetFieldNotation, SimpMessagingTemplate simpMessagingTemplate) throws MoveNotAllowedException {
+        // Only the current player is allowed to do moves.
+        // Fixes CCD2015-50
+        if (!clientId.equals(getCurrentPlayer().getId()))
+            throw new MoveNotAllowedException();
+
         List<Hexagon> possibleMovements = getPossibleFieldsToMove(figureId);
         // Throw an exception when the client ID does not match the figures owner id
         // or when the target field is not in the list of possible moves.
