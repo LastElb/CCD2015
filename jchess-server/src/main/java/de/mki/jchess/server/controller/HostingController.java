@@ -4,7 +4,7 @@ import de.mki.jchess.server.exception.HostedGameNotFoundException;
 import de.mki.jchess.server.exception.InvalidGameModeException;
 import de.mki.jchess.server.exception.TooManyPlayersException;
 import de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame;
-import de.mki.jchess.server.implementation.twoPersonChess.TwoPersonGame;
+//import de.mki.jchess.server.implementation.twoPersonChess.TwoPersonGame;
 import de.mki.jchess.server.model.Client;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.HostedGamesService;
@@ -33,9 +33,6 @@ public class HostingController {
             throw new InvalidGameModeException(name);
         Game game;
         switch (name) {
-            case "default-2-person-chess":
-                game = new TwoPersonGame(RandomStringService.getRandomString());
-                break;
             case "default-3-person-chess":
                 game = new ThreePersonGame(RandomStringService.getRandomString());
                 break;

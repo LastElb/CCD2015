@@ -38,15 +38,6 @@ public class HostingControllerTest {
     }
 
     /**
-     * Check if host can create a two person game
-     * @throws Exception
-     */
-    @Test
-    public void testHostRequestByGameModeTwoPerson() throws Exception {
-        hostingController.hostRequestByGameMode("default-2-person-chess");
-    }
-
-    /**
      * Check if host can create a three person game
      * @throws Exception
      */
