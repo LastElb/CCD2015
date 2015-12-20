@@ -79,21 +79,17 @@ public class Pawn extends Figure<Hexagon> {
         List<Hexagon> output = new ArrayList<>();
         movableDirections.forEach(direction -> getPosition().getNeighbourByDirection(direction)
                 .ifPresent(hexagon -> {
-                    try {
-                        if (!chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
-                            logger.trace("Field " + hexagon.getNotation() + " is not occupied.");
-                            setHypotheticalPosition(hexagon);
-                            if (!chessboard.willKingBeChecked(getClient().getId())) {
-                                output.add(hexagon);
-                                logger.trace("King will not be checked with this move.");
-                            } else
-                                logger.trace("King will be checked with this move.");
-                            setHypotheticalPosition(null);
+                    if (!chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
+                        logger.trace("Field " + hexagon.getNotation() + " is not occupied.");
+                        setHypotheticalPosition(hexagon);
+                        if (!chessboard.willKingBeChecked(getClient().getId())) {
+                            output.add(hexagon);
+                            logger.trace("King will not be checked with this move.");
                         } else
-                            logger.trace("Field " + hexagon.getNotation() + " is occupied.");
-                    } catch (Exception e) {
-                        logger.error("", e);
-                    }
+                            logger.trace("King will be checked with this move.");
+                        setHypotheticalPosition(null);
+                    } else
+                        logger.trace("Field " + hexagon.getNotation() + " is occupied.");
                 }));
         return output;
     }
@@ -118,22 +114,18 @@ public class Pawn extends Figure<Hexagon> {
                             .ifPresent(targetHexagon -> {
                                 // Both fields need to be free and the king can not be checked
                                 logger.trace("Inspecting special move to field " + targetHexagon.getNotation());
-                                try {
-                                    if (!chessboard.areFieldsOccupied(Collections.singletonList(hexagon)) &&
-                                            !chessboard.areFieldsOccupied(Collections.singletonList(targetHexagon))) {
-                                        logger.trace("Fields  " + hexagon.getNotation() + " and " + targetHexagon.getNotation() + " are not occupied");
-                                        setHypotheticalPosition(targetHexagon);
-                                        if (!chessboard.willKingBeChecked(getClient().getId())) {
-                                            output.add(targetHexagon);
-                                            logger.trace("King will not be checked with this move.");
-                                        } else
-                                            logger.trace("King will be checked with this move.");
-                                        setHypotheticalPosition(null);
-                                    } else {
-                                        logger.trace("Fields " + hexagon.getNotation() + " or " + targetHexagon.getNotation() + " are occupied");
-                                    }
-                                } catch (Exception e) {
-                                    logger.error("", e);
+                                if (!chessboard.areFieldsOccupied(Collections.singletonList(hexagon)) &&
+                                        !chessboard.areFieldsOccupied(Collections.singletonList(targetHexagon))) {
+                                    logger.trace("Fields  " + hexagon.getNotation() + " and " + targetHexagon.getNotation() + " are not occupied");
+                                    setHypotheticalPosition(targetHexagon);
+                                    if (!chessboard.willKingBeChecked(getClient().getId())) {
+                                        output.add(targetHexagon);
+                                        logger.trace("King will not be checked with this move.");
+                                    } else
+                                        logger.trace("King will be checked with this move.");
+                                    setHypotheticalPosition(null);
+                                } else {
+                                    logger.trace("Fields " + hexagon.getNotation() + " or " + targetHexagon.getNotation() + " are occupied");
                                 }
                             })));
         }
