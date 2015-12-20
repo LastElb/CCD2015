@@ -39,32 +39,29 @@ public class FigureUtils {
             // If the field is occupied, lets assume we beat this figure
             if (chessboard.areFieldsOccupied(Collections.singletonList(hexagon))) {
                 chessboard.getFigures().stream()
+                        // Just keep the figures of the enemies.
                         .filter(o -> !((Figure) o).getClient().getId().equals(client.getId()))
+                        // Just get the figure that is standing on our target field
                         .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
                         .findFirst()
                         .ifPresent(o -> {
+                            // We hypothetically beat this figure
                             Figure beatableFigure = (Figure) o;
                             beatableFigure.setHypotheticalRemoved(true);
                             logger.trace("Found beatable figure (" + beatableFigure.getName() + ") at field " + hexagon.getNotation());
 
                             figure.setHypotheticalPosition(hexagon);
-                            try {
-                                if (!chessboard.willKingBeChecked(client.getId()))
-                                    possibleFields.add(hexagon);
-                            } catch (Exception e) {
-                                logger.error("", e);
-                            }
+                            // Check if we really can beat the figure without our king being checked with this move.
+                            if (!chessboard.willKingBeChecked(client.getId()))
+                                possibleFields.add(hexagon);
                             figure.setHypotheticalPosition(null);
                             beatableFigure.setHypotheticalRemoved(null);
                         });
             } else {
+                // We have a free field.
                 figure.setHypotheticalPosition(hexagon);
-                try {
-                    if (!chessboard.willKingBeChecked(client.getId()))
-                        possibleFields.add(hexagon);
-                } catch (Exception e) {
-                    logger.error("", e);
-                }
+                if (!chessboard.willKingBeChecked(client.getId()))
+                    possibleFields.add(hexagon);
                 figure.setHypotheticalPosition(null);
             }
         });

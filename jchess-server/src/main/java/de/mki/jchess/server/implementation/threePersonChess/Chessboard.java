@@ -174,7 +174,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(figureId).setFromNotation(hexagonFigure.getPosition().getNotation()).setToNotation(targetFieldNotation));
                     try {
                         hexagonFigure.setPosition((Hexagon) getFieldByNotation(targetFieldNotation));
-                    } catch (Exception e) {
+                    } catch (NotationNotFoundException e) {
                         logger.error("", e);
                     }
                 });
