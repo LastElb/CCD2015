@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * Commonly used functions by {@link Figure}s on a {@link Chessboard}.
  * Created by Igor on 16.12.2015.
  */
 public class FigureUtils {
@@ -25,6 +26,14 @@ public class FigureUtils {
     private FigureUtils() {
     }
 
+    /**
+     * Evaluates if {@link Hexagon}s of a {@link List} are usable for given {@link Figure}.
+     * @param figure The {@link Figure}
+     * @param attackableFields A {@link List} of {@link Hexagon} the {@link Figure} can attack.
+     * @param chessboard A {@link Chessboard} instance
+     * @param client The {@link Client Owner} of the {@link Figure}.
+     * @param possibleFields The {@link List}-Reference that gets updated with the possible {@link Hexagon}s to move to.
+     */
     public static void evaluatePossibleMovements(Figure<Hexagon> figure, List<Hexagon> attackableFields, Chessboard chessboard, Client client, List<Hexagon> possibleFields) {
         attackableFields.forEach(hexagon -> {
             // If the field is occupied, lets assume we beat this figure
@@ -61,6 +70,17 @@ public class FigureUtils {
         });
     }
 
+    /**
+     * Adds the target {@link Hexagon} to a {@link List} if the {@link Hexagon} is free
+     * or occupied by an enemy {@link Figure}.
+     * @param chessboard The instance of the {@link Chessboard}.
+     * @param hexagonOptional The target {@link Hexagon}.
+     * @param possibleFields The {@link List}-reference where the possible {@link Hexagon}s are saved to.
+     * @param client The {@link Client Owner} of the {@link Figure}.
+     * @param direction The {@link Direction} the {@link Figure} wants to move to.
+     * @return Returns an {@link Optional} of {@link Hexagon} if we can go one {@link Hexagon} further
+     * or an empty {@link Optional} if this was the last {@link Hexagon} in this {@link Direction}.
+     */
     public static Optional<Hexagon> addHexagonToListIfFreeOrEnemy(Chessboard chessboard, Optional<Hexagon> hexagonOptional, List<Hexagon> possibleFields, Client client, Direction direction) {
         if (chessboard.areFieldsOccupied(Collections.singletonList(hexagonOptional.get()))) {
             // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
@@ -68,13 +88,26 @@ public class FigureUtils {
                 // It's an enemy figure
                 possibleFields.add(hexagonOptional.get());
             }
+            // Return an empty {@link Optional} when we are on the end of our line.
             return Optional.empty();
         } else {
+            // Return the next {@link Optional} in our {@link Direction}.
             possibleFields.add(hexagonOptional.get());
             return hexagonOptional.get().getNeighbourByDirection(direction);
         }
     }
 
+    /**
+     * Adds the target {@link Hexagon} to a {@link List} if the {@link Hexagon} is free
+     * or will be occupied by an enemy {@link Figure}.
+     * @param chessboard The instance of the {@link Chessboard}.
+     * @param hexagonOptional The target {@link Hexagon}.
+     * @param possibleFields The {@link List}-reference where the possible {@link Hexagon}s are saved to.
+     * @param client The {@link Client Owner} of the {@link Figure}.
+     * @param direction The {@link Direction} the {@link Figure} wants to move to.
+     * @return Returns an {@link Optional} of {@link Hexagon} if we can go one {@link Hexagon} further
+     * or an empty {@link Optional} if this was the last {@link Hexagon} in this {@link Direction}.
+     */
     public static Optional<Hexagon> addHexagonToListIfFreeOrEnemyHypothetical(Chessboard chessboard, Optional<Hexagon> hexagonOptional, List<Hexagon> possibleFields, Client client, Direction direction) {
         if (chessboard.willFieldsBeOccupied(Collections.singletonList(hexagonOptional.get()))) {
             // Check if the occupied field has an enemy figure. If so, the field is indeed attackable
@@ -82,8 +115,10 @@ public class FigureUtils {
                 // It's an enemy figure
                 possibleFields.add(hexagonOptional.get());
             }
+            // Return an empty {@link Optional} when we are on the end of our line.
             return Optional.empty();
         } else {
+            // Return the next {@link Optional} in our {@link Direction}.
             possibleFields.add(hexagonOptional.get());
             return hexagonOptional.get().getNeighbourByDirection(direction);
         }
