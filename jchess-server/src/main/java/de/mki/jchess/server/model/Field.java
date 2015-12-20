@@ -1,10 +1,7 @@
 package de.mki.jchess.server.model;
 
 /**
- * Created by Igor on 11.11.2015.
- */
-
-/**
+ * A field representing on what a {@link Figure} is placed on.
  * Created by Igor on 11.11.2015.
  * @param <T> The Direction enum
  */
