@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="jchess">
     <head>
         <meta charset="utf-8" />
         <title>Canvas Hexagonal Map</title>
@@ -12,7 +12,30 @@
         </style>
     </head>
     <body>
-        <canvas id="hexmap" width="660" height="624"></canvas>
+    <div>
+        <div ng-controller="chessboardController">
+            <canvas id="hexmap" width="660" height="624"></canvas>
+            <div>Aktiver Spieler: {{activeClient.nickname || 'Spiel hat noch nicht begonnen'}}</div>
+            <div>
+                <span>Feld: {{selectedField || 'Kein Feld markiert'}}</span>
+            </div>
+            <div>
+                <span>Spieler hinzufügen</span>
+                <input type="text" ng-model="host" placeholder="host"/>
+                <input type="text" ng-model="gameid" placeholder="game ID"/>
+                <input type="text" ng-model="editClient.nickname" placeholder="nickname"/>
+                <button ng-click="addClientPlayer()" value="Connect">Connect</button>
+            </div>
+            <div>
+                <div ng-repeat="player in players" ng-bind="player | json"></div>
+            </div>
+        </div>
+    </div>
+
+        <script src="./jquery-2.1.4.min.js"></script>
+        <script src="./angular.min.js"></script>
+        <script src="./sockjs.min.js"></script>
+        <script src="./stomp.min.js"></script>
         <script src="hexagons.js"></script>
     </body>
 </html>
