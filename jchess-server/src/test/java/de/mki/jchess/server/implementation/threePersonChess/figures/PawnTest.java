@@ -108,7 +108,9 @@ public class PawnTest extends FigureTest {
     public void testGetPossibleSpecialMovements2() throws Exception {
         Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("c5")));
-        game.getGameHistory().add(new HistoryEntry().setChessboardEvents(Collections.singletonList(new MovementEvent().setFigureId(pawn.getId()).setFromNotation("b5").setToNotation("c5"))));
+        HistoryEntry historyEntry = new HistoryEntry();
+        historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(pawn.getId()).setFromNotation("b5").setToNotation("c5"));
+        game.getGameHistory().add(historyEntry);
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
