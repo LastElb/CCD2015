@@ -24,7 +24,7 @@
 
         drawBoard(ctx, boardWidth, boardHeight);
 
-        canvas.addEventListener("mousemove", function(eventInfo) {
+        canvas.addEventListener("click", function(eventInfo) {
             var x,
                 y,
                 hexX,
@@ -52,19 +52,27 @@
             // Check if the mouse's coords are on the board
             if(hexX >= 0 && hexX < boardWidth) {
                 if(hexY >= 0 && hexY < boardHeight) {
-                  if (isHexagonValid(hexX, hexY)) {
-                    // ctx.fillStyle = "#000000";
-                    // drawHexagon(ctx, screenX, screenY, true);
-                  }
+                    if (isHexagonValid(hexX, hexY)) {
+                        ctx.fillStyle = "red";
+                        drawHexagon(ctx, screenX, screenY, null);
+                        console.log("Hexagon: " + getHexagonNotation(hexX, hexY));
+                    }
                 }
             }
         });
     }
 
+    /**
+     * Draw the whole chessboard and all figures.
+     * @param canvasContext The canvas to paint on
+     * @param width The amount of hexagons in horizontal view
+     * @param height The amount of hexagons in vertical view
+     */
     function drawBoard(canvasContext, width, height) {
         var i,
             j;
-        var colors = ["#DEFFD6", "#4AA631", "#8CDB73"]
+        // The field colors
+        var colors = ["#DEFFD6", "#4AA631", "#8CDB73"];
 
         for(i = 0; i < width; ++i) {
             for(j = 0; j < height; ++j) {
@@ -75,21 +83,24 @@
                 if (j%2 == 1) {
                   ctx.fillStyle = colors[(i+2)%3];
                 }
-                // if (j == 6) {
-                //   ctx.fillStyle = colors[(i+0)%3];
-                // }
                 drawHexagon(
                     ctx,
                     i * hexRectangleWidth + ((j % 2) * hexRadius),
                     j * (sideLength + hexHeight),
-                    true
+                    //getHexagonNotation(i, j)
+                    null
                 );
               }
-
             }
         }
     }
 
+    /**
+     * Returns if the hexagons position is valid and should be drawn.
+     * @param i The column
+     * @param j The row
+     * @returns {boolean}
+     */
     function isHexagonValid(i, j) {
       var render = true;
       // Row A
@@ -132,9 +143,90 @@
       return render;
     }
 
-    function drawHexagon(canvasContext, x, y, fill) {
-        var fill = fill || false;
+    /**
+     * Get the notation of a field on the canvas based on the hexagon position
+     * @param i The column
+     * @param j The row
+     * @returns {string}
+     */
+    function getHexagonNotation(i, j) {
+        var letter, number;
+        // Row A
+        if (j == 0 && i >= 3 || j == 0 && i <= 10) {
+            letter = "a";
+            number = i - 2;
+        }
+        // Row B
+        if (j == 1 && i >= 2 || j == 1 && i <= 10) {
+            letter = "b";
+            number = i - 1;
+        }
+        // Row C
+        if (j == 2 && i >= 2 || j == 2 && i <= 11) {
+            letter = "c";
+            number = i - 1;
+        }
+        // Row D
+        if (j == 3 && i >= 1 || j == 3 && i <= 11) {
+            letter = "d";
+            number = i;
+        }
+        // Row E
+        if (j == 4 && i >= 1 || j == 4 && i <= 12) {
+            letter = "e";
+            number = i;
+        }
+        // Row F
+        if (j == 5 && i >= 1 || j == 5 && i <= 12) {
+            letter = "f";
+            number = i + 1;
+        }
+        // Row G
+        if (j == 6 && i >= 1 || j == 6 && i <= 12) {
+            letter = "g";
+            number = i + 1;
+        }
+        // Row H
+        if (j == 7 && i >= 1 || j == 7 && i <= 11) {
+            letter = "h";
+            number = i + 2;
+        }
+        // Row I
+        if (j == 8 && i >= 2 || j == 8 && i <= 11) {
+            letter = "i";
+            number = i + 2;
+        }
+        // Row J
+        if (j == 9 && i >= 2 || j == 9 && i <= 10) {
+            letter = "j";
+            number = i + 3;
+        }
+        // Row K
+        if (j == 10 && i >= 3 || j == 10 && i <= 10) {
+            letter = "k";
+            number = i + 3;
+        }
+        // Row L
+        if (j == 11 && i >= 3 || j == 11 && i <= 9) {
+            letter = "l";
+            number = i + 4;
+        }
+        // Row M
+        if (j == 12 && i >= 4 || j == 12 && i <= 9) {
+            letter = "m";
+            number = i + 4;
+        }
+        return letter + number.toString();
+    }
 
+    /**
+     * Draws a single hexagon and the figure on it (if there is a figure on this position
+     * @param canvasContext The canvas to paint on
+     * @param x Pixel on the canvas
+     * @param y Pixel on the canvas
+     * @param figure The figure to paint on the field. Can be null to not draw any figure..
+     */
+    function drawHexagon(canvasContext, x, y, figure) {
         canvasContext.beginPath();
         canvasContext.moveTo(x + hexRadius, y);
         canvasContext.lineTo(x + hexRectangleWidth, y + hexHeight);
@@ -143,10 +235,25 @@
         canvasContext.lineTo(x, y + sideLength + hexHeight);
         canvasContext.lineTo(x, y + hexHeight);
         canvasContext.closePath();
+        canvasContext.fill();
 
-        if(fill) {
-            canvasContext.fill();
-        }
+        canvasContext.font="35px sans-serif";
+        canvasContext.fillStyle="black";
+        if (figure)
+            canvasContext.fillText(figure, x + (hexRadius/3.5), y + hexHeight + sideLength);
+
+        // Rook
+        //canvasContext.fillText("♖",x+(hexRadius/3.5),y + hexHeight +sideLength);
+        // Knight
+        //canvasContext.fillText("♞",x+(hexRadius/3.5),y + hexHeight +sideLength);
+        // Bishop
+        //canvasContext.fillText("♝",x+(hexRadius/3.5),y + hexHeight +sideLength);
+        // Queen
+        //canvasContext.fillText("♛",x+(hexRadius/3.5),y + hexHeight +sideLength);
+        // King
+        //canvasContext.fillText("♚",x+(hexRadius/3.5),y + hexHeight +sideLength);
+        // Pawn
+        canvasContext.fillText("♟",x+(hexRadius/3.5),y + hexHeight +sideLength);
         // canvasContext.stroke();
     }
 
