@@ -22,6 +22,10 @@ public abstract class Figure<T extends Field> {
     @JsonIgnore
     Optional<Boolean> hypotheticalRemoved;
 
+    /**
+     * Default constructor. Initializes {@link Optional}s.
+     * @param client The owner of the {@link Figure}.
+     */
     public Figure(Client client) {
         isRemoved = false;
         this.client = client;
@@ -74,17 +78,21 @@ public abstract class Figure<T extends Field> {
     public abstract List<T> getPossibleMovements(Chessboard chessboard);
 
     /**
+     * Returns a {@link List} of special movements like en passant, castling, ...
+     * The value is distinct to {@link #getPossibleMovements(Chessboard)}, but will be combined in {@link Chessboard#getPossibleFieldsToMove(String)}.
      * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return Returns a list of possible {@link Field}s for special movements like castling, en passant and pawn promotion.
      */
     public abstract List<T> getPossibleSpecialMovements(Chessboard chessboard);
 
     /**
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return This method returns a list of all fields the figure could attack.
      */
     public abstract List<T> getAttackableFields(Chessboard chessboard);
 
     /**
+     * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return This method returns a list of all fields the figure could attack with the hypothetical layout.
      */
     public abstract List<T> getHypotheticalAttackableFields(Chessboard chessboard);
@@ -111,7 +119,7 @@ public abstract class Figure<T extends Field> {
     }
 
     /**
-     * Set a hypothetical position or use {@link null} to reset the field.
+     * Set a hypothetical position or use NULL to reset the field.
      * @param position The hypothetical position or null
      */
     public void setHypotheticalPosition(T position) {
@@ -127,7 +135,7 @@ public abstract class Figure<T extends Field> {
     }
 
     /**
-     * Set if the figure is hypothetically removed or use {@link null} to reset the field.
+     * Set if the figure is hypothetically removed or use NULL to reset the field.
      * @param isRemoved If the figure is hypothetically removed or null
      */
     public void setHypotheticalRemoved(Boolean isRemoved) {

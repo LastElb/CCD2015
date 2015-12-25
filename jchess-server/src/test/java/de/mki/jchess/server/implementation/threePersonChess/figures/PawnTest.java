@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Test cases to check moves from {@link Pawn}s
  * Created by Igor on 17.11.2015.
  */
 @RunWith(SpringJUnit4ClassRunner.class)

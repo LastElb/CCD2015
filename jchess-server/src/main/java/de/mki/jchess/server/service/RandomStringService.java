@@ -1,14 +1,17 @@
 package de.mki.jchess.server.service;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Random;
 
 /**
  * Created by Igor on 11.11.2015.
  */
-@Service
 public class RandomStringService {
+
+    /**
+     * Don't allow creation of an instance.
+     */
+    private RandomStringService() {
+    }
 
     /**
      * Returns a {@link String} containing the lower cased english alphabet and the digits from 0 to 9

@@ -15,9 +15,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
+ * Tests for correct {@link Queen} movement and behaviour.
  * Created by Igor on 01.12.2015.
  */
 @RunWith(SpringJUnit4ClassRunner.class)

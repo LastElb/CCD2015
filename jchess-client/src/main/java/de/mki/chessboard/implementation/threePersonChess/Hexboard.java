@@ -15,10 +15,16 @@ public class Hexboard extends Chessboard {
     Point origin;
     Layout layout;
     Map<String, Hexagon> fields;
+    List figures;
 
-    public Hexboard(List<Figure> figures) {
-        super(figures);
-        fields = this.generateFields();
+    public Hexboard() {
+    }
+
+    @Override
+    public void setupBoard(List figures) {
+        this.figures = figures;
+        this.fields = generateFields();
+        this.repaint();
     }
 
     public int getHexWidth() {
@@ -61,30 +67,39 @@ public class Hexboard extends Chessboard {
         this.layout = layout;
     }
 
-
+    @Override
     public Map generateFields() {
         Map fields = new HashMap<>();
         // generate right half from x=0 to x=7
         for (int q = 0, maxR = 12; q <= 7; q++, maxR--) {
             for (int r = 0; r <= maxR; r++) {
-                insertHexagonInMap(q, r);
+                fields = insertHexagonInMap(q, r, fields);
             }
         }
         //generate left half from x=-1 to x=-5
         for (int q = -1, startR = 1; q >= -5; q--, startR++) {
             for (int r = startR; r <= 12; r++) {
-                insertHexagonInMap(q, r);
+                fields = insertHexagonInMap(q, r, fields);
             }
         }
         return fields;
     }
 
-    private void insertHexagonInMap(int q, int r) {
+    /**
+     * initialize hexagon, calculate the (pixel) center and put it into the map
+     *
+     * @param q
+     * @param r
+     * @param fields
+     * @return Map of fields
+     */
+    private Map insertHexagonInMap(int q, int r, Map fields) {
         Hexagon field = new Hexagon(q, r);
-        Point center = layout.hexagonToPixel(field);
+        Point center = this.layout.hexagonToPixel(field);
         field.setX(center.x);
         field.setY(center.y);
         fields.put(field.getNotation(), field);
+        return fields;
     }
 
     @Override

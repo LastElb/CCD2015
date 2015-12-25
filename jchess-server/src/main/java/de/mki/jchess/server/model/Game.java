@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.server.controller.GameModeController;
 import de.mki.jchess.server.exception.TooManyPlayersException;
 import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import java.util.concurrent.TimeUnit;
  * @since 11.11.2015
  */
 public abstract class Game {
+
+    private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
     String id;
     String gameMode;
@@ -55,6 +59,11 @@ public abstract class Game {
         return gameMode;
     }
 
+    /**
+     * Sets the game mode of the current game
+     * @param gameMode The game mode as valid string
+     * @return Returns this {@link Game} instance
+     */
     public Game setGameMode(String gameMode) {
         this.gameMode = gameMode;
         return this;
@@ -89,7 +98,7 @@ public abstract class Game {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
                 Client lastClient = playerList.get(playerList.size() - 1);
                 PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()));
@@ -112,6 +121,7 @@ public abstract class Game {
     }
 
     /**
+     * Returns a {@link List} of {@link Client}s that are registered as player.
      * @return Returns a {@link List} of {@link Client}s that are registered as player.
      */
     public List<Client> getPlayerList() {
@@ -119,6 +129,7 @@ public abstract class Game {
     }
 
     /**
+     * Returns a {@link List} of {@link Client}s that are registered as observer.
      * @return Returns a {@link List} of {@link Client}s that are registered as observer.
      */
     public List<Client> getObserverList() {
@@ -126,6 +137,7 @@ public abstract class Game {
     }
 
     /**
+     * Returns an integer with indicating the maximum count of players for this game.
      * @return Returns an integer with indicating the maximum count of players for this game.
      */
     public int getMaximumPlayers() {
@@ -133,6 +145,7 @@ public abstract class Game {
     }
 
     /**
+     * Returns a boolean indication if there are enough players registered to start the game.
      * @return Returns a boolean indication if there are enough players registered to start the game.
      */
     public boolean hasSufficientPlayers() {
@@ -145,8 +158,17 @@ public abstract class Game {
      */
     public abstract void initializeGame();
 
+    /**
+     * Returns the {@link Chessboard} specific to the game mode. As long as {@link #initializeGame()} is not called,
+     * this should return null.
+     * @return Returns the {@link Chessboard} specific to the game mode.
+     */
     public abstract Chessboard getChessboard();
 
+    /**
+     * Returns the history of the current {@link Game}.
+     * @return Returns the history of the current {@link Game}.
+     */
     public List<HistoryEntry> getGameHistory() {
         return gameHistory;
     }

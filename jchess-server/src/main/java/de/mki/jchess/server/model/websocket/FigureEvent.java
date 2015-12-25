@@ -5,7 +5,7 @@ import de.mki.jchess.server.model.ChessboardEvent;
 /**
  * Created by Igor on 14.11.2015.
  */
-public class FigureEvent extends ChessboardEvent {
+public class FigureEvent implements ChessboardEvent {
 
     String figureId;
     Event event;

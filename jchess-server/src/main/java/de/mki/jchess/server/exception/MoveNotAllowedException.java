@@ -5,6 +5,6 @@ package de.mki.jchess.server.exception;
  */
 public class MoveNotAllowedException extends Exception {
     public MoveNotAllowedException() {
-        super("The received move is not allowed");
+        super("The received move is not allowed.");
     }
 }

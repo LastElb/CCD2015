@@ -17,7 +17,6 @@ public class GameModeController {
 
     public GameModeController() {
         availableGameModes = new ArrayList<>();
-        availableGameModes.add("default-2-person-chess");
         availableGameModes.add("default-3-person-chess");
     }
 
