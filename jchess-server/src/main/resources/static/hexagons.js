@@ -193,6 +193,28 @@ angular.module('jchess', [])
                     }
                 }
             });
+
+            canvas.addEventListener("mousemove", function(eventInfo) {
+                var x,
+                    y,
+                    hexX,
+                    hexY,
+                    rect;
+
+                rect = canvas.getBoundingClientRect();
+
+                x = eventInfo.clientX - rect.left;
+                y = eventInfo.clientY - rect.top;
+
+                hexY = Math.floor(y / (hexHeight + sideLength));
+                hexX = Math.floor((x - (hexY % 2) * hexRadius) / hexRectangleWidth);
+
+                // Check if the mouse's coords are on the board
+                if(hexX >= 0 && hexX < boardWidth && hexY >= 0 && hexY < boardHeight) {
+                    $scope.hoveredField = getHexagonNotation(hexX, hexY);
+                    $scope.$apply();
+                }
+            });
         }
 
         /**

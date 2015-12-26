@@ -31,7 +31,8 @@
                     <div class="panel-body" ng-show="game">
                         <div>
                             <div>Aktiver Spieler: <strong ng-bind="activeClient.nickname"></strong> (<span ng-bind="activeClient.team"></span>)</div>
-                            <span>Feld: <strong ng-bind="selectedField || 'Kein Feld markiert'"></strong></span>
+                            <span>Feld: <strong ng-bind="selectedField || 'Kein Feld markiert'"></strong></span><br>
+                            <span>Maus über Feld: <strong ng-bind="hoveredField || 'Kein Feld markiert'"></strong></span>
                         </div>
                     </div>
                 </div>
