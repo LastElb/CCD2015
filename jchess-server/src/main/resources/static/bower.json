@@ -1,0 +1,27 @@
+{
+  "name": "JChess Webclient",
+  "homepage": "https://github.com/LastElb/CCD2015",
+  "authors": [
+    "Igor Lückel <igor.lueckel@googlemail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "notie": "*",
+    "angular": "~1.4.8",
+    "jquery": "~2.1.4",
+    "sockjs": "~0.3.4",
+    "stomp-websocket": "~2.3.4",
+    "bootstrap": "~3.3.6"
+  }
+}
