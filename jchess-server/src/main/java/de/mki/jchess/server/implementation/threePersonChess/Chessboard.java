@@ -264,7 +264,11 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      */
     public boolean isFigureOwnedByEnemy(Field targetField, Client client) {
         return getFigures().stream()
+                // Just use non removed figures. Fixes CCD2015-51
+                .filter(o -> !((Figure) o).isRemoved())
+                // Just those figures on the target position
                 .filter(o -> ((Figure) o).getHypotheticalPosition().getNotation().equals(targetField.getNotation()))
+                // Just enemy figures
                 .filter(o -> ((Figure) o).getClient().getId().equals(client.getId()))
                 .count() == 0;
     }
@@ -279,9 +283,13 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         // If the king is checked, go through all active figures and check if we can do any moves.
         // If we can't do any moves the player is defeated
         if (isKingChecked(client.getId()) && getFigures().stream()
+                // Just the players figures
                 .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(client.getId()))
+                // Just non removed figures
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Change type to a list of hexagon
                 .map(hexagonFigure -> hexagonFigure.getPossibleMovements(this))
+                // Convert list of list of hexagon to list of hexagon
                 .flatMap(Collection::stream)
                 .count() == 0)
             client.setDefeated(true);
