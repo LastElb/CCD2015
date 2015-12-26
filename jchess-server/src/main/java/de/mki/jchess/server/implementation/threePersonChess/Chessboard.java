@@ -152,7 +152,11 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .count() == 0
                 ||
                 getFigures().stream()
+                        // Only figures, that are sill active.
+                        .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                        // Only figures equals to the given id
                         .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                        // Only the clients figures
                         .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
                         .count() == 0)
             throw new MoveNotAllowedException();
@@ -161,6 +165,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         historyEntry.setPlayer(getCurrentPlayer());
         // Remove a figure from the chessboard if there is a figure on the target field
         getFigures().stream()
+                // Only figures, that are sill active.
+                // Fixes CCD2015-52
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Only figures on the target hexagon
                 .filter(hexagonFigure -> hexagonFigure.getPosition().getNotation().equals(targetFieldNotation))
                 .findFirst().ifPresent(hexagonFigure -> {
                     historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(hexagonFigure.getId()).setEvent(FigureEvent.Event.REMOVED));
@@ -169,6 +177,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
         // Move our figure to the target field
         getFigures().stream()
+                // Only figures, that are sill active.
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Only figures on the source hexagon
                 .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
                 .findFirst().ifPresent(hexagonFigure -> {
                     historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(figureId).setFromNotation(hexagonFigure.getPosition().getNotation()).setToNotation(targetFieldNotation));
