@@ -1,4 +1,10 @@
 angular.module('jchess', [])
+    .filter('reverse', function() {
+        return function(items) {
+            if (items && items.slice())
+                return items.slice().reverse();
+        };
+    })
     .factory('WebsocketService', ['$q', '$timeout', function($q, $timeout) {
         var service = {},
             listener = $q.defer(),
@@ -53,14 +59,31 @@ angular.module('jchess', [])
 
         $scope.editClient = {};
         $scope.players = [];
+        $scope.activeClient = null;
+        $scope.selectedField = null;
+
+        $scope.performMovement = function(targetField) {
+            $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.activeClient.connectedGameId + '/performMoveByField/'
+                + $scope.selectedField + '/' + $scope.activeClient.id + '/' + targetField)
+                .success(function(message) {
+                    $scope.updateGame($scope.activeClient.connectedGameId);
+                })
+                .error(function(message) {
+                    console.log(message);
+                    notie.alert(3, message.message || message, 5);
+                })
+        };
 
         $scope.updateSelectedField = function(field) {
             var select = false;
-            if (field == $scope.selectedField)
+            if (field == $scope.selectedField) {
                 $scope.selectedField = null;
-            else {
+            } else if ($scope.selectedField == null) {
                 $scope.selectedField = field;
                 select = true;
+            } else {
+                $scope.performMovement(field);
+                $scope.selectedField = null;
             }
             $scope.$apply();
             return select;
@@ -74,7 +97,7 @@ angular.module('jchess', [])
                     drawBoard(ctx, boardWidth, boardHeight);
                 })
                 .error(function(message) {
-
+                    notie.alert(3, message.message || message, 5);
                 })
         };
 
@@ -84,11 +107,12 @@ angular.module('jchess', [])
                     console.log(message);
                     $scope.players.push(message);
                     WebsocketService.subscribePlayer($scope.gameid, message.id, null);
+                    notie.alert(1, 'Spieler erfolgreich beigetreten', 5);
                 })
                 .error(function(message) {
                     console.log(message);
+                    notie.alert(3, message.message || message, 5);
                 });
-            //WebsocketService.subscribeGame($scope.gameid, null);
         };
 
         WebsocketService.receive().then(null, null, function(message) {
@@ -101,6 +125,7 @@ angular.module('jchess', [])
                     if (player.id == playerid && JSON.parse(message.body).itYouTurn == true) {
                         $scope.activeClient = player;
                         $scope.updateGame(count[2]);
+                        $scope.showAddPlayer = false;
                     }
                 });
             }
@@ -160,7 +185,7 @@ angular.module('jchess', [])
                 if(hexX >= 0 && hexX < boardWidth) {
                     if(hexY >= 0 && hexY < boardHeight) {
                         var notation = getHexagonNotation(hexX, hexY);
-                        if (isHexagonValid(hexX, hexY) && $scope.updateSelectedField(notation)) {
+                        if ($scope.game && isHexagonValid(hexX, hexY) && $scope.updateSelectedField(notation)) {
                             ctx.fillStyle = "red";
                             var figureDrawing = drawingFigure(notation);
                             drawHexagon(ctx, screenX, screenY, figureDrawing.figure, figureDrawing.color);
@@ -203,6 +228,42 @@ angular.module('jchess', [])
                 }
             }
         }
+
+        $scope.drawingFigure = function(figureId) {
+            var figure = null;
+            var figureColor = null;
+            if ($scope.game) {
+                // Get notation of current field
+                angular.forEach($scope.game.chessboard.figures, function(figureObject) {
+                    // Only active figures
+                    if (figureObject.id == figureId) {
+                        var picture = figureObject.pictureId.split("-");
+                        figureColor = picture[1];
+                        switch (picture[0]) {
+                            case "rook":
+                                figure = "♖";
+                                break;
+                            case "knight":
+                                figure = "♞";
+                                break;
+                            case "bishop":
+                                figure = "♝";
+                                break;
+                            case "queen":
+                                figure = "♛";
+                                break;
+                            case "king":
+                                figure = "♚";
+                                break;
+                            case "pawn":
+                                figure = "♟";
+                                break;
+                        }
+                    }
+                })
+            }
+            return {figure:figure, color:figureColor};
+        };
 
         function drawingFigure(notation) {
             var figure = null;
@@ -388,31 +449,4 @@ angular.module('jchess', [])
             if (figure)
                 canvasContext.fillText(figure, x + (hexRadius/3.5), y + hexHeight + sideLength);
         }
-    })
-    .controller('TodoListController', function($scope) {
-        var todoList = this;
-        $scope.todos = [
-            {text:'learn angular', done:true},
-            {text:'build an angular app', done:false}];
-
-        $scope.addTodo = function() {
-            todoList.todos.push({text:$scope.todoText, done:false});
-            todoList.todoText = '';
-        };
-
-        $scope.remaining = function() {
-            var count = 0;
-            angular.forEach($scope.todos, function(todo) {
-                count += todo.done ? 0 : 1;
-            });
-            return count;
-        };
-
-        $scope.archive = function() {
-            var oldTodos = todoList.todos;
-            todoList.todos = [];
-            angular.forEach(oldTodos, function(todo) {
-                if (!todo.done) todoList.todos.push(todo);
-            });
-        };
     });
