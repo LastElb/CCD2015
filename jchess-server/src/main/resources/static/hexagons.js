@@ -257,7 +257,6 @@ angular.module('jchess', [])
             if ($scope.game) {
                 // Get notation of current field
                 angular.forEach($scope.game.chessboard.figures, function(figureObject) {
-                    // Only active figures
                     if (figureObject.id == figureId) {
                         var picture = figureObject.pictureId.split("-");
                         figureColor = picture[1];
