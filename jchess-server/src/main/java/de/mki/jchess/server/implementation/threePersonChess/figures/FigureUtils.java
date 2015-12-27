@@ -43,6 +43,8 @@ public class FigureUtils {
                         .filter(o -> !((Figure) o).getClient().getId().equals(client.getId()))
                         // Just get the figure that is standing on our target field
                         .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
+                        // Just active ones
+                        .filter(o -> !((Figure) o).isRemoved())
                         .findFirst()
                         .ifPresent(o -> {
                             // We hypothetically beat this figure
