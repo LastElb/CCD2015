@@ -107,12 +107,23 @@ angular.module('jchess', [])
                     console.log(message);
                     $scope.players.push(message);
                     WebsocketService.subscribePlayer($scope.gameid, message.id, null);
-                    notie.alert(1, 'Spieler erfolgreich beigetreten', 5);
+                    notie.alert(1, 'Spieler erfolgreich beigetreten', 2);
                 })
                 .error(function(message) {
                     console.log(message);
                     notie.alert(3, message.message || message, 5);
                 });
+        };
+
+        $scope.requestGame = function() {
+            $http.get(($scope.host ? $scope.host : '') + '/host/byGameMode/' + $scope.gamemode)
+                .success(function(response) {
+                    $scope.requestedGame = response;
+                })
+                .error(function(response) {
+                    console.log(message);
+                    notie.alert(3, message.message || message, 5);
+                })
         };
 
         WebsocketService.receive().then(null, null, function(message) {
@@ -126,6 +137,7 @@ angular.module('jchess', [])
                         $scope.activeClient = player;
                         $scope.updateGame(count[2]);
                         $scope.showAddPlayer = false;
+                        $scope.showCreateGame = false;
                     }
                 });
             }

@@ -58,6 +58,27 @@
                         </form>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" ng-click="showCreateGame = !showCreateGame" style="cursor: hand">
+                        <h3 class="panel-title">Spiel erstellen</h3>
+                    </div>
+                    <div class="panel-body" ng-show="showCreateGame">
+                        <form>
+                            <div class="form-group">
+                                <label for="InputGameMode">Spielmodus</label>
+                                <input type="text" class="form-control" id="InputGameMode" placeholder="default-3-person-chess" ng-model="gamemode" value="default-3-person-chess" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="InputHost2">Host</label>
+                                <input type="text" class="form-control" id="InputHost2" placeholder="Host (leave empty or http(s)://domain:port)" ng-model="host">
+                            </div>
+                            <button type="submit" class="btn btn-default" ng-click="requestGame()">Spiel anfordern</button>
+                        </form>
+                        <div ng-show="requestedGame">
+                            Spiel-ID: <span ng-bind="requestedGame.id"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-6">
                 <canvas id="hexmap" width="660" height="624"></canvas>
