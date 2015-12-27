@@ -19,8 +19,6 @@
  */
 package jchess;
 
-import jchess.server.Server;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,7 +31,6 @@ import java.util.regex.Pattern;
  * Class responible for drawing Network Settings, when player want to start
  * a game on a network
  *
- * @param parent Where are saved default settings
  */
 public class DrawNetworkSettings extends JPanel implements ActionListener {
 
@@ -52,7 +49,6 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     private JPasswordField textPassword;
     private JTextField textGameID;
     private JButton buttonStart;
-    private ServOptionsPanel servOptions;
     private ClientOptionsPanel clientOptions;
 
     DrawNetworkSettings(JDialog parent) {
@@ -61,28 +57,27 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         //components
         this.parent = parent;
 
-        this.radioServer = new JRadioButton(Settings.lang("create_server"), true);
-        this.radioClient = new JRadioButton(Settings.lang("connect_2_server"), false);
+        this.radioServer = new JRadioButton("Server starten", true);
+        this.radioClient = new JRadioButton("Mit Server verbinden", false);
         this.serverORclient = new ButtonGroup();
         this.serverORclient.add(this.radioServer);
         this.serverORclient.add(this.radioClient);
         this.radioServer.addActionListener(this);
         this.radioClient.addActionListener(this);
 
-        this.labelNick = new JLabel(Settings.lang("nickname"));
-        this.labelPassword = new JLabel(Settings.lang("password"));
-        this.labelGameID = new JLabel(Settings.lang("game_id"));
-        this.labelOptions = new JLabel(Settings.lang("server_options"));
+        this.labelNick = new JLabel("Nutzername");
+        this.labelGameID = new JLabel("Game-ID");
+
+        this.labelOptions = new JLabel("Server Optionen");
 
         this.textNick = new JTextField();
-        this.textPassword = new JPasswordField();
         this.textGameID = new JTextField();
+        this.textGameID.setEnabled(false);
 
         this.panelOptions = new JPanel();
         this.clientOptions = new ClientOptionsPanel();
-        this.servOptions = new ServOptionsPanel();
 
-        this.buttonStart = new JButton(Settings.lang("start"));
+        this.buttonStart = new JButton("Start");
         this.buttonStart.addActionListener(this);
 
         //add components
@@ -128,34 +123,20 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         this.gbc.gridx = 0;
         this.gbc.gridy = 5;
         this.gbc.gridwidth = 2;
-        this.gbl.setConstraints(labelPassword, gbc);
-        this.add(labelPassword);
-
-        this.gbc.gridx = 0;
-        this.gbc.gridy = 6;
-        this.gbc.gridwidth = 2;
-        this.gbl.setConstraints(textPassword, gbc);
-        this.add(textPassword);
-
-        this.gbc.gridx = 0;
-        this.gbc.gridy = 7;
-        this.gbc.gridwidth = 2;
         this.gbl.setConstraints(labelOptions, gbc);
         this.add(labelOptions);
 
         this.gbc.gridx = 0;
-        this.gbc.gridy = 8;
+        this.gbc.gridy = 6;
         this.gbc.gridwidth = 2;
         this.gbl.setConstraints(panelOptions, gbc);
         this.add(panelOptions);
 
         this.gbc.gridx = 0;
-        this.gbc.gridy = 9;
+        this.gbc.gridy = 7;
         this.gbc.gridwidth = 2;
         this.gbl.setConstraints(buttonStart, gbc);
         this.add(buttonStart);
-
-        this.panelOptions.add(servOptions);
     }
 
     /*Method for showing settings which the player is intrested with
@@ -163,13 +144,14 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getSource() == this.radioServer) //show options for server
         {
+            this.textGameID.setEnabled(false); // disable gameID
             this.panelOptions.removeAll();
-            this.panelOptions.add(servOptions);
             this.panelOptions.revalidate();
             this.panelOptions.requestFocus();
             this.panelOptions.repaint();
         } else if (arg0.getSource() == this.radioClient) //show options for client
         {
+            this.textGameID.setEnabled(true); // disable gameID
             this.panelOptions.removeAll();
             this.panelOptions.add(clientOptions);
             this.panelOptions.revalidate();
@@ -179,51 +161,46 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         {
             String error = "";
             if (this.textGameID.getText().isEmpty()) {
-                error = Settings.lang("fill_game_id") + "\n";
+                error = "Bitte geben Sie eine Game ID an.\n";
             }
             if (this.textNick.getText().length() == 0) {
-                error += Settings.lang("fill_name") + "\n";
-            }
-            if (this.textPassword.getText().length() <= 4) {
-                error += Settings.lang("fill_pass_with_more_than_4_signs") + "\n";
+                error += "Bitte geben Sie einen Nickname an.\n";
             }
             if (this.radioClient.isSelected() && this.clientOptions.textServIP.getText().length() == 0) {
-                error += Settings.lang("please_fill_field") + " IP \n";
+                error += "Bitte geben Sie eine IP an.\n";
             } else if (this.radioClient.isSelected()) {
                 Pattern ipPattern = Pattern.compile("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}");
                 if (!ipPattern.matcher(this.clientOptions.textServIP.getText()).matches()) {
-                    error += Settings.lang("bad_ip_format") + "\n";
+                    error += "Bitte geben Sie eine gültige IP an.\n";
                 }
             }
             if (error.length() > 0) {
                 JOptionPane.showMessageDialog(this, error);
                 return;
             }
-            String pass = this.textPassword.getText().toString();
-            if (this.radioServer.isSelected()) {
-                Server server = new Server(); //create server
-                server.newTable(Integer.parseInt(textGameID.getText()), pass, !servOptions.checkWitchoutObserver.isSelected(), !servOptions.checkDisableChat.isSelected()); //create new table
-                //set client options
-                clientOptions.textServIP.setText("127.0.0.1");
 
-                try {
-                    Thread.sleep(100); //wait 100 ms
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(DrawNetworkSettings.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            if (this.radioServer.isSelected()) {
+                // @ToDo Start server
             }
+
+            // @ToDo Start Client (do we really want to do it here?)
+            // Start Client an Join Game
+            // GameID: textGameID.getText()
+            // view only: clientOptions.checkOnlyWatch.isSelected()
+            // nickname: textNick.getText()
+
+           /*
             Client client;
             try {
-                client = new Client(clientOptions.textServIP.getText(), Server.port);//create client
+                client = new Client(clientOptions.textServIP.getText(), 8080);//create client
                 boolean isJoining = client.join(Integer.parseInt(textGameID.getText()), !clientOptions.checkOnlyWatch.isSelected(), textNick.getText(), MD5.encrypt(textPassword.getText()));//join and wait for all players
 
                 if (isJoining) //Client connection: succesful
                 {
                     System.out.println("Client connection: succesful");
                     //create new game and draw chessboard
-                    Game newGUI = JChessApp.jcv.addNewTab("Network game, table: " + textGameID.getText()/*client.sett.playerWhite.getName()+" vs "+client.sett.playerBlack.getName()*/);
+                    Game newGUI = JChessApp.jcv.addNewTab("Network game, table: " + textGameID.getText());
                     client.game = newGUI;
-                    newGUI.add(newGUI.chat);
                     newGUI.chessboard.draw();
 
                     Thread thread = new Thread(client);
@@ -238,63 +215,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 System.out.println("Client connection: failure");
                 JOptionPane.showMessageDialog(this, err);
             }
-        }
-    }
-
-    /* Method witch is saving the latest network settings
-     */
-    private class ServOptionsPanel extends JPanel //options for server
-    {
-
-        public JTextField textGameTime;
-        public JCheckBox checkWitchoutObserver;
-        public JCheckBox checkDisableChat;
-        private GridBagLayout gbl;
-        private GridBagConstraints gbc;
-        private JLabel labelGameTime;
-
-        ServOptionsPanel() {
-            super();
-
-            labelGameTime = new JLabel(Settings.lang("time_game_min"));
-            textGameTime = new JTextField();
-            checkWitchoutObserver = new JCheckBox(Settings.lang("without_observers"));
-            checkDisableChat = new JCheckBox(Settings.lang("without_chat"));
-
-            //temporary disabled options
-            this.labelGameTime.setEnabled(false);
-            this.textGameTime.setEnabled(false);
-            this.checkDisableChat.setEnabled(false);
-            //------------------------
-
-            this.gbl = new GridBagLayout();
-            this.gbc = new GridBagConstraints();
-            this.gbc.fill = GridBagConstraints.BOTH;
-            this.setLayout(gbl);
-
-            this.gbc.gridx = 0;
-            this.gbc.gridy = 0;
-            this.gbc.gridwidth = 2;
-            this.gbl.setConstraints(labelGameTime, gbc);
-            this.add(labelGameTime);
-
-            this.gbc.gridx = 0;
-            this.gbc.gridy = 1;
-            this.gbc.gridwidth = 2;
-            this.gbl.setConstraints(textGameTime, gbc);
-            this.add(textGameTime);
-
-            this.gbc.gridx = 0;
-            this.gbc.gridy = 2;
-            this.gbc.gridwidth = 1;
-            this.gbl.setConstraints(checkWitchoutObserver, gbc);
-            this.add(checkWitchoutObserver);
-
-            this.gbc.gridx = 1;
-            this.gbc.gridy = 2;
-            this.gbc.gridwidth = 1;
-            this.gbl.setConstraints(checkDisableChat, gbc);
-            this.add(checkDisableChat);
+        */
         }
     }
 
@@ -312,9 +233,9 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         ClientOptionsPanel() {
             super();
 
-            this.labelServIP = new JLabel(Settings.lang("server_ip"));
+            this.labelServIP = new JLabel("Server IP");
             this.textServIP = new JTextField();
-            this.checkOnlyWatch = new JCheckBox(Settings.lang("only_observe"));
+            this.checkOnlyWatch = new JCheckBox("Spiel beobachten");
 
             this.gbl = new GridBagLayout();
             this.gbc = new GridBagConstraints();

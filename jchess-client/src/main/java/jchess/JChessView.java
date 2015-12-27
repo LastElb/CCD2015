@@ -23,8 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.io.File;
-import java.io.IOException;
 
 
 /**
@@ -45,22 +43,13 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     public JDialog newGameFrame;
     GUI activeGUI;//in future it will be reference to active tab
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu gameMenu;
     private javax.swing.JTabbedPane gamesPane;
-    private javax.swing.JMenuItem loadGameItem;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem moveBackItem;
-    private javax.swing.JMenuItem moveForwardItem;
     private javax.swing.JMenuItem newGameItem;
-    private javax.swing.JMenu optionsMenu;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JMenuItem rewindToBegin;
-    private javax.swing.JMenuItem rewindToEnd;
-    private javax.swing.JMenuItem saveGameItem;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
-    private javax.swing.JMenuItem themeSettingsMenu;
     private int busyIconIndex = 0;
     private JDialog aboutBox;
     private PawnPromotionWindow promotionBox;
@@ -135,60 +124,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         if (target == newGameItem) {
             this.newGameFrame = new NewGameWindow();
             JChessApp.getApplication().show(this.newGameFrame);
-        } else if (target == saveGameItem) { //saveGame
-            if (this.gamesPane.getTabCount() == 0) {
-                JOptionPane.showMessageDialog(null, Settings.lang("save_not_called_for_tab"));
-                return;
-            }
-            while (true) {//until
-                JFileChooser fc = new JFileChooser();
-                int retVal = fc.showSaveDialog(this.gamesPane);
-                if (retVal == JFileChooser.APPROVE_OPTION) {
-                    File selFile = fc.getSelectedFile();
-                    Game tempGUI = (Game) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
-                    if (!selFile.exists()) {
-                        try {
-                            selFile.createNewFile();
-                        } catch (IOException exc) {
-                            System.out.println("error creating file: " + exc);
-                        }
-                    } else if (selFile.exists()) {
-                        int opt = JOptionPane.showConfirmDialog(tempGUI, Settings.lang("file_exists"), Settings.lang("file_exists"), JOptionPane.YES_NO_OPTION);
-                        if (opt == JOptionPane.NO_OPTION)//if user choose to now overwrite
-                        {
-                            continue; // go back to file choose
-                        }
-                    }
-                    if (selFile.canWrite()) {
-                        tempGUI.saveGame(selFile);
-                    }
-                    System.out.println(fc.getSelectedFile().isFile());
-                    break;
-                } else if (retVal == JFileChooser.CANCEL_OPTION) {
-                    break;
-                }
-                ///JChessView.gui.game.saveGame(fc.);
-            }
-        } else if (target == loadGameItem) { //loadGame
-            JFileChooser fc = new JFileChooser();
-            int retVal = fc.showOpenDialog(this.gamesPane);
-            if (retVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                if (file.exists() && file.canRead()) {
-                    Game.loadGame(file);
-                }
-            }
-        } else if (target == this.themeSettingsMenu) {
-            try {
-                ThemeChooseWindow choose = new ThemeChooseWindow(this.getFrame());
-                JChessApp.getApplication().show(choose);
-            } catch (Exception exc) {
-                JOptionPane.showMessageDialog(
-                        JChessApp.getApplication().getMainFrame(),
-                        exc.getMessage()
-                );
-                System.out.println("Something wrong creating window - perhaps themeList is null");
-            }
         }
     }
 
@@ -236,16 +171,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newGameItem = new javax.swing.JMenuItem();
-        loadGameItem = new javax.swing.JMenuItem();
-        saveGameItem = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
-        gameMenu = new javax.swing.JMenu();
-        moveBackItem = new javax.swing.JMenuItem();
-        moveForwardItem = new javax.swing.JMenuItem();
-        rewindToBegin = new javax.swing.JMenuItem();
-        rewindToEnd = new javax.swing.JMenuItem();
-        optionsMenu = new javax.swing.JMenu();
-        themeSettingsMenu = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -289,89 +215,12 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         fileMenu.add(newGameItem);
         newGameItem.addActionListener(this);
 
-        loadGameItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        loadGameItem.setText(resourceMap.getString("loadGameItem.text")); // NOI18N
-        loadGameItem.setName("loadGameItem"); // NOI18N
-        fileMenu.add(loadGameItem);
-        loadGameItem.addActionListener(this);
-
-        saveGameItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        saveGameItem.setText(resourceMap.getString("saveGameItem.text")); // NOI18N
-        saveGameItem.setName("saveGameItem"); // NOI18N
-        fileMenu.add(saveGameItem);
-        saveGameItem.addActionListener(this);
-
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(jchess.JChessApp.class).getContext().getActionMap(JChessView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
-
-        gameMenu.setText(resourceMap.getString("gameMenu.text")); // NOI18N
-        gameMenu.setName("gameMenu"); // NOI18N
-
-        moveBackItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-        moveBackItem.setText(resourceMap.getString("moveBackItem.text")); // NOI18N
-        moveBackItem.setName("moveBackItem"); // NOI18N
-        moveBackItem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                moveBackItemMouseClicked(evt);
-            }
-        });
-        moveBackItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                moveBackItemActionPerformed(evt);
-            }
-        });
-        gameMenu.add(moveBackItem);
-
-        moveForwardItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
-        moveForwardItem.setText(resourceMap.getString("moveForwardItem.text")); // NOI18N
-        moveForwardItem.setName("moveForwardItem"); // NOI18N
-        moveForwardItem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                moveForwardItemMouseClicked(evt);
-            }
-        });
-        moveForwardItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                moveForwardItemActionPerformed(evt);
-            }
-        });
-        gameMenu.add(moveForwardItem);
-
-        rewindToBegin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        rewindToBegin.setText(resourceMap.getString("rewindToBegin.text")); // NOI18N
-        rewindToBegin.setName("rewindToBegin"); // NOI18N
-        rewindToBegin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rewindToBeginActionPerformed(evt);
-            }
-        });
-        gameMenu.add(rewindToBegin);
-
-        rewindToEnd.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        rewindToEnd.setText(resourceMap.getString("rewindToEnd.text")); // NOI18N
-        rewindToEnd.setName("rewindToEnd"); // NOI18N
-        rewindToEnd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rewindToEndActionPerformed(evt);
-            }
-        });
-        gameMenu.add(rewindToEnd);
-
-        menuBar.add(gameMenu);
-
-        optionsMenu.setText(resourceMap.getString("optionsMenu.text")); // NOI18N
-        optionsMenu.setName("optionsMenu"); // NOI18N
-
-        themeSettingsMenu.setText(resourceMap.getString("themeSettingsMenu.text")); // NOI18N
-        themeSettingsMenu.setName("themeSettingsMenu"); // NOI18N
-        optionsMenu.add(themeSettingsMenu);
-        themeSettingsMenu.addActionListener(this);
-
-        menuBar.add(optionsMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
@@ -424,24 +273,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void moveBackItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveBackItemActionPerformed
-    {//GEN-HEADEREND:event_moveBackItemActionPerformed
-        if (gui != null && gui.game != null) {
-            gui.game.undo();
-        } else {
-            try {
-                Game activeGame = this.getActiveTabGame();
-                if (!activeGame.undo()) {
-                    JOptionPane.showMessageDialog(null, "Nie da sie cofnac!");
-                }
-            } catch (java.lang.ArrayIndexOutOfBoundsException exc) {
-                JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-            } catch (UnsupportedOperationException exc) {
-                JOptionPane.showMessageDialog(null, exc.getMessage());
-            }
-        }
-
-    }//GEN-LAST:event_moveBackItemActionPerformed
 
     private void moveBackItemMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_moveBackItemMouseClicked
     {//GEN-HEADEREND:event_moveBackItemMouseClicked
@@ -454,53 +285,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         // TODO add your handling code here:
 
     }//GEN-LAST:event_moveForwardItemMouseClicked
-
-    private void moveForwardItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveForwardItemActionPerformed
-    {//GEN-HEADEREND:event_moveForwardItemActionPerformed
-        // TODO add your handling code here:
-        if (gui != null && gui.game != null) {
-            gui.game.redo();
-        } else {
-            try {
-                Game activeGame = this.getActiveTabGame();
-                if (!activeGame.redo()) {
-                    JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
-                }
-            } catch (java.lang.ArrayIndexOutOfBoundsException exc) {
-                JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-            } catch (UnsupportedOperationException exc) {
-                JOptionPane.showMessageDialog(null, exc.getMessage());
-            }
-        }
-    }//GEN-LAST:event_moveForwardItemActionPerformed
-
-    private void rewindToBeginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToBeginActionPerformed
-    {//GEN-HEADEREND:event_rewindToBeginActionPerformed
-        try {
-            Game activeGame = this.getActiveTabGame();
-            if (!activeGame.rewindToBegin()) {
-                JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
-            }
-        } catch (ArrayIndexOutOfBoundsException exc) {
-            JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-        } catch (UnsupportedOperationException exc) {
-            JOptionPane.showMessageDialog(null, exc.getMessage());
-        }
-    }//GEN-LAST:event_rewindToBeginActionPerformed
-
-    private void rewindToEndActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToEndActionPerformed
-    {//GEN-HEADEREND:event_rewindToEndActionPerformed
-        try {
-            Game activeGame = this.getActiveTabGame();
-            if (!activeGame.rewindToEnd()) {
-                JOptionPane.showMessageDialog(null, "W pamieci brak ruchow wstecz!");
-            }
-        } catch (ArrayIndexOutOfBoundsException exc) {
-            JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-        } catch (UnsupportedOperationException exc) {
-            JOptionPane.showMessageDialog(null, exc.getMessage());
-        }
-    }//GEN-LAST:event_rewindToEndActionPerformed
 
     public void componentResized(ComponentEvent e) {
         System.out.println("jchessView resized!!;");
