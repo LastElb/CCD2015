@@ -61,11 +61,13 @@ angular.module('jchess', [])
         $scope.players = [];
         $scope.activeClient = null;
         $scope.selectedField = null;
+        $scope.possibleMoves = [];
 
         $scope.performMovement = function(targetField) {
             $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.activeClient.connectedGameId + '/performMoveByField/'
                 + $scope.selectedField + '/' + $scope.activeClient.id + '/' + targetField)
                 .success(function(message) {
+                    $scope.possibleMoves = [];
                     $scope.updateGame($scope.activeClient.connectedGameId);
                 })
                 .error(function(message) {
@@ -78,8 +80,11 @@ angular.module('jchess', [])
             var select = false;
             if (field == $scope.selectedField) {
                 $scope.selectedField = null;
+                $scope.possibleMoves = [];
             } else if ($scope.selectedField == null) {
                 $scope.selectedField = field;
+                if ($scope.showPossibleMoves)
+                    $scope.updatePossibleMoves();
                 select = true;
             } else {
                 $scope.performMovement(field);
@@ -89,11 +94,23 @@ angular.module('jchess', [])
             return select;
         };
 
+        $scope.updatePossibleMoves = function () {
+            $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.activeClient.connectedGameId +
+                '/possibleMovesByField/' + $scope.selectedField )
+                .success(function(response) {
+                    console.log(response);
+                    $scope.possibleMoves = response;
+                    drawBoard(ctx, boardWidth, boardHeight);
+                })
+                .error(function(response) {
+                    notie.alert(3, response.message || response, 5);
+                })
+        };
+
         $scope.updateGame = function(gameid) {
             $http.get(($scope.host ? $scope.host : '') + '/game/' + gameid + "/full")
                 .success(function(message) {
                     $scope.game = message;
-                    console.log(message);
                     drawBoard(ctx, boardWidth, boardHeight);
                 })
                 .error(function(message) {
@@ -166,7 +183,7 @@ angular.module('jchess', [])
             ctx.strokeStyle = "#CCCCCC";
             ctx.lineWidth = 0;
 
-            drawBoard(ctx, boardWidth, boardHeight);
+            drawBoard(ctx, boardWidth, boardHeight, false);
 
             canvas.addEventListener("click", function(eventInfo) {
                 var x,
@@ -191,19 +208,15 @@ angular.module('jchess', [])
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                drawBoard(ctx, boardWidth, boardHeight);
-
                 // Check if the mouse's coords are on the board
-                if(hexX >= 0 && hexX < boardWidth) {
-                    if(hexY >= 0 && hexY < boardHeight) {
-                        var notation = getHexagonNotation(hexX, hexY);
-                        if ($scope.game && isHexagonValid(hexX, hexY) && $scope.updateSelectedField(notation)) {
-                            ctx.fillStyle = "red";
-                            var figureDrawing = drawingFigure(notation);
-                            drawHexagon(ctx, screenX, screenY, figureDrawing.figure, figureDrawing.color);
-                        }
+                if(hexX >= 0 && hexX < boardWidth && hexY >= 0 && hexY < boardHeight) {
+                    var notation = getHexagonNotation(hexX, hexY);
+                    if ($scope.game && isHexagonValid(hexX, hexY)) {
+                        $scope.updateSelectedField(notation);
                     }
                 }
+
+                drawBoard(ctx, boardWidth, boardHeight);
             });
 
             canvas.addEventListener("mousemove", function(eventInfo) {
@@ -251,6 +264,17 @@ angular.module('jchess', [])
                             canvasContext.fillStyle = colors[(i+2)%3];
                         }
                         var figureDrawing = drawingFigure(getHexagonNotation(i, j));
+                        var notation = getHexagonNotation(i, j);
+                        if ($scope.showPossibleMoves && $scope.possibleMoves && $scope.possibleMoves.length > 1) {
+                            angular.forEach($scope.possibleMoves, function(field) {
+                                if (field.notation == notation)
+                                    //canvasContext.fillStyle = "#FF6A00";
+                                    canvasContext.fillStyle = tinycolor(canvasContext.fillStyle).greyscale().toHexString();
+                            });
+                        }
+                        if ($scope.selectedField && notation == $scope.selectedField) {
+                            canvasContext.fillStyle = "red";
+                        }
                         drawHexagon(
                             canvasContext,
                             i * hexRectangleWidth + ((j % 2) * hexRadius),
