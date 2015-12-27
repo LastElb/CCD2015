@@ -41,7 +41,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      * @throws NotationNotFoundException
      */
     public Hexagon getFieldByNotation(int column, int row) throws NotationNotFoundException {
-        return getFields().stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new NotationNotFoundException("column=" + column + ", row=" + row));
+        return getFields().stream()
+                .filter(field -> field.column == column && field.row == row)
+                .findFirst()
+                .orElseThrow(() -> new NotationNotFoundException("column=" + column + ", row=" + row));
     }
 
     /**
@@ -56,7 +59,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
         // Find our king
         Optional<King> king = getFigures().stream()
+                // Only the figures of the client
                 .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
+                // Filter all out that are not our king
                 .filter(hexagonFigure -> hexagonFigure instanceof King)
                 .map(hexagonFigure -> (King) hexagonFigure)
                 .findFirst();
@@ -101,8 +106,11 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .findFirst();
         // Check if any figure could attack our kings hexagon
         king.ifPresent(king1 -> getFigures().stream()
-                .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved()) // Only active figures
-                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId)) // Enemy players
+                // Only active figures
+                .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved())
+                // Enemy players figures
+                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId))
+                // Go through all attackable fields
                 .forEach(hexagonFigure -> hexagonFigure.getHypotheticalAttackableFields(this).forEach(hexagon -> {
                     if (hexagon.getNotation().equals(king1.getHypotheticalPosition().getNotation()))
                         output[0] = true;
@@ -120,8 +128,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     public List<Hexagon> getPossibleFieldsToMove(String figureId) {
         List<Hexagon> hexagons = new ArrayList<>();
         getFigures().stream()
-                .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                // Only active figures
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Only the desired figure
+                .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
                 .findFirst().ifPresent(hexagonFigure -> {
             hexagons.addAll(hexagonFigure.getPossibleMovements(this));
             hexagons.addAll(hexagonFigure.getPossibleSpecialMovements(this));
