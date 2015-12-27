@@ -67,7 +67,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .findFirst();
 
         // Check if any figure can attack our kings hexagon
-        king.ifPresent(king1 -> getFigures().stream()
+        king.ifPresent(king1 -> getFigures().stream().parallel()
                 // Filter out inactive figures
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 // Only use enemy figures
@@ -105,7 +105,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .map(hexagonFigure -> (King) hexagonFigure)
                 .findFirst();
         // Check if any figure could attack our kings hexagon
-        king.ifPresent(king1 -> getFigures().stream()
+        king.ifPresent(king1 -> getFigures().stream().parallel()
                 // Only active figures
                 .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved())
                 // Enemy players figures
