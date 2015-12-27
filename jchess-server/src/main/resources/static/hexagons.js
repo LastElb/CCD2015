@@ -121,8 +121,8 @@ angular.module('jchess', [])
                     $scope.requestedGame = response;
                 })
                 .error(function(response) {
-                    console.log(message);
-                    notie.alert(3, message.message || message, 5);
+                    console.log(response);
+                    notie.alert(3, response.message || response, 5);
                 })
         };
 
