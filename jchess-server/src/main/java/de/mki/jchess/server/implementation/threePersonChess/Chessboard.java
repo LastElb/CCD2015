@@ -112,8 +112,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId))
                 // Go through all attackable fields
                 .forEach(hexagonFigure -> hexagonFigure.getHypotheticalAttackableFields(this).forEach(hexagon -> {
-                    if (hexagon.getNotation().equals(king1.getHypotheticalPosition().getNotation()))
+                    if (hexagon.getNotation().equals(king1.getHypotheticalPosition().getNotation())) {
                         output[0] = true;
+                        logger.trace("King would be checked by {} on field {}", hexagonFigure.getName(), hexagonFigure.getPosition().getNotation());
+                    }
                 })));
         return output[0];
     }
