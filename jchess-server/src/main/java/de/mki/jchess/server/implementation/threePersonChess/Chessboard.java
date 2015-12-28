@@ -7,6 +7,7 @@ import de.mki.jchess.server.model.*;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
 import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
+import de.mki.jchess.server.model.websocket.PlayerDefeatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -207,10 +208,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry);
         // Change the active player and send it through websocket
         setCurrentPlayer(getCurrentPlayer().getNextClient());
-        checkIfCurrentPlayerIsDefeated();
+        checkIfCurrentPlayerIsDefeated(simpMessagingTemplate);
         while (getCurrentPlayer().isDefeated()) {
             setCurrentPlayer(getCurrentPlayer().getNextClient());
-            checkIfCurrentPlayerIsDefeated();
+            checkIfCurrentPlayerIsDefeated(simpMessagingTemplate);
         }
         getParentGame().getPlayerList().stream()
                 .filter(client -> !client.isDefeated())
@@ -298,8 +299,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
     /**
      * Decides whether the {@link #getCurrentPlayer()} is defeated or not.
+     * @param simpMessagingTemplate Template for websocket messages
      */
-    void checkIfCurrentPlayerIsDefeated() {
+    void checkIfCurrentPlayerIsDefeated(SimpMessagingTemplate simpMessagingTemplate) {
         Client client = getCurrentPlayer();
         if (client.isDefeated())
             return;
@@ -314,7 +316,16 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .map(hexagonFigure -> hexagonFigure.getPossibleMovements(this))
                 // Convert list of list of hexagon to list of hexagon
                 .flatMap(Collection::stream)
-                .count() == 0)
+                .count() == 0) {
             client.setDefeated(true);
+            // Send the defeated message to all clients
+            getParentGame().getPlayerList().stream()
+                    .forEach(client1 -> {
+                        PlayerDefeatedEvent playerDefeatedEvent = new PlayerDefeatedEvent()
+                                .setAreYouDefeated(client1.isDefeated()).setName(client.getNickname());
+                        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client1.getId(), playerDefeatedEvent);
+                    });
+        }
+
     }
 }
