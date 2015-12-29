@@ -1,7 +1,7 @@
 package de.mki.jchess.commons.websocket;
 
 /**
- * Event for websockets. This message is send when the active {@link de.mki.jchess.server.model.Client Player} changes
+ * Event for websockets. This message is send when the active Player changes
  * Created by Igor on 14.11.2015.
  */
 public class PlayerChangedEvent {
@@ -9,7 +9,7 @@ public class PlayerChangedEvent {
 
     /**
      * Message specific for a player. Returns whether it's its turn on the game.
-     * @return Returns a boolean indicating if it is the receiving {@link de.mki.jchess.server.model.Client Player}'s turn
+     * @return Returns a boolean indicating if it is the receiving Player's turn
      */
     public boolean isItYouTurn() {
         return isItYouTurn;
