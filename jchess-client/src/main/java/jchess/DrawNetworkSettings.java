@@ -196,17 +196,18 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 boolean isJoining = client.join(Integer.parseInt(textGameID.getText()), !clientOptions.checkOnlyWatch.isSelected(), textNick.getText(), MD5.encrypt(textPassword.getText()));//join and wait for all players
 
                 if (isJoining) //Client connection: succesful
-                {
+                { */
                     System.out.println("Client connection: succesful");
                     //create new game and draw chessboard
-                    Game newGUI = JChessApp.jcv.addNewTab("Network game, table: " + textGameID.getText());
-                    client.game = newGUI;
-                    newGUI.chessboard.draw();
+                    Game newGUI = JChessApp.getjChessView().addNewTab("Network game, table: " + textGameID.getText());
+                    //client.game = newGUI;
+                    //newGUI.chessboard.draw();
 
-                    Thread thread = new Thread(client);
-                    thread.start(); //client listening
+                    //Thread thread = new Thread(client);
+                    //thread.start(); //client listening
 
                     this.parent.setVisible(false);//hide parent
+            /*
                 } else {
                     JOptionPane.showMessageDialog(this, Settings.lang("error_connecting_to_server"));
                 }
