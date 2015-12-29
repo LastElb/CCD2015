@@ -2,9 +2,9 @@ package de.mki.jchess.server.implementation.threePersonChess.figures;
 
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame;
-import de.mki.jchess.server.model.Client;
+import de.mki.jchess.commons.Client;
 import de.mki.jchess.server.model.Game;
-import de.mki.jchess.server.service.RandomStringService;
+import de.mki.jchess.commons.RandomStringService;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,7 +19,8 @@ public abstract class FigureTest {
     SimpMessagingTemplate simpMessagingTemplate;
 
     /**
-     * Sets up a chessboard with three players and three kings at their initial position
+     * Sets up a chessboard with three players and three kings at their initial position.
+     * All other figures are removed.
      * @throws Exception
      */
     @Before

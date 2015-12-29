@@ -8,6 +8,7 @@ public class Client {
     String nickname;
     String connectedGameId;
     String team;
+    boolean defeated;
 
     public String getId() {
         return id;
@@ -42,6 +43,15 @@ public class Client {
 
     public Client setTeam(String team) {
         this.team = team;
+        return this;
+    }
+
+    public boolean isDefeated() {
+        return defeated;
+    }
+
+    public Client setDefeated(boolean defeated) {
+        this.defeated = defeated;
         return this;
     }
 }

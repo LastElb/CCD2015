@@ -1,4 +1,4 @@
-package de.mki.jchess.server.model;
+package de.mki.jchess.commons;
 
 /**
  * A field representing on what a {@link Figure} is placed on.

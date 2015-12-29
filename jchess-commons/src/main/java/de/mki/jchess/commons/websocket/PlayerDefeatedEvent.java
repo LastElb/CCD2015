@@ -1,4 +1,4 @@
-package de.mki.jchess.server.model.websocket;
+package de.mki.jchess.commons.websocket;
 
 /**
  * Event for websockets to signal that a player is defeated. The player receiving the message

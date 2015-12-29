@@ -1,4 +1,4 @@
-package de.mki.jchess.server.model.websocket;
+package de.mki.jchess.commons.websocket;
 
 /**
  * Event for websockets. This message is send when the active {@link de.mki.jchess.server.model.Client Player} changes

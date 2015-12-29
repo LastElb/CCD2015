@@ -5,6 +5,8 @@ import jchess.client.models.Figure;
 import static de.mki.chessboard.controller.GraphicsController.loadImage;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,8 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     List<Figure> figures;
 
     public Chessboard() {
+        figures = new ArrayList<>();
+        fields = new LinkedHashMap<>();
     }
 
     public int getWidth() {
@@ -122,13 +126,11 @@ public abstract class Chessboard<T extends Field> extends JPanel {
      * @param g2d
      */
     private void drawFigures(Graphics2D g2d) {
-
         for (Figure figure : figures) {
             Image figureImage = loadImage(figure.getPictureId());
             String position = figure.getPositionObject().getNotation();
             Field field = getFieldByNotation(position);
             g2d.drawImage(figureImage, field.getX(), field.getY(), null);
-            }
-
+        }
     }
 }

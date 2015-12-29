@@ -1,4 +1,4 @@
-package de.mki.jchess.server.service;
+package de.mki.jchess.commons;
 
 import java.util.Random;
 
