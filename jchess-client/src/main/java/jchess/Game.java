@@ -21,6 +21,9 @@
 package jchess;
 
 import jchess.client.ServerApi;
+import jchess.client.WebSocketClient;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +32,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
+import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +46,7 @@ import java.util.logging.Logger;
 public class Game extends JPanel implements MouseListener, ComponentListener {
 
     private ServerApi serverApi;
+    private WebSocketClient webSocketClient;
     private Optional<jchess.client.models.Game> gameModel;
     private Optional<jchess.client.models.Client> clientModel;
 
@@ -49,13 +54,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public boolean blockedChessboard;
 
     Game() {
-        serverApi = new ServerApi("localhost", 8080);
-
-        try {
-            this.initiaizeAndJoinHostedGame();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         this.setLayout(null);
         // ToDo: Initalize Chessboard & add MouseListener & add JPanel
@@ -101,14 +99,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public void switchActive() {
     }
 
-    /**
-     * Initialize a game on the server and joins it
-     * @throws Exception
-     */
-    private void initiaizeAndJoinHostedGame() throws Exception {
-        gameModel = serverApi.hostGame("default-3-person-chess");
-        clientModel = serverApi.connectToGame("Malte", gameModel.get().getId());
-    }
 
     // MouseListener:
     public void mouseClicked(MouseEvent arg0) {
@@ -160,5 +150,74 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
 
     public void componentHidden(ComponentEvent e) {
+    }
+
+    /**
+     * Initialize a game on the server and join it
+     * @throws Exception
+     */
+    public void initiaizeAndJoinHostedGame(String host, int port, String nickname) throws Exception {
+        serverApi = new ServerApi(host, port);
+        gameModel = serverApi.hostGame("default-3-person-chess");
+
+        joinGame(host, port, gameModel.get().getId(), nickname);
+    }
+
+    /**
+     * Join a network game as player
+     * @param host
+     * @param port
+     * @param gameID
+     * @param nickname
+     * @throws Exception
+     */
+    public void joinGame(String host, int port, String gameID, String nickname) throws Exception {
+        if (serverApi != null) {
+            // setup Websockets
+            webSocketClient = new WebSocketClient();
+            webSocketClient.connect(host, port);
+
+            // subscribe to Websocket destination url game/{gameid}
+            webSocketClient.subscribe("/game/"+gameID, new StompFrameHandler() {
+                @Override
+                public Type getPayloadType(StompHeaders headers) {
+                    return null;
+                }
+
+                @Override
+                public void handleFrame(StompHeaders headers, Object payload) {
+                    System.out.println(headers);
+                    System.out.println(payload);
+                }
+            });
+
+            // Connect to game
+            clientModel = serverApi.connectToGame(nickname, gameID);
+
+            // subscribe to Websocket destination url game/{gameid}/{clientid}
+            webSocketClient.subscribe("/game/"+gameID+"/"+clientModel.get().getId(), new StompFrameHandler() {
+                @Override
+                public Type getPayloadType(StompHeaders headers) {
+                    return null;
+                }
+
+                @Override
+                public void handleFrame(StompHeaders headers, Object payload) {
+                    System.out.println(getPayloadType(headers));
+                    String content = new String((byte[])payload);
+                }
+            });
+
+        } else{
+            throw new Exception("Es wurde keine Verbindung zum Server aufgebaut.");
+        }
+    }
+
+    /**
+     * Get the id of the current game if running
+     * @return
+     */
+    public String getGameID(){
+        return gameModel.get().getId();
     }
 }
