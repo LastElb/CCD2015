@@ -72,8 +72,24 @@ public class Rook extends Figure<Hexagon> {
             logger.trace("Figure {} (id {}) was moved: {}", getName(), getId(), wasMoved);
             logger.trace("Figure {} (id {}) was moved: {}", king.get().getName(), king.get().getId(), wasMoved);
             if (!wasMoved) {
-                // Both figures were not moved.
-                // Also all fields can not be attacked by enemies figures.
+                // Get the direction of the castling first
+                // from the kings view
+                Direction direction = FigureUtils.findDirection(king.get().getPosition(), getPosition());
+
+                // Check if all fields between the figures are not attacked
+                List<Hexagon> hexagonsBetween = new ArrayList<>();
+                Hexagon current = king.get().getPosition();
+                while (!current.getNotation().equals(getPosition().getNotation())) {
+                    hexagonsBetween.add(current);
+                    current = current.getNeighbourByDirection(direction).get();
+                }
+                hexagonsBetween.add(current);
+                if (!FigureUtils.areHexagonsAttacked(
+                        hexagonsBetween,
+                        (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard,
+                        getClient())) {
+                    
+                }
             }
         }
 

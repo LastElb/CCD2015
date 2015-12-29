@@ -8,9 +8,8 @@ import de.mki.jchess.server.model.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Commonly used functions by {@link Figure}s on a {@link Chessboard}.
@@ -108,11 +107,11 @@ public class FigureUtils {
     /**
      * Adds the target {@link Hexagon} to a {@link List} if the {@link Hexagon} is free
      * or will be occupied by an enemy {@link Figure}.
-     * @param chessboard The instance of the {@link Chessboard}.
+     * @param chessboard      The instance of the {@link Chessboard}.
      * @param hexagonOptional The target {@link Hexagon}.
-     * @param possibleFields The {@link List}-reference where the possible {@link Hexagon}s are saved to.
-     * @param client The {@link Client Owner} of the {@link Figure}.
-     * @param direction The {@link Direction} the {@link Figure} wants to move to.
+     * @param possibleFields  The {@link List}-reference where the possible {@link Hexagon}s are saved to.
+     * @param client          The {@link Client Owner} of the {@link Figure}.
+     * @param direction       The {@link Direction} the {@link Figure} wants to move to.
      * @return Returns an {@link Optional} of {@link Hexagon} if we can go one {@link Hexagon} further
      * or an empty {@link Optional} if this was the last {@link Hexagon} in this {@link Direction}.
      */
@@ -134,5 +133,61 @@ public class FigureUtils {
             logger.trace("{} is not occupied. Going more into the direction.", hexagonOptional.get().getNotation());
             return hexagonOptional.get().getNeighbourByDirection(direction);
         }
+    }
+
+    /**
+     * Detects a straight direction between two fields. Simplified!!
+     * Just use it for castling detection!
+     * @param source The target {@link Hexagon}
+     * @param target The source {@link Hexagon}
+     * @return Returns the direction the target is in view of the source.
+     */
+    public static Direction findDirection (Hexagon source, Hexagon target) {
+        List<Direction> directions = Arrays.asList(
+                Direction.RIGHT,
+                Direction.BOTTOMRIGHT,
+                Direction.BOTTOMLEFT,
+                Direction.LEFT,
+                Direction.TOPLEFT,
+                Direction.TOPRIGHT
+        );
+        Optional<Direction> targetDirection = directions.stream()
+                .filter(direction -> {
+                    Optional<Hexagon> neighbour = source.getNeighbourByDirection(direction);
+                    if (!neighbour.isPresent())
+                        return false;
+                    int cost = 100;
+                    while (cost > (Math.abs(target.getRow() - neighbour.get().getRow()) +  Math.abs(target.getColumn() - neighbour.get().getColumn()))) {
+                        cost = Math.abs(target.getRow() - neighbour.get().getRow()) + Math.abs(target.getColumn() - neighbour.get().getColumn());
+                        if (cost == 0)
+                            return true;
+                        neighbour = neighbour.get().getNeighbourByDirection(direction);
+                        if (!neighbour.isPresent())
+                            return false;
+                    }
+                    return false;
+                })
+                .findFirst();
+        return targetDirection.get();
+    }
+
+    /**
+     *
+     * @param observedHexagons
+     * @param chessboard
+     * @param client
+     * @return
+     */
+    public static boolean areHexagonsAttacked(List<Hexagon> observedHexagons, Chessboard chessboard, Client client) {
+        return chessboard.getFigures().stream()
+                // Just active figures
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Just enemy figures
+                .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(client.getId()))
+                // Get all attackable fields
+                .parallel()
+                .map(hexagonFigure -> hexagonFigure.getAttackableFields(chessboard))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()).containsAll(observedHexagons);
     }
 }
