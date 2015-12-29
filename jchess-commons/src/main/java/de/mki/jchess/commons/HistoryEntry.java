@@ -1,4 +1,6 @@
-package de.mki.jchess.server.model;
+package de.mki.jchess.commons;
+
+import de.mki.jchess.commons.websocket.ChessboardEvent;
 
 import java.util.ArrayList;
 import java.util.List;

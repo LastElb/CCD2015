@@ -2,7 +2,7 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.server.Application;
 import de.mki.jchess.server.exception.TooManyPlayersException;
-import de.mki.jchess.server.model.Client;
+import de.mki.jchess.commons.Client;
 import de.mki.jchess.server.model.Game;
 import org.junit.Before;
 import org.junit.Test;

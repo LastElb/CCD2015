@@ -1,6 +1,4 @@
-package de.mki.jchess.server.model.websocket;
-
-import de.mki.jchess.server.model.ChessboardEvent;
+package de.mki.jchess.commons.websocket;
 
 /**
  * Event for websocket communication. Indicates that the state of a {@link de.mki.jchess.server.model.Figure} has changed.

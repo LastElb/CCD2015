@@ -2,7 +2,7 @@ package de.mki.jchess.server.controller;
 
 import de.mki.jchess.server.exception.HostedGameNotFoundException;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
-import de.mki.jchess.server.model.Figure;
+import de.mki.jchess.commons.Figure;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.server.service.HostedGamesService;
 import org.springframework.beans.factory.annotation.Autowired;

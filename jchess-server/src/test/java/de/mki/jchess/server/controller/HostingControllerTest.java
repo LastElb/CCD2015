@@ -4,18 +4,14 @@ import de.mki.jchess.server.Application;
 import de.mki.jchess.server.exception.HostedGameNotFoundException;
 import de.mki.jchess.server.exception.InvalidGameModeException;
 import de.mki.jchess.server.exception.TooManyPlayersException;
-import de.mki.jchess.server.model.Client;
+import de.mki.jchess.commons.Client;
 import de.mki.jchess.server.model.Game;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Igor on 17.12.2015.

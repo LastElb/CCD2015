@@ -11,6 +11,7 @@
     <name>Project aggregator</name>
 
     <modules>
+        <module>jchess-commons</module>
         <module>jchess-client</module>
         <module>jchess-server</module>
     </modules>

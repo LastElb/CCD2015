@@ -1,6 +1,9 @@
 package de.mki.jchess.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.mki.jchess.commons.Client;
+import de.mki.jchess.commons.Field;
+import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.exception.NotationNotFoundException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

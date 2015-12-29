@@ -1,6 +1,4 @@
-package de.mki.jchess.server.model.websocket;
-
-import de.mki.jchess.server.model.ChessboardEvent;
+package de.mki.jchess.commons.websocket;
 
 /**
  * Movement event that is send through websockets.

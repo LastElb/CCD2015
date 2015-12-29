@@ -1,13 +1,17 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
+import de.mki.jchess.commons.Client;
+import de.mki.jchess.commons.Field;
+import de.mki.jchess.server.model.Figure;
+import de.mki.jchess.commons.HistoryEntry;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.exception.NotationNotFoundException;
 import de.mki.jchess.server.implementation.threePersonChess.figures.King;
 import de.mki.jchess.server.model.*;
-import de.mki.jchess.server.model.websocket.FigureEvent;
-import de.mki.jchess.server.model.websocket.MovementEvent;
-import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
-import de.mki.jchess.server.model.websocket.PlayerDefeatedEvent;
+import de.mki.jchess.commons.websocket.FigureEvent;
+import de.mki.jchess.commons.websocket.MovementEvent;
+import de.mki.jchess.commons.websocket.PlayerChangedEvent;
+import de.mki.jchess.commons.websocket.PlayerDefeatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -50,8 +54,8 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
     /**
      * Returns if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King}
-     * of a {@link de.mki.jchess.server.model.Client} is checked with the current figure layout.
-     * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
+     * of a {@link Client} is checked with the current figure layout.
+     * @param clientId The ID of the {@link Client}.
      * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} is checked.
      */
     @Override
@@ -90,9 +94,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
     /**
      * Returns if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King} of a
-     * {@link de.mki.jchess.server.model.Client} is checked with a hypothetical figure layout.0
+     * {@link Client} is checked with a hypothetical figure layout.0
      * Used for predetermination if a movement is valid.
-     * @param clientId The ID of the {@link de.mki.jchess.server.model.Client}.
+     * @param clientId The ID of the {@link Client}.
      * @return Returns true if the {@link de.mki.jchess.server.implementation.threePersonChess.figures.King}
      * would be checked.
      */

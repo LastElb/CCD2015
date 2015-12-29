@@ -1,9 +1,13 @@
 package de.mki.jchess.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.mki.jchess.commons.Client;
+import de.mki.jchess.commons.Field;
+import de.mki.jchess.commons.Figure;
+import de.mki.jchess.commons.HistoryEntry;
 import de.mki.jchess.server.controller.GameModeController;
 import de.mki.jchess.server.exception.TooManyPlayersException;
-import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
+import de.mki.jchess.commons.websocket.PlayerChangedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

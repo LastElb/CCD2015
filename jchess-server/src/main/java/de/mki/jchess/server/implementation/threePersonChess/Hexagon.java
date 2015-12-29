@@ -1,6 +1,6 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
-import de.mki.jchess.server.model.Field;
+import de.mki.jchess.commons.Field;
 
 import java.util.ArrayList;
 import java.util.List;
