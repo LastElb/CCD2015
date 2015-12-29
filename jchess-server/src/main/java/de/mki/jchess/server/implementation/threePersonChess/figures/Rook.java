@@ -95,6 +95,7 @@ public class Rook extends Figure<Hexagon> {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
                 hexagonOptional = FigureUtils.addHexagonToListIfFreeOrEnemy(actualChessboard, hexagonOptional, output, getClient(), direction);
             }
+            logger.trace("Finished direction {}", direction.toString());
         });
         return output;
     }
@@ -114,6 +115,7 @@ public class Rook extends Figure<Hexagon> {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getHypotheticalPosition().getNotation(), hexagonOptional.get());
                 hexagonOptional = FigureUtils.addHexagonToListIfFreeOrEnemyHypothetical(actualChessboard, hexagonOptional, output, getClient(), direction);
             }
+            logger.trace("Finished direction {}", direction.toString());
         });
         return output;
     }

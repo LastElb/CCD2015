@@ -7,6 +7,7 @@ import de.mki.jchess.server.model.*;
 import de.mki.jchess.server.model.websocket.FigureEvent;
 import de.mki.jchess.server.model.websocket.MovementEvent;
 import de.mki.jchess.server.model.websocket.PlayerChangedEvent;
+import de.mki.jchess.server.model.websocket.PlayerDefeatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -41,7 +42,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      * @throws NotationNotFoundException
      */
     public Hexagon getFieldByNotation(int column, int row) throws NotationNotFoundException {
-        return getFields().stream().filter(field -> field.column == column && field.row == row).findFirst().orElseThrow(() -> new NotationNotFoundException("column=" + column + ", row=" + row));
+        return getFields().stream()
+                .filter(field -> field.column == column && field.row == row)
+                .findFirst()
+                .orElseThrow(() -> new NotationNotFoundException("column=" + column + ", row=" + row));
     }
 
     /**
@@ -56,13 +60,15 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
         // Find our king
         Optional<King> king = getFigures().stream()
+                // Only the figures of the client
                 .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
+                // Filter all out that are not our king
                 .filter(hexagonFigure -> hexagonFigure instanceof King)
                 .map(hexagonFigure -> (King) hexagonFigure)
                 .findFirst();
 
         // Check if any figure can attack our kings hexagon
-        king.ifPresent(king1 -> getFigures().stream()
+        king.ifPresent(king1 -> getFigures().stream().parallel()
                 // Filter out inactive figures
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 // Only use enemy figures
@@ -100,12 +106,17 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .map(hexagonFigure -> (King) hexagonFigure)
                 .findFirst();
         // Check if any figure could attack our kings hexagon
-        king.ifPresent(king1 -> getFigures().stream()
-                .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved()) // Only active figures
-                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId)) // Enemy players
+        king.ifPresent(king1 -> getFigures().stream().parallel()
+                // Only active figures
+                .filter(hexagonFigure -> !hexagonFigure.getHypotheticalRemoved())
+                // Enemy players figures
+                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId))
+                // Go through all attackable fields
                 .forEach(hexagonFigure -> hexagonFigure.getHypotheticalAttackableFields(this).forEach(hexagon -> {
-                    if (hexagon.getNotation().equals(king1.getHypotheticalPosition().getNotation()))
+                    if (hexagon.getNotation().equals(king1.getHypotheticalPosition().getNotation())) {
                         output[0] = true;
+                        logger.trace("King would be checked by {} on field {}", hexagonFigure.getName(), hexagonFigure.getPosition().getNotation());
+                    }
                 })));
         return output[0];
     }
@@ -120,8 +131,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
     public List<Hexagon> getPossibleFieldsToMove(String figureId) {
         List<Hexagon> hexagons = new ArrayList<>();
         getFigures().stream()
-                .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                // Only active figures
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Only the desired figure
+                .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
                 .findFirst().ifPresent(hexagonFigure -> {
             hexagons.addAll(hexagonFigure.getPossibleMovements(this));
             hexagons.addAll(hexagonFigure.getPossibleSpecialMovements(this));
@@ -152,7 +165,11 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .count() == 0
                 ||
                 getFigures().stream()
+                        // Only figures, that are sill active.
+                        .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                        // Only figures equals to the given id
                         .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                        // Only the clients figures
                         .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(clientId))
                         .count() == 0)
             throw new MoveNotAllowedException();
@@ -161,6 +178,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         historyEntry.setPlayer(getCurrentPlayer());
         // Remove a figure from the chessboard if there is a figure on the target field
         getFigures().stream()
+                // Only figures, that are sill active.
+                // Fixes CCD2015-52
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Only figures on the target hexagon
                 .filter(hexagonFigure -> hexagonFigure.getPosition().getNotation().equals(targetFieldNotation))
                 .findFirst().ifPresent(hexagonFigure -> {
                     historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(hexagonFigure.getId()).setEvent(FigureEvent.Event.REMOVED));
@@ -169,6 +190,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
 
         // Move our figure to the target field
         getFigures().stream()
+                // Only figures, that are sill active.
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Only figures on the source hexagon
                 .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
                 .findFirst().ifPresent(hexagonFigure -> {
                     historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(figureId).setFromNotation(hexagonFigure.getPosition().getNotation()).setToNotation(targetFieldNotation));
@@ -184,10 +208,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry);
         // Change the active player and send it through websocket
         setCurrentPlayer(getCurrentPlayer().getNextClient());
-        checkIfCurrentPlayerIsDefeated();
+        checkIfCurrentPlayerIsDefeated(simpMessagingTemplate);
         while (getCurrentPlayer().isDefeated()) {
             setCurrentPlayer(getCurrentPlayer().getNextClient());
-            checkIfCurrentPlayerIsDefeated();
+            checkIfCurrentPlayerIsDefeated(simpMessagingTemplate);
         }
         getParentGame().getPlayerList().stream()
                 .filter(client -> !client.isDefeated())
@@ -264,26 +288,44 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
      */
     public boolean isFigureOwnedByEnemy(Field targetField, Client client) {
         return getFigures().stream()
+                // Just use non removed figures. Fixes CCD2015-51
+                .filter(o -> !((Figure) o).isRemoved())
+                // Just those figures on the target position
                 .filter(o -> ((Figure) o).getHypotheticalPosition().getNotation().equals(targetField.getNotation()))
+                // Just enemy figures
                 .filter(o -> ((Figure) o).getClient().getId().equals(client.getId()))
                 .count() == 0;
     }
 
     /**
      * Decides whether the {@link #getCurrentPlayer()} is defeated or not.
+     * @param simpMessagingTemplate Template for websocket messages
      */
-    void checkIfCurrentPlayerIsDefeated() {
+    void checkIfCurrentPlayerIsDefeated(SimpMessagingTemplate simpMessagingTemplate) {
         Client client = getCurrentPlayer();
         if (client.isDefeated())
             return;
         // If the king is checked, go through all active figures and check if we can do any moves.
         // If we can't do any moves the player is defeated
         if (isKingChecked(client.getId()) && getFigures().stream()
+                // Just the players figures
                 .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(client.getId()))
+                // Just non removed figures
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Change type to a list of hexagon
                 .map(hexagonFigure -> hexagonFigure.getPossibleMovements(this))
+                // Convert list of list of hexagon to list of hexagon
                 .flatMap(Collection::stream)
-                .count() == 0)
+                .count() == 0) {
             client.setDefeated(true);
+            // Send the defeated message to all clients
+            getParentGame().getPlayerList().stream()
+                    .forEach(client1 -> {
+                        PlayerDefeatedEvent playerDefeatedEvent = new PlayerDefeatedEvent()
+                                .setAreYouDefeated(client1.isDefeated()).setName(client.getNickname());
+                        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client1.getId(), playerDefeatedEvent);
+                    });
+        }
+
     }
 }

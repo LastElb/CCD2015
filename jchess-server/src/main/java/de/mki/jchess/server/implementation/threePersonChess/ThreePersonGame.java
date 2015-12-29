@@ -102,7 +102,7 @@ public class ThreePersonGame extends Game {
             getChessboard().getFigures().add(new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(0, 5)).setPictureId("rook-black"));
             IntStream.range(4, 13).forEach(row -> {
                 try {
-                    getChessboard().getFigures().add(new Pawn(playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-grey"));
+                    getChessboard().getFigures().add(new Pawn(playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-black"));
                 } catch (Exception e) {
                     logger.error("", e);
                 }
