@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -93,20 +95,26 @@ public abstract class Game {
             initializeGame();
             getChessboard().setCurrentPlayer(playerList.get(0));
             playerList.forEach(client1 -> {
+                Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
+                webSocketDataHeader.put("data-type", "PlayerChangedEvent");
+
                 PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client1.equals(getChessboard().getCurrentPlayer()));
-                simpMessagingTemplate.convertAndSend("/game/" + getId() + "/" + client1.getId(), playerChangedEvent);
+                simpMessagingTemplate.convertAndSend("/game/" + getId() + "/" + client1.getId(), playerChangedEvent, webSocketDataHeader);
             });
             //The last client does connect to the websocket channel after this method is executed. So he will not get the message send above
             // Ugly workaround: Wait a second and resend the message
             new Thread(() -> {
                 try {
-                    TimeUnit.SECONDS.sleep(1);
+                    TimeUnit.SECONDS.sleep(10);
                 } catch (InterruptedException e) {
                     logger.error("", e);
                 }
+                Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
+                webSocketDataHeader.put("data-type", "PlayerChangedEvent");
+
                 Client lastClient = playerList.get(playerList.size() - 1);
                 PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()));
-                simpMessagingTemplate.convertAndSend("/game/" + getId() + "/" + lastClient.getId(), playerChangedEvent);
+                simpMessagingTemplate.convertAndSend("/game/" + getId() + "/" + lastClient.getId(), playerChangedEvent, webSocketDataHeader);
             }).start();
 
         }

@@ -16,10 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -209,7 +206,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         // Add action to history
         getParentGame().getGameHistory().add(historyEntry);
         // Send event through websocket
-        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry);
+        Map<String, Object> webSocketHeader = new LinkedHashMap<>();
+        webSocketHeader.put("data-type", "HistoryEntry");
+        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId(), historyEntry, webSocketHeader);
         // Change the active player and send it through websocket
         setCurrentPlayer(getCurrentPlayer().getNextClient());
         checkIfCurrentPlayerIsDefeated(simpMessagingTemplate);
@@ -217,11 +216,15 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
             setCurrentPlayer(getCurrentPlayer().getNextClient());
             checkIfCurrentPlayerIsDefeated(simpMessagingTemplate);
         }
+
         getParentGame().getPlayerList().stream()
                 .filter(client -> !client.isDefeated())
                 .forEach(client -> {
+                    Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
+                    webSocketDataHeader.put("data-type", "PlayerChangedEvent");
+
                     PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client.equals(getCurrentPlayer()));
-                    simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client.getId(), playerChangedEvent);
+                    simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client.getId(), playerChangedEvent, webSocketDataHeader);
                 });
     }
 
@@ -327,7 +330,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     .forEach(client1 -> {
                         PlayerDefeatedEvent playerDefeatedEvent = new PlayerDefeatedEvent()
                                 .setAreYouDefeated(client1.isDefeated()).setName(client.getNickname());
-                        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client1.getId(), playerDefeatedEvent);
+                        Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
+                        webSocketDataHeader.put("data-type", "PlayerDefeatedEvent");
+                        simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client1.getId(), playerDefeatedEvent, webSocketDataHeader);
                     });
         }
 
