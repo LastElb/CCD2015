@@ -21,6 +21,7 @@
 package jchess;
 
 import de.mki.chessboard.implementation.threePersonChess.smallHexboard;
+import de.mki.jchess.commons.Client;
 import jchess.client.ServerApi;
 import jchess.client.models.Figure;
 import jchess.client.models.Position;
@@ -47,7 +48,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     private ServerApi serverApi;
     private Optional<jchess.client.models.Game> gameModel;
-    private Optional<jchess.client.models.Client> clientModel;
+    private Optional<Client> clientModel;
     private smallHexboard smallHexboard;
 
 

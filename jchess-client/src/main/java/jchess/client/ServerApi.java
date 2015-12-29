@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
-import jchess.client.models.Client;
+import de.mki.jchess.commons.Client;
 import jchess.client.models.Game;
 
 import java.io.IOException;
