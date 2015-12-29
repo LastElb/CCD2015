@@ -67,6 +67,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     Game() {
 
+        initializeHexboard();
         //this.setLayout(null);
         // ToDo: Initalize Chessboard & add MouseListener & add JPanel
         // chessboard.addMouseListener(this);
@@ -123,22 +124,34 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         figure1.setId("yripqepbztt6nv5d8t2m");
 
         position1 = new Position();
-        position1.setNotation("e1");
+        position1.setNotation("A1");
 
         figure1.setPositionObject(position1);
         figure1.setName("King");
         figure1.setPictureId("king-white");
         figure1.setRemoved(false);
 
+        Figure figure2 = new Figure();
+        figure2.setId("y2ripqepbztt6nv5d8t2m");
+
+        Position position2 = new Position();
+        position2.setNotation("B2");
+
+        figure2.setPositionObject(position2);
+        figure2.setName("Knight");
+        figure2.setPictureId("knight-white");
+        figure2.setRemoved(false);
+
         figures = new ArrayList<Figure>();
         figures.add(figure1);
+        figures.add(figure2);
 
         try {
             smallHexboard = new smallHexboard();
 
             smallHexboard.setupBoard(figures);
             this.add(smallHexboard);
-            //smallHexboard.repaint();
+            smallHexboard.repaint();
         } catch (Exception e) {
             e.printStackTrace();
         }
