@@ -55,11 +55,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public boolean blockedChessboard;
 
     Game() {
-        //serverApi = new ServerApi("localhost", 8080);
 
         this.setLayout(null);
         this.setDoubleBuffered(false);
-       this.initializeHexboard();
+        this.initializeHexboard();
 
         try {
             this.initiaizeAndJoinHostedGame();
@@ -116,8 +115,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @throws Exception
      */
     private void initiaizeAndJoinHostedGame() throws Exception {
-        gameModel = serverApi.hostGame("default-3-person-chess");
-        clientModel = serverApi.connectToGame("Malte", gameModel.get().getId());
+//        serverApi = new ServerApi("localhost", 8080);
+//        gameModel = serverApi.hostGame("default-3-person-chess");
+//        clientModel = serverApi.connectToGame("Malte", gameModel.get().getId());
     }
 
     public void initializeHexboard(){
