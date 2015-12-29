@@ -1,7 +1,6 @@
-package de.mki.jchess.server.model;
+package de.mki.jchess.commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.mki.jchess.server.service.RandomStringService;
 
 /**
  * Created by Igor on 11.11.2015.

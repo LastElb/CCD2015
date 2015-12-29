@@ -1,13 +1,12 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
+import de.mki.jchess.commons.Field;
 import de.mki.jchess.server.Application;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
 import de.mki.jchess.server.exception.NotationNotFoundException;
 import de.mki.jchess.server.exception.TooManyPlayersException;
-import de.mki.jchess.server.model.Client;
-import de.mki.jchess.server.model.Figure;
-import de.mki.jchess.server.model.Game;
-import junitx.framework.ListAssert;
+import de.mki.jchess.commons.Client;
+import de.mki.jchess.commons.Figure;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +50,7 @@ public class ChessboardTest {
     }
 
     /**
-     * Gets a valid {@link de.mki.jchess.server.model.Field}.
+     * Gets a valid {@link Field}.
      * @throws Exception
      */
     @Test
@@ -60,7 +59,7 @@ public class ChessboardTest {
     }
 
     /**
-     * Gets an invalid {@link de.mki.jchess.server.model.Field}.
+     * Gets an invalid {@link Field}.
      * @throws Exception
      */
     @Test(expected = NotationNotFoundException.class)
@@ -99,10 +98,10 @@ public class ChessboardTest {
     }
 
     /**
-     * Tests if an removed {@link de.mki.jchess.server.model.Figure} has fields to move.
-     * An active {@link de.mki.jchess.server.model.Figure} has just a combined {@link List} of
-     * {@link de.mki.jchess.server.model.Figure#getPossibleMovements(de.mki.jchess.server.model.Chessboard)} and
-     * {@link de.mki.jchess.server.model.Figure#getPossibleSpecialMovements(de.mki.jchess.server.model.Chessboard)}.
+     * Tests if an removed {@link Figure} has fields to move.
+     * An active {@link Figure} has just a combined {@link List} of
+     * {@link Figure#getPossibleMovements(de.mki.jchess.server.model.Chessboard)} and
+     * {@link Figure#getPossibleSpecialMovements(de.mki.jchess.server.model.Chessboard)}.
      * @throws Exception
      */
     @Test

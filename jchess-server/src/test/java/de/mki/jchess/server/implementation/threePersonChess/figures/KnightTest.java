@@ -3,7 +3,6 @@ package de.mki.jchess.server.implementation.threePersonChess.figures;
 import de.mki.jchess.server.Application;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
-import de.mki.jchess.server.model.Figure;
 import junitx.framework.ListAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Igor on 02.12.2015.

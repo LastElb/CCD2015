@@ -3,10 +3,10 @@ package de.mki.jchess.server.implementation.threePersonChess.figures;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
-import de.mki.jchess.server.model.Client;
+import de.mki.jchess.commons.Client;
 import de.mki.jchess.server.model.Figure;
-import de.mki.jchess.server.model.websocket.MovementEvent;
-import de.mki.jchess.server.service.RandomStringService;
+import de.mki.jchess.commons.websocket.MovementEvent;
+import de.mki.jchess.commons.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +95,7 @@ public class Rook extends Figure<Hexagon> {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getPosition().getNotation(), hexagonOptional.get().getNotation());
                 hexagonOptional = FigureUtils.addHexagonToListIfFreeOrEnemy(actualChessboard, hexagonOptional, output, getClient(), direction);
             }
+            logger.trace("Finished direction {}", direction.toString());
         });
         return output;
     }
@@ -114,6 +115,7 @@ public class Rook extends Figure<Hexagon> {
                 logger.trace("Checking attackable fields for direction {} from {} to {}", direction, getHypotheticalPosition().getNotation(), hexagonOptional.get());
                 hexagonOptional = FigureUtils.addHexagonToListIfFreeOrEnemyHypothetical(actualChessboard, hexagonOptional, output, getClient(), direction);
             }
+            logger.trace("Finished direction {}", direction.toString());
         });
         return output;
     }

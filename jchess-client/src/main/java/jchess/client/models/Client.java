@@ -46,11 +46,11 @@ public class Client {
         return this;
     }
 
-    public Boolean getDefeated() {
+    public boolean isDefeated() {
         return defeated;
     }
 
-    public Client setDefeated(Boolean defeated) {
+    public Client setDefeated(boolean defeated) {
         this.defeated = defeated;
         return this;
     }

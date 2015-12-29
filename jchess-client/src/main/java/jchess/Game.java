@@ -20,10 +20,16 @@
  */
 package jchess;
 
+import de.mki.chessboard.implementation.threePersonChess.smallHexboard;
 import jchess.client.ServerApi;
+
 import jchess.client.WebSocketClient;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
+
+import jchess.client.models.Figure;
+import jchess.client.models.Position;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,8 +38,12 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
+
 import java.lang.reflect.Type;
 import java.util.Optional;
+
+import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,21 +59,23 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     private WebSocketClient webSocketClient;
     private Optional<jchess.client.models.Game> gameModel;
     private Optional<jchess.client.models.Client> clientModel;
+    private smallHexboard smallHexboard;
+
 
 
     public boolean blockedChessboard;
 
     Game() {
 
-        this.setLayout(null);
+        //this.setLayout(null);
         // ToDo: Initalize Chessboard & add MouseListener & add JPanel
         // chessboard.addMouseListener(this);
         // chessboard.setLocation(new Point(0, 0));
         // this.add(chessboard);
 
-        this.setLayout(null);
+        //this.setLayout(null);
         this.addComponentListener(this);
-        this.setDoubleBuffered(true);
+        //this.setDoubleBuffered(true);
     }
 
 
@@ -99,6 +111,38 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public void switchActive() {
     }
 
+    public void initializeHexboard(){
+        this.setLayout(null);
+        this.setDoubleBuffered(false);
+
+        java.util.List<Figure> figures;
+        Figure figure1;
+        Position position1;
+
+        figure1 = new Figure();
+        figure1.setId("yripqepbztt6nv5d8t2m");
+
+        position1 = new Position();
+        position1.setNotation("e1");
+
+        figure1.setPositionObject(position1);
+        figure1.setName("King");
+        figure1.setPictureId("king-white");
+        figure1.setRemoved(false);
+
+        figures = new ArrayList<Figure>();
+        figures.add(figure1);
+
+        try {
+            smallHexboard = new smallHexboard();
+
+            smallHexboard.setupBoard(figures);
+            this.add(smallHexboard);
+            //smallHexboard.repaint();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // MouseListener:
     public void mouseClicked(MouseEvent arg0) {

@@ -3,9 +3,9 @@ package de.mki.jchess.server.implementation.threePersonChess.figures;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
-import de.mki.jchess.server.model.Client;
+import de.mki.jchess.commons.Client;
 import de.mki.jchess.server.model.Figure;
-import de.mki.jchess.server.service.RandomStringService;
+import de.mki.jchess.commons.RandomStringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

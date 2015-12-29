@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html ng-app="jchess">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <title>Canvas Hexagonal Map</title>
+        <style type="text/css">
+            canvas { 
+                border:0;
+                display:block;
+                margin:0 auto;
+            }
+        </style>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+    <div class="container-fluid" ng-controller="chessboardController" style="margin-top: 4rem;">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Spiel</h3>
+                    </div>
+                    <div class="panel-body" ng-show="game">
+                        <div>
+                            <div>Aktiver Spieler: <strong ng-bind="activeClient.nickname"></strong> (<span ng-bind="activeClient.team"></span>)</div>
+                            <span>Feld: <strong ng-bind="selectedField || 'Kein Feld markiert'"></strong></span><br>
+                            <span>Maus über Feld: <strong ng-bind="hoveredField || 'Kein Feld markiert'"></strong></span>
+                            <form>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="showPossibleMoves"> Mögliche Zugfelder anzeigen
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" ng-click="showAddPlayer = !showAddPlayer" style="cursor: hand">
+                        <h3 class="panel-title">Spieler hinzufügen</h3>
+                    </div>
+                    <div class="panel-body" ng-show="showAddPlayer">
+                        <form>
+                            <div class="form-group">
+                                <label for="InputNickname">Nickname</label>
+                                <input type="text" class="form-control" id="InputNickname" placeholder="Nickname" ng-model="editClient.nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="InputGameID">Game ID</label>
+                                <input type="text" class="form-control" id="InputGameID" placeholder="Game ID" ng-model="gameid" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="InputHost">Host</label>
+                                <input type="text" class="form-control" id="InputHost" placeholder="Host (leave empty or http(s)://domain:port)" ng-model="host">
+                            </div>
+                            <button type="submit" class="btn btn-default" ng-click="addClientPlayer()">Spieler hinzufügen</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" ng-click="showCreateGame = !showCreateGame" style="cursor: hand">
+                        <h3 class="panel-title">Spiel erstellen</h3>
+                    </div>
+                    <div class="panel-body" ng-show="showCreateGame">
+                        <form>
+                            <div class="form-group">
+                                <label for="InputGameMode">Spielmodus</label>
+                                <input type="text" class="form-control" id="InputGameMode" placeholder="default-3-person-chess" ng-model="gamemode" value="default-3-person-chess" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="InputHost2">Host</label>
+                                <input type="text" class="form-control" id="InputHost2" placeholder="Host (leave empty or http(s)://domain:port)" ng-model="host">
+                            </div>
+                            <button type="submit" class="btn btn-default" ng-click="requestGame()">Spiel anfordern</button>
+                        </form>
+                        <div ng-show="requestedGame">
+                            Spiel-ID: <span ng-bind="requestedGame.id"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <canvas id="hexmap" width="660" height="624"></canvas>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Spielverlauf</h3>
+                    </div>
+                    <div class="panel-body" ng-show="game" style="overflow:hidden; overflow-y:auto; max-height: 500px">
+                        <div ng-repeat="item in game.gameHistory | reverse">
+                            <span ng-bind="item.player.nickname"></span>
+                            <ul>
+                                <li ng-repeat="event in item.chessboardEvents | reverse">
+                                    <div ng-if="event.fromNotation && event.toNotation">
+                                        Zug von <span ng-bind="drawingFigure(event.figureId).figure"></span> (<span ng-bind="event.fromNotation"></span>) auf <span ng-bind="event.toNotation"></span>
+                                    </div>
+                                    <div ng-if="event.event">
+                                        <span ng-bind="event.event"></span> <span ng-bind="drawingFigure(event.figureId).figure"> (Stand auf Zielfeld des obigen Figurenzugs)</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <hr ng-if="game.gameHistory.length > 1"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./bower_components/notie/notie.js"></script>
+    <script src="./bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="./bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./bower_components/angular/angular.min.js"></script>
+    <script src="./bower_components/sockjs/sockjs.min.js"></script>
+    <script src="./bower_components/stomp-websocket/lib/stomp.min.js"></script>
+    <script src="./bower_components/tinycolor/dist/tinycolor-min.js"></script>
+    <script src="hexagons.js"></script>
+    </body>
+</html>

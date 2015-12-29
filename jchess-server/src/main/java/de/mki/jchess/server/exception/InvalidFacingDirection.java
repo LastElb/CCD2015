@@ -1,6 +1,6 @@
 package de.mki.jchess.server.exception;
 
-import de.mki.jchess.server.model.Figure;
+import de.mki.jchess.commons.Figure;
 
 /**
  * Created by Igor on 02.12.2015.

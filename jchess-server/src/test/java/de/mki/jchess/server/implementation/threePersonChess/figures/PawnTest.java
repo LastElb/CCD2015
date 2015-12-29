@@ -1,11 +1,11 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
+import de.mki.jchess.commons.Figure;
 import de.mki.jchess.server.Application;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
-import de.mki.jchess.server.model.HistoryEntry;
-import de.mki.jchess.server.model.websocket.MovementEvent;
-import de.mki.jchess.server.service.RandomStringService;
+import de.mki.jchess.commons.HistoryEntry;
+import de.mki.jchess.commons.websocket.MovementEvent;
 import junitx.framework.ListAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +71,7 @@ public class PawnTest extends FigureTest {
     }
 
     /**
-     * Tests if the {@link Pawn} can move to any {@link Hexagon}. An enemy {@link de.mki.jchess.server.model.Figure} is checking our {@link King}.
+     * Tests if the {@link Pawn} can move to any {@link Hexagon}. An enemy {@link Figure} is checking our {@link King}.
      * The {@link Pawn} should not be able to do any movements.
      * @throws Exception
      */
@@ -108,7 +108,9 @@ public class PawnTest extends FigureTest {
     public void testGetPossibleSpecialMovements2() throws Exception {
         Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("c5")));
-        game.getGameHistory().add(new HistoryEntry().setChessboardEvents(Collections.singletonList(new MovementEvent().setFigureId(pawn.getId()).setFromNotation("b5").setToNotation("c5"))));
+        HistoryEntry historyEntry = new HistoryEntry();
+        historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(pawn.getId()).setFromNotation("b5").setToNotation("c5"));
+        game.getGameHistory().add(historyEntry);
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -179,7 +181,7 @@ public class PawnTest extends FigureTest {
     }
 
     /**
-     * Tests if the {@link Pawn} can NOT beat a {@link de.mki.jchess.server.model.Figure} on a blocked diagonal path.
+     * Tests if the {@link Pawn} can NOT beat a {@link Figure} on a blocked diagonal path.
      * One of the two-fields-move paths is blocked as well.
      * @throws Exception
      */

@@ -3,7 +3,7 @@ package de.mki.jchess.server.implementation.threePersonChess.figures;
 import de.mki.jchess.server.Application;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
-import de.mki.jchess.server.model.Figure;
+import de.mki.jchess.commons.Figure;
 import junitx.framework.ListAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
