@@ -15,14 +15,13 @@ public class Hexboard extends Chessboard {
     Point origin;
     Layout layout;
     Map<String, Hexagon> fields;
-    List figures;
 
     public Hexboard() {
     }
 
     @Override
     public void setupBoard(List figures) {
-        this.figures = figures;
+        this.setFigures(figures);
         this.fields = generateFields();
         this.repaint();
     }
