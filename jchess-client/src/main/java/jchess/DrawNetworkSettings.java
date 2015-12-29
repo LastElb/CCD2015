@@ -160,7 +160,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         } else if (arg0.getSource() == this.buttonStart) //click start button
         {
             String error = "";
-            if (this.textGameID.getText().isEmpty()) {
+            if (this.textGameID.getText().isEmpty() && this.radioClient.isSelected()) {
                 error = "Bitte geben Sie eine Game ID an.\n";
             }
             if (this.textNick.getText().length() == 0) {
@@ -179,9 +179,38 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 return;
             }
 
+            // Server on the local PC
             if (this.radioServer.isSelected()) {
-                // @ToDo Start server
+                // @ToDo Start server & save gameID
+
+
+                // Host game & join
+                Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel");
+                try {
+                    newGUI.initiaizeAndJoinHostedGame("localhost", 8080, textNick.getText());
+
+                    // wait for opponents
+                    JOptionPane.showMessageDialog(this, "Warten auf Mitspieler! Spiel-ID: " + newGUI.getGameID());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else{
+                Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel: "+clientOptions.textServIP.getText());
+
+                // join existing game
+                try {
+                    newGUI.joinGame(clientOptions.textServIP.getText(), 8080, textNick.getText(), textGameID.getText());
+
+                    // wait for opponents
+                    JOptionPane.showMessageDialog(this, "Ein Moment Geduld, wir warten noch auf Mitspieler");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
+            // close network settings window
+            this.parent.setVisible(false);
+
 
             // @ToDo Start Client (do we really want to do it here?)
             // Start Client an Join Game
@@ -189,6 +218,8 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
             // view only: clientOptions.checkOnlyWatch.isSelected()
             // nickname: textNick.getText()
 
+            //create new game and draw chessboard
+            //Game newGUI = JChessApp.getjChessView().addNewTab("Network game, table: " + textGameID.getText());
            /*
             Client client;
             try {
