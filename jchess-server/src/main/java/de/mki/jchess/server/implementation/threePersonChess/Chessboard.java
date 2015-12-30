@@ -365,6 +365,14 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .flatMap(Collection::stream)
                 .count() == 0) {
             client.setDefeated(true);
+
+            // Remove the king of the player.
+            // Fixes CCD2015-56
+            getFigures().stream().parallel()
+                    .filter(o -> o instanceof King)
+                    .filter(o1 -> o1.getClient().getId().equals(client.getId()))
+                    .findFirst().get().setRemoved(true);
+
             // Send the defeated message to all clients
             getParentGame().getPlayerList().stream()
                     .forEach(client1 -> {
