@@ -63,7 +63,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     private WebSocketClient webSocketClient;
     private Optional<jchess.client.models.Game> gameModel;
     private Optional<Client> clientModel;
-    private smallHexboard smallHexboard;
+    private smallHexboard chessboard;
 
 
 
@@ -151,11 +151,12 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         figures.add(figure2);
 
         try {
-            smallHexboard = new smallHexboard();
+            chessboard = new smallHexboard();
 
-            smallHexboard.setupBoard(figures);
-            this.add(smallHexboard);
-            smallHexboard.repaint();
+            chessboard.setupBoard(figures);
+            chessboard.addMouseListener(this);
+            this.add(chessboard);
+            chessboard.repaint();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,6 +176,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                     int y = event.getY();//get Y position of mouse
 
                 // @Todo: Pass position to chessboard
+                String clickedField = chessboard.getClickedField(x, y);
 
             } else {
                 System.out.println("Chessboard is blocked");
