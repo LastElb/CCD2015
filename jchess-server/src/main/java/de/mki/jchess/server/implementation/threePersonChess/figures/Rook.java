@@ -154,4 +154,29 @@ public class Rook extends Figure<Hexagon> {
         return output;
     }
 
+    public King moveKingForCastling(Chessboard chessboard) {
+        // Lets find the king of the player
+        Optional<King> king = chessboard.getFigures().stream()
+                .filter(o -> o instanceof King)
+                .filter(o1 -> ((King) o1).getClient().getId().equals(getClient().getId()))
+                .findFirst();
+        if (king.isPresent()) {
+            // Get the direction of the castling first
+            // from the kings view
+            Direction direction = FigureUtils.findDirection(king.get().getPosition(), getPosition());
+            // Check if all fields between the figures are not attacked
+            List<Hexagon> hexagonsBetween = new ArrayList<>();
+            Hexagon current = king.get().getPosition();
+            while (!current.getNotation().equals(getPosition().getNotation())) {
+                hexagonsBetween.add(current);
+                current = current.getNeighbourByDirection(direction).get();
+            }
+            hexagonsBetween.add(current);
+            king.get().setHypotheticalPosition(king.get().getPosition());
+            king.get().setPosition(hexagonsBetween.get(2));
+            return king.get();
+        }
+        return null;
+    }
+
 }

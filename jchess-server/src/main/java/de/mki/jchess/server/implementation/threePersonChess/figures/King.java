@@ -1,6 +1,7 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
 import de.mki.jchess.commons.websocket.MovementEvent;
+import de.mki.jchess.server.exception.NotationNotFoundException;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
@@ -24,7 +25,8 @@ public class King extends Figure<Hexagon> {
 
     /**
      * Constructor with the possibility to pass an own id.
-     * @param id The figures id.
+     *
+     * @param id     The figures id.
      * @param client The owner of the {@link King}.
      */
     public King(String id, Client client) {
@@ -38,6 +40,7 @@ public class King extends Figure<Hexagon> {
 
     /**
      * Default constructor
+     *
      * @param client The owner of the {@link King}.
      */
     public King(Client client) {
@@ -46,6 +49,7 @@ public class King extends Figure<Hexagon> {
 
     /**
      * {@inheritDoc}
+     *
      * @param chessboard The instance of the {@link Chessboard} of the current {@link de.mki.jchess.server.model.Game}.
      * @return Returns a {@link List} of {@link Hexagon}.
      */
@@ -60,6 +64,7 @@ public class King extends Figure<Hexagon> {
     /**
      * {@inheritDoc}
      * Implements castling
+     *
      * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return Returns a {@link List} of {@link Hexagon}.
      */
@@ -131,6 +136,7 @@ public class King extends Figure<Hexagon> {
 
     /**
      * {@inheritDoc}
+     *
      * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return Returns a {@link List} of {@link Hexagon}.
      */
@@ -158,7 +164,6 @@ public class King extends Figure<Hexagon> {
     }
 
     /**
-     *
      * @param chessboard The current {@link Chessboard} instance for checking purposes.
      * @return Returns a {@link List} of {@link Hexagon}.
      */
@@ -183,5 +188,26 @@ public class King extends Figure<Hexagon> {
             }
         }));
         return output;
+    }
+
+    public Rook findRookForCastling(Chessboard chessboard, String targetFieldNotation) {
+        // Find the direction between king position and target field
+        Hexagon targetField;
+        try {
+            targetField = (Hexagon) chessboard.getFieldByNotation(targetFieldNotation);
+        } catch (NotationNotFoundException e) {
+            logger.error("", e);
+            return null;
+        }
+        Direction direction = FigureUtils.findDirection(getPosition(), targetField);
+
+        // Lets find the rooks of the player
+        Optional<Rook> rook = chessboard.getFigures().stream()
+                .filter(o -> o instanceof Rook)
+                .filter(o -> !((Rook) o).isRemoved())
+                .filter(o1 -> ((Rook) o1).getClient().getId().equals(getClient().getId()))
+                .filter(o -> FigureUtils.findDirection(getPosition(), ((Rook) o).getPosition()).equals(direction))
+                .findFirst();
+        return rook.get();
     }
 }
