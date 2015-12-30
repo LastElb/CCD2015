@@ -61,7 +61,11 @@ public class Rook extends Figure<Hexagon> {
      */
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
-        Optional<King> king = chessboard.getFigures().stream().filter(o -> o instanceof King).filter(o1 -> ((King) o1).getClient().getId().equals(getClient().getId())).findFirst();
+        // Lets find the king of the player
+        Optional<King> king = chessboard.getFigures().stream()
+                .filter(o -> o instanceof King)
+                .filter(o1 -> ((King) o1).getClient().getId().equals(getClient().getId()))
+                .findFirst();
         if (king.isPresent()) {
             boolean wasMoved = chessboard.getParentGame().getGameHistory().stream().parallel()
                     .filter(historyEntry -> historyEntry.getChessboardEvents().stream()
