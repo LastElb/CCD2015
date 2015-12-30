@@ -20,8 +20,10 @@
  */
 package jchess;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mki.chessboard.implementation.threePersonChess.smallHexboard;
 import de.mki.jchess.commons.Client;
+import de.mki.jchess.commons.websocket.PlayerChangedEvent;
 import jchess.client.ServerApi;
 
 import jchess.client.WebSocketClient;
@@ -40,6 +42,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
@@ -261,8 +264,22 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
                 @Override
                 public void handleFrame(StompHeaders headers, Object payload) {
-                    System.out.println(getPayloadType(headers));
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String objectType = headers.getFirst("data-type");
                     String content = new String((byte[])payload);
+
+                    switch (objectType) {
+                        case "PlayerChangedEvent":
+                            Optional<PlayerChangedEvent> playerChangedEvent = null;
+                            try {
+                                playerChangedEvent = Optional.of(objectMapper.readValue(content, PlayerChangedEvent.class));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            PlayerChangedAction(playerChangedEvent.get());
+                            break;
+                        default: break;
+                    }
                 }
             });
 
@@ -277,5 +294,24 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      */
     public String getGameID(){
         return gameModel.get().getId();
+    }
+
+    /**
+     * Action which is triggered when the player changes
+     * @param playerChangedEvent
+     */
+    private void PlayerChangedAction(PlayerChangedEvent playerChangedEvent) {
+        if(playerChangedEvent.isItYouTurn()) {
+            // unblock chessboard, it is your turn
+            blockedChessboard = true;
+            // show hint
+            JOptionPane.showMessageDialog(this, "Du bist dran!");
+        }
+        else{
+            // block chessboard, it is not your turn
+            blockedChessboard = true;
+            //todo: block chessboard in hexboard class?
+        }
+
     }
 }
