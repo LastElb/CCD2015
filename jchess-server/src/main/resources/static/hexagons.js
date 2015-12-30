@@ -252,7 +252,7 @@ angular.module('jchess', [])
             var i,
                 j;
             // The field colors
-            var colors = ["#DEFFD6", "#4AA631", "#8CDB73"];
+            var colors = ["#C7B299", "#8CC63F", "#006837"];
 
             for(i = 0; i < width; ++i) {
                 for(j = 0; j < height; ++j) {
