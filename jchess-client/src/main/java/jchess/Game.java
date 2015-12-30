@@ -320,7 +320,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     private void PlayerChangedAction(PlayerChangedEvent playerChangedEvent) {
         if(playerChangedEvent.isItYouTurn()) {
             // unblock chessboard, it is your turn
-            blockedChessboard = true;
+            blockedChessboard = false;
             // show hint
             JOptionPane.showMessageDialog(this, "Du bist dran!");
         }
