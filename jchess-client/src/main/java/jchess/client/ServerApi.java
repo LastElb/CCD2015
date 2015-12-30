@@ -96,4 +96,23 @@ public class ServerApi {
             throw new Exception(response.getResponseBody());
         }
     }
+
+    /**
+     * Get all available game information from the server
+     * @param gameID
+     * @return
+     * @throws Exception
+     */
+    public Optional<Game> getFullGame(String gameID) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        Future<Response> future = asyncHttpClient.preparePost("game/" + gameID + "/full").execute();
+        Response response = future.get();
+        asyncHttpClient.close();
+        if (response.getStatusCode() == 200) {
+            return Optional.of(objectMapper.readValue(response.getResponseBody(), Game.class));
+        } else {
+            throw new Exception(response.getResponseBody());
+        }
+    }
 }

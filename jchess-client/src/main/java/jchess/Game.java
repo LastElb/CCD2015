@@ -27,6 +27,7 @@ import de.mki.jchess.commons.websocket.PlayerChangedEvent;
 import jchess.client.ServerApi;
 
 import jchess.client.WebSocketClient;
+import jchess.client.models.Chessboard;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 
@@ -280,6 +281,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                             }
                             PlayerChangedAction(playerChangedEvent.get());
                             break;
+                        case "HistoryEntry":
+                            // at the moment the client is not able to handle the history-objects
+                            ChessboardChangedAction();
+                            break;
                         default: break;
                     }
                 }
@@ -315,5 +320,19 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             //todo: block chessboard in hexboard class?
         }
 
+    }
+
+    /**
+     * This action is triggered by the server when something on the chessboard changed. The chessboard gets reloaded
+     */
+    private void ChessboardChangedAction(){
+        try {
+            jchess.client.models.Game game = serverApi.getFullGame(getGameID()).get();
+
+            Chessboard newChessboard = (Chessboard) game.getChessboard();
+            chessboard.updateChessboard(newChessboard.getFigures());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
