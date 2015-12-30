@@ -156,7 +156,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             chessboard = new smallHexboard();
 
             chessboard.setupBoard(figures);
-            chessboard.addMouseListener(this);
+            this.addMouseListener(this);
             this.add(chessboard);
             chessboard.repaint();
         } catch (Exception e) {
