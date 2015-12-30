@@ -47,6 +47,14 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         this.image = image;
     }
 
+    public List<Figure> getFigures() {
+        return figures;
+    }
+
+    public void setFigures(List<Figure> figures) {
+        this.figures = figures;
+    }
+
     /**
      * generates fields and puts figures on the board
      *
@@ -137,9 +145,9 @@ public abstract class Chessboard<T extends Field> extends JPanel {
      * @param g2d
      */
     private void drawFigures(Graphics2D g2d) {
-        for (Figure figure : figures) {
-            Image figureImage = loadImage(figure.getPictureId());
-            String position = figure.getPositionObject().getNotation();
+        for (Figure tempFigure : this.figures) {
+            Image figureImage = loadImage(tempFigure.getPictureId()+".png");
+            String position = tempFigure.getPositionObject().getNotation();
             Field field = getFieldByNotation(position);
             g2d.drawImage(figureImage, field.getX(), field.getY(), null);
         }
