@@ -1,5 +1,6 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
+import de.mki.jchess.commons.HistoryEntry;
 import de.mki.jchess.server.Application;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
@@ -215,8 +216,9 @@ public class RookTest extends FigureTest {
     @Test
     public void testGetPossibleSpecialMovements3() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
-        //FIXME
-//        game.getGameHistory().add(new HistoryEntry().setChessboardEvents(Collections.singletonList(new MovementEvent().setFigureId(rook.getId()).setFromNotation("a1").setToNotation("a2"))));
+        HistoryEntry historyEntry = new HistoryEntry();
+        historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(rook.getId()).setFromNotation("a1").setToNotation("a2"));
+        game.getGameHistory().add(historyEntry);
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
         List<Hexagon> possibleMovements = rook.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
@@ -231,8 +233,9 @@ public class RookTest extends FigureTest {
     @Test
     public void testGetPossibleSpecialMovements4() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
-        //FIXME
-//        game.getGameHistory().add(new HistoryEntry().setChessboardEvents(Collections.singletonList(new MovementEvent().setFigureId(rook.getId()).setFromNotation("a8").setToNotation("a7"))));
+        HistoryEntry historyEntry = new HistoryEntry();
+        historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(rook.getId()).setFromNotation("a8").setToNotation("a7"));
+        game.getGameHistory().add(historyEntry);
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a7")));
         List<Hexagon> possibleMovements = rook.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
