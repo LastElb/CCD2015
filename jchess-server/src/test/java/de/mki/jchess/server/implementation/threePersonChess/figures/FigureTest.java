@@ -1,13 +1,17 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
+import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame;
 import de.mki.jchess.commons.Client;
 import de.mki.jchess.server.model.Game;
 import de.mki.jchess.commons.RandomStringService;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Igor on 30.11.2015.

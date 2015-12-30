@@ -1,5 +1,6 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.commons.Field;
 
 import java.util.ArrayList;
@@ -94,6 +95,16 @@ public class Hexagon extends Field<Direction> {
         public Hexagon getHexagon() {
             return hexagon;
         }
+    }
+
+    @JsonIgnore
+    public int getColumn() {
+        return column;
+    }
+
+    @JsonIgnore
+    public int getRow() {
+        return row;
     }
 
     @Override
