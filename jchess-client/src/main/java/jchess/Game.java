@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mki.chessboard.implementation.threePersonChess.smallHexboard;
 import de.mki.jchess.commons.Client;
 import de.mki.jchess.commons.websocket.PlayerChangedEvent;
+import de.mki.jchess.commons.websocket.PlayerDefeatedEvent;
 import jchess.client.ServerApi;
 
 import jchess.client.WebSocketClient;
@@ -285,6 +286,15 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                             // at the moment the client is not able to handle the history-objects
                             ChessboardChangedAction();
                             break;
+                        case "PlayerDefeatedEvent":
+                            Optional<PlayerDefeatedEvent> playerDefeatedEvent = null;
+                            try {
+                                playerDefeatedEvent = Optional.of(objectMapper.readValue(content, PlayerDefeatedEvent.class));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            PlayerDefeatedAction(playerDefeatedEvent.get());
+                            break;
                         default: break;
                     }
                 }
@@ -334,5 +344,14 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Action triggered by the server, when the player is defeated
+     * @param playerDefeatedEvent
+     */
+    private void PlayerDefeatedAction(PlayerDefeatedEvent playerDefeatedEvent) {
+        if(playerDefeatedEvent.isAreYouDefeated())
+            JOptionPane.showMessageDialog(this, "Du wurdest besiegt!");
     }
 }
