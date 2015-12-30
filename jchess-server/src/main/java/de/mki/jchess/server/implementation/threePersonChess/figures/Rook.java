@@ -61,16 +61,15 @@ public class Rook extends Figure<Hexagon> {
      */
     @Override
     public List<Hexagon> getPossibleSpecialMovements(Chessboard chessboard) {
-        //TODO Castling (Rochade)
         Optional<King> king = chessboard.getFigures().stream().filter(o -> o instanceof King).filter(o1 -> ((King) o1).getClient().getId().equals(getClient().getId())).findFirst();
         if (king.isPresent()) {
-            boolean wasMoved = chessboard.getParentGame().getGameHistory().stream()
+            boolean wasMoved = chessboard.getParentGame().getGameHistory().stream().parallel()
                     .filter(historyEntry -> historyEntry.getChessboardEvents().stream()
                             .filter(chessboardEvent -> chessboardEvent instanceof MovementEvent)
                             .map(chessboardEvent -> (MovementEvent) chessboardEvent)
                             .filter(movementEvent -> movementEvent.getFigureId().equals(getId()) || movementEvent.getFigureId().equals(king.get().getId())).count() != 0).findAny().isPresent();
-            logger.trace("Figure {} (id {}) was moved: {}", getName(), getId(), wasMoved);
-            logger.trace("Figure {} (id {}) was moved: {}", king.get().getName(), king.get().getId(), wasMoved);
+            logger.trace("Figure {} ({}) was moved: {}", getName(), getPosition().getNotation(), wasMoved);
+            logger.trace("Figure {} ({}) was moved: {}", king.get().getName(), king.get().getPosition().getNotation(), wasMoved);
             if (!wasMoved) {
                 // Get the direction of the castling first
                 // from the kings view
@@ -88,11 +87,26 @@ public class Rook extends Figure<Hexagon> {
                         hexagonsBetween,
                         (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard,
                         getClient())) {
-                    
+                    // Remove the first and last hexagon
+                    hexagonsBetween.remove(0);
+                    hexagonsBetween.remove(hexagonsBetween.size() - 1);
+                    // Check if the fields between King and Rook are free
+                    if (FigureUtils.areHexagonsFree(hexagonsBetween,
+                            (de.mki.jchess.server.implementation.threePersonChess.Chessboard) chessboard)) {
+                        // The fields are free
+                        // Check if the king would be checked with the new position of the figures
+                        setHypotheticalPosition(king.get().getPosition());
+                        king.get().setHypotheticalPosition(hexagonsBetween.get(1));
+                        boolean wouldKingBeChecked = chessboard.willKingBeChecked(getClient().getId());
+                        setHypotheticalPosition(null);
+                        king.get().setHypotheticalPosition(null);
+                        // When the king would not be checked the user can do this move.
+                        if (!wouldKingBeChecked)
+                            return Collections.singletonList(king.get().getPosition());
+                    }
                 }
             }
         }
-
         return new ArrayList<>();
     }
 

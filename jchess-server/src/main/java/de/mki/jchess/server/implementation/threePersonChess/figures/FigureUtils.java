@@ -172,22 +172,52 @@ public class FigureUtils {
     }
 
     /**
-     *
-     * @param observedHexagons
-     * @param chessboard
-     * @param client
-     * @return
+     * Checks if all {@link Hexagon}s in a {@link List} are attacked by enemy {@link Figure}s or not.
+     * @param observedHexagons The {@link Hexagon}s to check for.
+     * @param chessboard       Instance of the {@link Chessboard}
+     * @param client           The current active {@link Client}
+     * @return Returns true if at least one {@link Hexagon} is attacked by an enemy.
      */
     public static boolean areHexagonsAttacked(List<Hexagon> observedHexagons, Chessboard chessboard, Client client) {
-        return chessboard.getFigures().stream()
+        List<Hexagon> attackedPositions = chessboard.getFigures().stream()
                 // Just active figures
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 // Just enemy figures
-                .filter(hexagonFigure -> hexagonFigure.getClient().getId().equals(client.getId()))
+                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(client.getId()))
                 // Get all attackable fields
                 .parallel()
-                .map(hexagonFigure -> hexagonFigure.getAttackableFields(chessboard))
+                .map(hexagonFigure -> {
+                    List<Hexagon> attackableFields = hexagonFigure.getAttackableFields(chessboard);
+                    logger.trace("hexagonFigure = {}:{}, attackableFields = {}", hexagonFigure.getName(),
+                            hexagonFigure.getPosition().getNotation(), attackableFields);
+                    return attackableFields;
+                })
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList()).containsAll(observedHexagons);
+                .collect(Collectors.toList());
+        for (Hexagon position : attackedPositions) {
+            if (observedHexagons.contains(position))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if all {@link Hexagon}s in a {@link List} are free or occupied by a {@link Figure}.
+     * @param observedHexagons    The {@link Hexagon}s to check for.
+     * @param chessboard          Instance of the {@link Chessboard}
+     * @return Returns true if all {@link Hexagon}s are not occupied. False otherwise.
+     */
+    public static boolean areHexagonsFree(List<Hexagon> observedHexagons, Chessboard chessboard) {
+        List<Hexagon> figurePositions = chessboard.getFigures().stream()
+                // Just active figures
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // We just want the positions of the figures
+                .map(de.mki.jchess.commons.Figure::getPosition)
+                .collect(Collectors.toList());
+        for (Hexagon position : figurePositions) {
+            if (observedHexagons.contains(position))
+                return false;
+        }
+        return true;
     }
 }

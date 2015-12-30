@@ -244,6 +244,51 @@ public class RookTest extends FigureTest {
 
     /**
      * The {@link Rook} is on one of its starting positions.
+     * Check for castling. A figure is in the way for castling
+     * @throws Exception
+     */
+    @Test
+    public void testGetPossibleSpecialMovements5() throws Exception {
+        Rook rook = new Rook(game.getPlayerList().get(0));
+        game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a8")));
+        game.getChessboard().getFigures().add((new Bishop(game.getPlayerList().get(0)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a7"))));
+        List<Hexagon> possibleMovements = rook.getPossibleSpecialMovements(game.getChessboard());
+        List<Hexagon> expectedMovements = new ArrayList<>();
+        ListAssert.assertEquals(expectedMovements, possibleMovements);
+    }
+
+    /**
+     * The {@link Rook} is on one of its starting positions.
+     * Check for castling. An enemy figure is attacking one of the free fields.
+     * @throws Exception
+     */
+    @Test
+    public void testGetPossibleSpecialMovements6() throws Exception {
+        Rook rook = new Rook(game.getPlayerList().get(0));
+        game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a8")));
+        game.getChessboard().getFigures().add((new Bishop(game.getPlayerList().get(1)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c8"))));
+        List<Hexagon> possibleMovements = rook.getPossibleSpecialMovements(game.getChessboard());
+        List<Hexagon> expectedMovements = new ArrayList<>();
+        ListAssert.assertEquals(expectedMovements, possibleMovements);
+    }
+
+    /**
+     * The {@link Rook} is on one of its starting positions.
+     * Check for castling. An enemy figure is attacking one of the free fields.
+     * @throws Exception
+     */
+    @Test
+    public void testGetPossibleSpecialMovements7() throws Exception {
+        Rook rook = new Rook(game.getPlayerList().get(0));
+        game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a8")));
+        game.getChessboard().getFigures().add((new Bishop(game.getPlayerList().get(1)).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c6"))));
+        List<Hexagon> possibleMovements = rook.getPossibleSpecialMovements(game.getChessboard());
+        List<Hexagon> expectedMovements = new ArrayList<>();
+        ListAssert.assertEquals(expectedMovements, possibleMovements);
+    }
+
+    /**
+     * The {@link Rook} is on one of its starting positions.
      * Similar to {@link #testGetPossibleMovements1()}
      * @throws Exception
      */
