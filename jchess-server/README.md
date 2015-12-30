@@ -579,3 +579,9 @@ All these information are generated after all players joined the game.
 ### 7. Websockets
 
 You can subscribe to following URLs ```game/{gameid}``` and ```game/{gameid}/{clientId}``` for player specific events.
+
+All messages through websockets contain a header ````data-type```` indicating the model to convert the message to.
+Possible values can be
+* ```PlayerChangedEvent```
+* ```PlayerDefeatedEvent```
+* ```HistoryEntry```

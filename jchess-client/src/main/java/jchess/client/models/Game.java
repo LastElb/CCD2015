@@ -1,6 +1,7 @@
 package jchess.client.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.mki.jchess.commons.HistoryEntry;
 
 import java.util.ArrayList;
 import java.util.List;

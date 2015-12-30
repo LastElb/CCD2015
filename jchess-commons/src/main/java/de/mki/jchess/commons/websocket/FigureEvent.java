@@ -10,16 +10,16 @@ public class FigureEvent implements ChessboardEvent {
     Event event;
 
     /**
-     * The id of the {@link de.mki.jchess.server.model.Figure}.
-     * @return The id of the {@link de.mki.jchess.server.model.Figure}.
+     * The id of the Figure.
+     * @return The id of the Figure.
      */
     public String getFigureId() {
         return figureId;
     }
 
     /**
-     * Set the id of the {@link de.mki.jchess.server.model.Figure}.
-     * @param figureId The id of the {@link de.mki.jchess.server.model.Figure}.
+     * Set the id of the Figure.
+     * @param figureId The id of the Figure.
      * @return Returns an updated instance of {@link FigureEvent}.
      */
     public FigureEvent setFigureId(String figureId) {
@@ -28,16 +28,16 @@ public class FigureEvent implements ChessboardEvent {
     }
 
     /**
-     * Gets the event the {@link de.mki.jchess.server.model.Figure} had.
-     * @return Gets the event the {@link de.mki.jchess.server.model.Figure} had.
+     * Gets the event the Figure had.
+     * @return Gets the event the Figure had.
      */
     public Event getEvent() {
         return event;
     }
 
     /**
-     * Sets the event a {@link de.mki.jchess.server.model.Figure} had.
-     * @param event The event the {@link de.mki.jchess.server.model.Figure} had.
+     * Sets the event a Figure had.
+     * @param event The event the Figure had.
      * @return Returns an updated instance of {@link FigureEvent}.
      */
     public FigureEvent setEvent(Event event) {

@@ -1,6 +1,6 @@
 package jchess.client;
 
-import jchess.client.models.Client;
+import de.mki.jchess.commons.Client;
 import jchess.client.models.Game;
 import org.junit.Test;
 import org.springframework.expression.ExpressionException;
