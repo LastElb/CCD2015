@@ -176,9 +176,17 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             if (!blockedChessboard) {
                     int x = event.getX();//get X position of mouse
                     int y = event.getY();//get Y position of mouse
+                System.out.println("You clicked x=" + x + " and y=" + y);
 
                 // @Todo: Pass position to chessboard
                 String clickedField = chessboard.getClickedField(x, y);
+
+                /* DEBUGGING*/
+                System.out.println("This means you clicked on " + clickedField);
+                int centerX = chessboard.getFieldByNotation(clickedField).getX();
+                int centerY = chessboard.getFieldByNotation(clickedField).getY();
+                System.out.println("The center of " + clickedField + " is at (" + centerX + "," + centerY + ")");
+                /* END OF DEBUGGING */
 
             } else {
                 System.out.println("Chessboard is blocked");

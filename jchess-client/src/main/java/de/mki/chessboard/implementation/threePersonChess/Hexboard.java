@@ -107,7 +107,7 @@ public class Hexboard extends Chessboard {
     }
 
     @Override
-    protected Hexagon getFieldByNotation(String position) {
+    public Hexagon getFieldByNotation(String position) {
         return fields.get(position);
     }
 }
