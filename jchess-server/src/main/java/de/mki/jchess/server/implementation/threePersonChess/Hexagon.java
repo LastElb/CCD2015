@@ -97,6 +97,17 @@ public class Hexagon extends Field<Direction> {
         }
     }
 
+    /**
+     * Checks if this {@link Hexagon} is neighbour of another {@link Hexagon}.
+     * @param neighbour    The neighbour to check for
+     * @return Returns true if the specified {@link Hexagon} is a neighbour of this {@link Hexagon}.
+     */
+    public boolean isHexagonNeighbour(Hexagon neighbour) {
+        return neighbours.stream()
+                .filter(hexagonNeighbourModel -> hexagonNeighbourModel.getHexagon().equals(neighbour))
+                .findAny().isPresent();
+    }
+
     @JsonIgnore
     public int getColumn() {
         return column;

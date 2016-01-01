@@ -69,7 +69,7 @@ public class RookTest extends FigureTest {
     public void testGetPossibleMovements2() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
         List<Hexagon> possibleMovements = rook.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b1"),
@@ -101,8 +101,8 @@ public class RookTest extends FigureTest {
     public void testGetPossibleMovements3() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
         List<Hexagon> possibleMovements = rook.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b1"),
@@ -122,9 +122,9 @@ public class RookTest extends FigureTest {
     public void testGetPossibleMovements4() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
         List<Hexagon> possibleMovements = rook.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -139,7 +139,7 @@ public class RookTest extends FigureTest {
     public void testGetPossibleMovements5() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALTOPRIGHT).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALTOPRIGHT, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
         List<Hexagon> possibleMovements = rook.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -154,7 +154,7 @@ public class RookTest extends FigureTest {
     public void testGetPossibleMovements6() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
         List<Hexagon> possibleMovements = rook.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b1"),
@@ -329,7 +329,7 @@ public class RookTest extends FigureTest {
     public void testGetAttackableFields2() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
         List<Hexagon> possibleMovements = rook.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b1"),
@@ -360,8 +360,8 @@ public class RookTest extends FigureTest {
     public void testGetAttackableFields3() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
         List<Hexagon> possibleMovements = rook.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b1"),
@@ -380,9 +380,9 @@ public class RookTest extends FigureTest {
     public void testGetAttackableFields4() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
         List<Hexagon> possibleMovements = rook.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -429,7 +429,7 @@ public class RookTest extends FigureTest {
     public void testGetHypotheticalAttackableFields2() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
         List<Hexagon> possibleMovements = rook.getHypotheticalAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b1"),
@@ -460,8 +460,8 @@ public class RookTest extends FigureTest {
     public void testGetHypotheticalAttackableFields3() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
         List<Hexagon> possibleMovements = rook.getHypotheticalAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b1"),
@@ -480,9 +480,9 @@ public class RookTest extends FigureTest {
     public void testGetHypotheticalAttackableFields4() throws Exception {
         Rook rook = new Rook(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(rook.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a1")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b2")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b1")));
         List<Hexagon> possibleMovements = rook.getHypotheticalAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);

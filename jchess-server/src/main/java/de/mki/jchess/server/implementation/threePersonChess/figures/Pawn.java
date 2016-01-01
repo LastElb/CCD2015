@@ -1,6 +1,8 @@
 package de.mki.jchess.server.implementation.threePersonChess.figures;
 
+import de.mki.jchess.commons.HistoryEntry;
 import de.mki.jchess.server.exception.InvalidFacingDirection;
+import de.mki.jchess.server.exception.NotationNotFoundException;
 import de.mki.jchess.server.implementation.threePersonChess.Direction;
 import de.mki.jchess.server.implementation.threePersonChess.Hexagon;
 import de.mki.jchess.server.model.Chessboard;
@@ -24,15 +26,17 @@ public class Pawn extends Figure<Hexagon> {
     Direction facingDirection;
     List<Direction> attackableDirections;
     List<Direction> movableDirections;
+    static Map<Client, List<Hexagon>> playerBaselines;
 
     /**
      * Creates a new instance of a pawn. Constructor with the possibility to pass an own id.
      * @param id The figures id.
      * @param client The owner of the {@link Pawn}.
      * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
+     * @param chessboard Instance of the {@link Chessboard}.
      * @throws InvalidFacingDirection
      */
-    public Pawn(String id, Client client, Direction direction) throws InvalidFacingDirection {
+    public Pawn(String id, Client client, Direction direction, Chessboard chessboard) throws InvalidFacingDirection {
         super(client);
         setId(id);
         setName("Pawn");
@@ -57,16 +61,73 @@ public class Pawn extends Figure<Hexagon> {
                 // Every other direction is not allowed
                 throw new InvalidFacingDirection(direction, this);
         }
+        if (playerBaselines == null)
+            playerBaselines = new LinkedHashMap<>();
+        if (!playerBaselines.containsKey(client)) {
+            List<Hexagon> baseline = new ArrayList<>();
+            switch (client.getTeam()) {
+                case "white":
+                    try {
+                        baseline = Arrays.asList(
+                                (Hexagon) chessboard.getFieldByNotation("a1"),
+                                (Hexagon) chessboard.getFieldByNotation("a2"),
+                                (Hexagon) chessboard.getFieldByNotation("a3"),
+                                (Hexagon) chessboard.getFieldByNotation("a4"),
+                                (Hexagon) chessboard.getFieldByNotation("a5"),
+                                (Hexagon) chessboard.getFieldByNotation("a6"),
+                                (Hexagon) chessboard.getFieldByNotation("a7"),
+                                (Hexagon) chessboard.getFieldByNotation("a8")
+                        );
+                    } catch (NotationNotFoundException e) {
+                        logger.error("", e);
+                    }
+                    break;
+                case "grey":
+                    try {
+                        baseline = Arrays.asList(
+                                (Hexagon) chessboard.getFieldByNotation("f1"),
+                                (Hexagon) chessboard.getFieldByNotation("g2"),
+                                (Hexagon) chessboard.getFieldByNotation("h3"),
+                                (Hexagon) chessboard.getFieldByNotation("i4"),
+                                (Hexagon) chessboard.getFieldByNotation("j5"),
+                                (Hexagon) chessboard.getFieldByNotation("k6"),
+                                (Hexagon) chessboard.getFieldByNotation("l7"),
+                                (Hexagon) chessboard.getFieldByNotation("m8")
+                        );
+                    } catch (NotationNotFoundException e) {
+                        logger.error("", e);
+                    }
+                    break;
+                case "black":
+                    try {
+                        baseline = Arrays.asList(
+                                (Hexagon) chessboard.getFieldByNotation("f13"),
+                                (Hexagon) chessboard.getFieldByNotation("g13"),
+                                (Hexagon) chessboard.getFieldByNotation("h13"),
+                                (Hexagon) chessboard.getFieldByNotation("i13"),
+                                (Hexagon) chessboard.getFieldByNotation("j13"),
+                                (Hexagon) chessboard.getFieldByNotation("k13"),
+                                (Hexagon) chessboard.getFieldByNotation("l13"),
+                                (Hexagon) chessboard.getFieldByNotation("m13")
+                        );
+                    } catch (NotationNotFoundException e) {
+                        logger.error("", e);
+                    }
+                    break;
+            }
+            playerBaselines.put(client, baseline);
+        }
     }
 
     /**
      * Default constructor.
      * @param client The owner of the {@link Pawn}.
      * @param direction Allowed values: {@link Direction#DIAGONALBOTTOM}, {@link Direction#DIAGONALTOPLEFT}, {@link Direction#DIAGONALTOPRIGHT}
+     * @param chessboard Instance of the {@link Chessboard}.
      * @throws InvalidFacingDirection
      */
-    public Pawn(Client client, Direction direction) throws InvalidFacingDirection {
-        this(RandomStringService.getRandomString(), client, direction);
+    public Pawn(Client client, Direction direction, Chessboard chessboard) throws InvalidFacingDirection {
+        this(RandomStringService.getRandomString(), client, direction, chessboard);
     }
 
     /**
@@ -155,6 +216,86 @@ public class Pawn extends Figure<Hexagon> {
                                     figure.setHypotheticalRemoved(null);
                                 }))));
 
+        // En passant
+        // Just get the latest movements
+        List<HistoryEntry> latestMoves = new ArrayList<>();
+        if (chessboard.getParentGame().getGameHistory().size() >= 3) {
+            latestMoves.add(chessboard.getParentGame().getGameHistory().get(chessboard.getParentGame().getGameHistory().size() - 1));
+            latestMoves.add(chessboard.getParentGame().getGameHistory().get(chessboard.getParentGame().getGameHistory().size() - 2));
+        }
+
+        latestMoves.stream()
+                .map(historyEntry -> historyEntry.getChessboardEvents().stream()
+                        // Just consider Movement Events
+                        .filter(chessboardEvent -> chessboardEvent instanceof MovementEvent)
+                        .map(chessboardEvent -> (MovementEvent) chessboardEvent)
+                        // Just keep those events where the figure was a pawn.
+                        .map(movementEvent -> {
+                            Optional<Pawn> pawn = chessboard.getFigures().stream()
+                                    .filter(o -> ((Figure) o).getId().equals(movementEvent.getFigureId()))
+                                    .filter(o -> o instanceof Pawn)
+                                    .findFirst();
+                            if (pawn.isPresent()) {
+                                logger.trace("Keeping pawn at {}", pawn.get().getPosition().getNotation());
+                                return Arrays.asList(movementEvent, pawn.get());
+                            }
+                            return null;
+                        })
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList())
+                        )
+                .filter(objects2 -> {
+                    logger.trace("En Passant Entry before flatMap");
+                    return true;
+                })
+                .flatMap(Collection::stream)
+                .filter(objects1 -> !objects1.isEmpty())
+                .filter(objects2 -> {
+                    logger.trace("En Passant Entry after flatMap");
+                    return true;
+                })
+                // Now we have all pawns that were moved last turn.
+                .filter(objects -> {
+                    MovementEvent movementEvent = (MovementEvent) objects.get(0);
+                    Hexagon source;
+                    Hexagon target;
+                    try {
+                        source = (Hexagon) chessboard.getFieldByNotation(movementEvent.getFromNotation());
+                        target = (Hexagon) chessboard.getFieldByNotation(movementEvent.getToNotation());
+                    } catch (NotationNotFoundException e) {
+                        logger.error("", e);
+                        return false;
+                    }
+                    // We are now checking if the fields are neighbours. Double step fields are not neighbours.
+                    return !source.isHexagonNeighbour(target);
+                })
+                // Now we have all pawns that did a double step last move.
+                .forEach(lists -> {
+                    // Get the field between the double step
+                    // and check if it is in the attackable fields of this figure.
+                    MovementEvent movementEvent = (MovementEvent) lists.get(0);
+                    Hexagon source;
+                    Hexagon target;
+                    try {
+                        source = (Hexagon) chessboard.getFieldByNotation(movementEvent.getFromNotation());
+                        target = (Hexagon) chessboard.getFieldByNotation(movementEvent.getToNotation());
+                    } catch (NotationNotFoundException e) {
+                        logger.error("", e);
+                        return;
+                    }
+                    Direction direction = FigureUtils.findDirection(source, target);
+                    Optional<Hexagon> hexagonBetween = source.getNeighbourByDirection(direction);
+                    hexagonBetween.ifPresent(hexagon -> {
+                        Pawn pawn = (Pawn) lists.get(1);
+                        pawn.setHypotheticalRemoved(true);
+                        setHypotheticalPosition(hexagon);
+                        if (getAttackableFields(chessboard).contains(hexagon) && !chessboard.willKingBeChecked(getClient().getId()))
+                            output.add(hexagon);
+                        setHypotheticalPosition(null);
+                        pawn.setHypotheticalRemoved(null);
+                    });
+                });
+
         return output;
     }
 
@@ -203,5 +344,74 @@ public class Pawn extends Figure<Hexagon> {
                 output.add(optional.get());
         });
         return output;
+    }
+
+    /**
+     * Function that determines if a {@link Figure} is at the enemy baseline. This would cause a pawn promotion.
+     * @return Returns true if the pawn is at an enemy baseline.
+     */
+    public boolean isAtEnemyBaseline() {
+        final boolean[] output = {false};
+        playerBaselines.forEach((client, hexagons) -> {
+            if (!client.getId().equals(getClient().getId()) && playerBaselines.get(client).contains(getPosition()))
+                output[0] = true;
+        });
+        return output[0];
+    }
+
+    public Optional<Pawn> enPassantPawn(String targetFieldNotation, Chessboard chessboard) {
+        List<HistoryEntry> latestMoves = new ArrayList<>();
+        List<HistoryEntry> reversedMoves = chessboard.getParentGame().getGameHistory();
+        Collections.reverse(reversedMoves);
+
+        for (HistoryEntry historyEntry : reversedMoves) {
+            if (historyEntry.getPlayer().equals(getClient()))
+                break;
+            latestMoves.add(historyEntry);
+        }
+        return latestMoves.stream()
+                .map(historyEntry -> historyEntry.getChessboardEvents().stream()
+                        // Just consider Movement Events
+                        .filter(chessboardEvent -> chessboardEvent instanceof MovementEvent)
+                        .map(chessboardEvent -> (MovementEvent) chessboardEvent)
+                        // Just keep those events where the figure was a pawn.
+                        .map(movementEvent -> {
+                            Optional<Pawn> pawn = chessboard.getFigures().stream()
+                                    .filter(o -> ((Figure) o).getId().equals(movementEvent.getFigureId()))
+                                    .filter(o -> o instanceof Pawn)
+                                    .findFirst();
+                            if (pawn.isPresent()) {
+                                logger.trace("Keeping pawn at {}", pawn.get().getPosition().getNotation());
+                                return Arrays.asList(movementEvent, pawn.get());
+                            }
+                            return null;
+                        })
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList())
+                )
+                .flatMap(Collection::stream)
+                .filter(lists1 -> !lists1.isEmpty())
+                // Now we have all pawns that were moved last turn.
+                .filter(objects -> {
+                    MovementEvent movementEvent = (MovementEvent) objects.get(0);
+                    Hexagon source;
+                    Hexagon target;
+                    try {
+                        source = (Hexagon) chessboard.getFieldByNotation(movementEvent.getFromNotation());
+                        target = (Hexagon) chessboard.getFieldByNotation(movementEvent.getToNotation());
+                    } catch (NotationNotFoundException e) {
+                        logger.error("", e);
+                        return false;
+                    }
+                    // We are now checking if the fields are neighbours. Double step fields are not neighbours.
+                    if (source.isHexagonNeighbour(target))
+                        return false;
+                    // Now we get the direction
+                    Direction direction = FigureUtils.findDirection(source, target);
+                    Optional<Hexagon> hexagonBetween = source.getNeighbourByDirection(direction);
+                    return hexagonBetween.isPresent() && hexagonBetween.get().getNotation().equals(targetFieldNotation);
+                })
+                .map(lists -> (Pawn) lists.get(1))
+                .findFirst();
     }
 }

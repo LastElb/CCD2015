@@ -161,8 +161,8 @@ public class KingTest extends FigureTest {
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
-        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b6")));
+        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
+        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b6")));
         List<Hexagon> possibleMovements = king.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b4"),
@@ -206,8 +206,8 @@ public class KingTest extends FigureTest {
         King king = (King) getGame().getChessboard().getFigures().stream()
                 .filter(o -> ((Figure) o).getClient().equals(getGame().getPlayerList().get(0)))
                 .filter(o -> o instanceof King).findFirst().get();
-        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b6")));
+        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
+        game.getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b6")));
         List<Hexagon> possibleMovements = king.getHypotheticalAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b4"),
