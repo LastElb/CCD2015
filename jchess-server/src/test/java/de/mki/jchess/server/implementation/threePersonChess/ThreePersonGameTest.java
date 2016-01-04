@@ -16,6 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
@@ -59,10 +60,10 @@ public class ThreePersonGameTest {
     @Test(expected = TooManyPlayersException.class)
     public void testAddClientAsPlayer() throws Exception {
         Client client = new Client();
-        game.addClientAsPlayer(client, simpMessagingTemplate);
-        game.addClientAsPlayer(client, simpMessagingTemplate);
-        game.addClientAsPlayer(client, simpMessagingTemplate);
-        game.addClientAsPlayer(client, simpMessagingTemplate);
+        game.addClientAsPlayer(client, Optional.ofNullable(simpMessagingTemplate));
+        game.addClientAsPlayer(client, Optional.ofNullable(simpMessagingTemplate));
+        game.addClientAsPlayer(client, Optional.ofNullable(simpMessagingTemplate));
+        game.addClientAsPlayer(client, Optional.ofNullable(simpMessagingTemplate));
     }
 
     /**
