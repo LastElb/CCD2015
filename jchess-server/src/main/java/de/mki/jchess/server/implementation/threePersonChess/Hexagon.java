@@ -108,16 +108,28 @@ public class Hexagon extends Field<Direction> {
                 .findAny().isPresent();
     }
 
+    /**
+     * Gets the column number.
+     * @return Returns the column number in the interval [0,12].
+     */
     @JsonIgnore
     public int getColumn() {
         return column;
     }
 
+    /**
+     * Gets the row number.
+     * @return Returns the row number in the interval [0,12].
+     */
     @JsonIgnore
     public int getRow() {
         return row;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Returns a formatted {@link String} with row, column and notation.
+     */
     @Override
     public String toString() {
         return "Hexagon{" +

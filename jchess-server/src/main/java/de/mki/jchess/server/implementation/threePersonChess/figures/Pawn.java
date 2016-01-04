@@ -359,6 +359,12 @@ public class Pawn extends Figure<Hexagon> {
         return output[0];
     }
 
+    /**
+     * Returns the {@link Optional} of the beaten {@link Pawn} when doing an "en passant" move with this {@link Pawn}
+     * @param targetFieldNotation    The {@link Hexagon#getNotation()} of this {@link Pawn} after the move.
+     * @param chessboard             The {@link Chessboard} instance.
+     * @return Returns the {@link Optional} of the beaten {@link Pawn}.
+     */
     public Optional<Pawn> enPassantPawn(String targetFieldNotation, Chessboard chessboard) {
         List<HistoryEntry> latestMoves = new ArrayList<>();
         List<HistoryEntry> reversedMoves = chessboard.getParentGame().getGameHistory();

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * The direction neighbours of a {@link Hexagon} can be located.
  * Created by Igor on 13.11.2015.
  */
 public enum Direction {
@@ -46,10 +47,18 @@ public enum Direction {
         DIAGONALTOPLEFT.freeForDiagonalMove = Arrays.asList(LEFT, TOPLEFT);
     }
 
+    /**
+     * Returns the opposite {@link Direction}.
+     * @return Returns the opposite direction as {@link Direction}.
+     */
     public Direction getOppositeDirection() {
         return opposite;
     }
 
+    /**
+     * Returns the required free {@link Direction}s (where the actual free {@link Hexagon}s are located).
+     * @return Returns an {@link Optional} of null or a {@link List} of {@link Direction}.
+     */
     public Optional<List<Direction>> getNecessaryFreeDirectionsForDiagonal() {
         return Optional.ofNullable(freeForDiagonalMove);
     }

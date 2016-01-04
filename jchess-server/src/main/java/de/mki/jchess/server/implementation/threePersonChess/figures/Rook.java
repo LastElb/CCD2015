@@ -154,6 +154,12 @@ public class Rook extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * Searches for the {@link King} required for the castling. Also moves the {@link King} to his new position.<br/>
+     * Does NOT generate a {@link de.mki.jchess.commons.HistoryEntry}!
+     * @param chessboard    The instance of the {@link Chessboard}.
+     * @return Returns the {@link King} required for castling.
+     */
     public King moveKingForCastling(Chessboard chessboard) {
         // Lets find the king of the player
         Optional<King> king = chessboard.getFigures().stream()
@@ -172,6 +178,7 @@ public class Rook extends Figure<Hexagon> {
                 current = current.getNeighbourByDirection(direction).get();
             }
             hexagonsBetween.add(current);
+            // Use the HypotheticalPosition as temp variable to generate the history entry later on.
             king.get().setHypotheticalPosition(king.get().getPosition());
             king.get().setPosition(hexagonsBetween.get(2));
             return king.get();
