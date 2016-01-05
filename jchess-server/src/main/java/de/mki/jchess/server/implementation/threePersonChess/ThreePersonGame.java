@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -119,7 +120,7 @@ public class ThreePersonGame extends Game {
     }
 
     @Override
-    public Client addClientAsPlayer(Client client, SimpMessagingTemplate simpMessagingTemplate) throws TooManyPlayersException {
+    public Client addClientAsPlayer(Client client, Optional<SimpMessagingTemplate> simpMessagingTemplate) throws TooManyPlayersException {
         switch (getPlayerList().size()) {
             case 0:
                 client.setTeam("white");
@@ -131,7 +132,7 @@ public class ThreePersonGame extends Game {
                 client.setTeam("black");
                 break;
             default:
-                throw new TooManyPlayersException();
+                client.setTeam("");
         }
         return super.addClientAsPlayer(client, simpMessagingTemplate);
     }

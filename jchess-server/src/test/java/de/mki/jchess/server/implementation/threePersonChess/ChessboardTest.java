@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -40,9 +41,9 @@ public class ChessboardTest {
     public void setUp() {
         ThreePersonGame game = new ThreePersonGame("foobar");
         try {
-            game.addClientAsPlayer(new Client().setNickname("Client1"), simpMessagingTemplate);
-            game.addClientAsPlayer(new Client().setNickname("Client2"), simpMessagingTemplate);
-            game.addClientAsPlayer(new Client().setNickname("Client3"), simpMessagingTemplate);
+            game.addClientAsPlayer(new Client().setNickname("Client1"), Optional.ofNullable(simpMessagingTemplate));
+            game.addClientAsPlayer(new Client().setNickname("Client2"), Optional.ofNullable(simpMessagingTemplate));
+            game.addClientAsPlayer(new Client().setNickname("Client3"), Optional.ofNullable(simpMessagingTemplate));
         } catch (TooManyPlayersException e) {
             //Ignore, we don't want to add more players than possible.
         }
@@ -100,8 +101,8 @@ public class ChessboardTest {
     /**
      * Tests if an removed {@link Figure} has fields to move.
      * An active {@link Figure} has just a combined {@link List} of
-     * {@link Figure#getPossibleMovements(de.mki.jchess.server.model.Chessboard)} and
-     * {@link Figure#getPossibleSpecialMovements(de.mki.jchess.server.model.Chessboard)}.
+     * {@link de.mki.jchess.server.model.Figure#getPossibleMovements(de.mki.jchess.server.model.Chessboard)} and
+     * {@link de.mki.jchess.server.model.Figure#getPossibleSpecialMovements(de.mki.jchess.server.model.Chessboard)}.
      * @throws Exception
      */
     @Test
@@ -161,28 +162,12 @@ public class ChessboardTest {
                 simpMessagingTemplate);
     }
 
-//    @Test
-//    public void testAreFieldsOccupied() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testWillFieldsBeOccupied() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testGetFreeFieldsForDiagonalMove() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testIsFigureOwnedByEnemy() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testCheckIfCurrentPlayerIsDefeated() throws Exception {
-//
-//    }
+    /**
+     * Creating a game scene for en passant
+     * @throws Exception
+     */
+    @Test
+    public void gameScene1() throws Exception {
+        //chessboard.performMovement();
+    }
 }

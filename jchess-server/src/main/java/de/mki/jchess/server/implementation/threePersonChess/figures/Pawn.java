@@ -196,6 +196,8 @@ public class Pawn extends Figure<Hexagon> {
                         .filter(attackableHexagon -> attackableHexagon.getNotation().equals(hexagon.getNotation()))
                         .findFirst()
                         .ifPresent(hexagon1 -> chessboard.getFigures().stream()
+                                // Just active figures
+                                .filter(o -> !((Figure) o).isRemoved())
                                 .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
                                 .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
                                 .findFirst()
@@ -359,6 +361,12 @@ public class Pawn extends Figure<Hexagon> {
         return output[0];
     }
 
+    /**
+     * Returns the {@link Optional} of the beaten {@link Pawn} when doing an "en passant" move with this {@link Pawn}
+     * @param targetFieldNotation    The {@link Hexagon#getNotation()} of this {@link Pawn} after the move.
+     * @param chessboard             The {@link Chessboard} instance.
+     * @return Returns the {@link Optional} of the beaten {@link Pawn}.
+     */
     public Optional<Pawn> enPassantPawn(String targetFieldNotation, Chessboard chessboard) {
         List<HistoryEntry> latestMoves = new ArrayList<>();
         List<HistoryEntry> reversedMoves = chessboard.getParentGame().getGameHistory();
