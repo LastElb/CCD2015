@@ -63,7 +63,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     private smallHexboard smallHexboard;
 
 
-
     public boolean blockedChessboard;
 
     Game() {
@@ -113,7 +112,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public void switchActive() {
     }
 
-    public void initializeHexboard(){
+    public void initializeHexboard() {
         this.setLayout(null);
         this.setDoubleBuffered(false);
 
@@ -168,8 +167,8 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         {
             // its your turn
             if (!blockedChessboard) {
-                    int x = event.getX();//get X position of mouse
-                    int y = event.getY();//get Y position of mouse
+                int x = event.getX();//get X position of mouse
+                int y = event.getY();//get Y position of mouse
 
                 // @Todo: Pass position to chessboard
 
@@ -212,6 +211,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     /**
      * Initialize a game on the server and join it
+     *
      * @throws Exception
      */
     public void initiaizeAndJoinHostedGame(String host, int port, String nickname) throws Exception {
@@ -223,6 +223,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     /**
      * Join a network game as player
+     *
      * @param host
      * @param port
      * @param gameID
@@ -230,52 +231,54 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @throws Exception
      */
     public void joinGame(String host, int port, String gameID, String nickname) throws Exception {
-        if (serverApi != null) {
-            // setup Websockets
-            webSocketClient = new WebSocketClient();
-            webSocketClient.connect(host, port);
-
-            // subscribe to Websocket destination url game/{gameid}
-            webSocketClient.subscribe("/game/"+gameID, new StompFrameHandler() {
-                @Override
-                public Type getPayloadType(StompHeaders headers) {
-                    return null;
-                }
-
-                @Override
-                public void handleFrame(StompHeaders headers, Object payload) {
-                    System.out.println(headers);
-                    System.out.println(payload);
-                }
-            });
-
-            // Connect to game
-            clientModel = serverApi.connectToGame(nickname, gameID);
-
-            // subscribe to Websocket destination url game/{gameid}/{clientid}
-            webSocketClient.subscribe("/game/"+gameID+"/"+clientModel.get().getId(), new StompFrameHandler() {
-                @Override
-                public Type getPayloadType(StompHeaders headers) {
-                    return null;
-                }
-
-                @Override
-                public void handleFrame(StompHeaders headers, Object payload) {
-                    System.out.println(getPayloadType(headers));
-                    String content = new String((byte[])payload);
-                }
-            });
-
-        } else{
-            throw new Exception("Es wurde keine Verbindung zum Server aufgebaut.");
+        // Fixes CCD2015-58 [Client] Es wurde keine Verbindung zum Server aufgebaut.
+        if (serverApi == null) {
+            serverApi = new ServerApi(host, port);
         }
+
+        // setup Websockets
+        webSocketClient = new WebSocketClient();
+        webSocketClient.connect(host, port);
+
+        // subscribe to Websocket destination url game/{gameid}
+        webSocketClient.subscribe("/game/" + gameID, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return null;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                System.out.println(headers);
+                System.out.println(payload);
+            }
+        });
+
+        // Connect to game
+        clientModel = serverApi.connectToGame(nickname, gameID);
+
+        // subscribe to Websocket destination url game/{gameid}/{clientid}
+        webSocketClient.subscribe("/game/" + gameID + "/" + clientModel.get().getId(), new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return null;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                System.out.println(getPayloadType(headers));
+                String content = new String((byte[]) payload);
+            }
+        });
+
     }
 
     /**
      * Get the id of the current game if running
+     *
      * @return
      */
-    public String getGameID(){
+    public String getGameID() {
         return gameModel.get().getId();
     }
 }

@@ -42,7 +42,7 @@ public class HostingController {
         Game game;
         switch (name) {
             case "default-3-person-chess":
-                game = new ThreePersonGame(RandomStringService.getRandomString());
+                game = new ThreePersonGame(RandomStringService.getRandomString(4));
                 break;
             default:
                 game = null;
