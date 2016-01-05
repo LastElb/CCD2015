@@ -110,4 +110,14 @@ public class Hexboard extends Chessboard {
     protected Hexagon getFieldByNotation(String position) {
         return fields.get(position);
     }
+
+    @Override
+    public void clearHighlightedFields() {
+
+    }
+
+    @Override
+    public void highlightFieldsByNotation(List fieldsToHighight) {
+        
+    }
 }

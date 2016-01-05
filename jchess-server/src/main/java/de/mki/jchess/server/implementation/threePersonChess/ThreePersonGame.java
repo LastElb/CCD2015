@@ -59,7 +59,7 @@ public class ThreePersonGame extends Game {
             getChessboard().getFigures().add((Figure<Hexagon>) new Rook(playerWhite).setPosition(chessboard.getFieldByNotation(7, 0)).setPictureId("rook-white"));
             IntStream.range(0, 9).forEach(column -> {
                 try {
-                    getChessboard().getFigures().add((Figure<Hexagon>) new Pawn(playerWhite, Direction.DIAGONALBOTTOM).setPosition(chessboard.getFieldByNotation(column, 1)).setPictureId("pawn-white"));
+                    getChessboard().getFigures().add((Figure<Hexagon>) new Pawn(playerWhite, Direction.DIAGONALBOTTOM, chessboard).setPosition(chessboard.getFieldByNotation(column, 1)).setPictureId("pawn-white"));
                 } catch (Exception e) {
                     logger.error("", e);
                 }
@@ -81,7 +81,7 @@ public class ThreePersonGame extends Game {
             getChessboard().getFigures().add((Figure<Hexagon>) new Rook(playerGrey).setPosition(chessboard.getFieldByNotation(12, 12)).setPictureId("rook-grey"));
             IntStream.range(4, 13).forEach(row -> {
                 try {
-                    getChessboard().getFigures().add((Figure<Hexagon>) new Pawn(playerGrey, Direction.DIAGONALTOPLEFT).setPosition(chessboard.getFieldByNotation(11, row)).setPictureId("pawn-grey"));
+                    getChessboard().getFigures().add((Figure<Hexagon>) new Pawn(playerGrey, Direction.DIAGONALTOPLEFT, chessboard).setPosition(chessboard.getFieldByNotation(11, row)).setPictureId("pawn-grey"));
                 } catch (Exception e) {
                     logger.error("", e);
                 }
@@ -103,7 +103,7 @@ public class ThreePersonGame extends Game {
             getChessboard().getFigures().add((Figure<Hexagon>) new Rook(playerBlack).setPosition(chessboard.getFieldByNotation(0, 5)).setPictureId("rook-black"));
             IntStream.range(4, 13).forEach(row -> {
                 try {
-                    getChessboard().getFigures().add((Figure<Hexagon>) new Pawn(playerBlack, Direction.DIAGONALTOPRIGHT).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-black"));
+                    getChessboard().getFigures().add((Figure<Hexagon>) new Pawn(playerBlack, Direction.DIAGONALTOPRIGHT, chessboard).setPosition(chessboard.getFieldByNotation(row - 4, row)).setPictureId("pawn-black"));
                 } catch (Exception e) {
                     logger.error("", e);
                 }

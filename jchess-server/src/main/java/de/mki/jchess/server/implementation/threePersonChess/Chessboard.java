@@ -2,6 +2,9 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.commons.Client;
 import de.mki.jchess.commons.Field;
+import de.mki.jchess.server.implementation.threePersonChess.figures.Pawn;
+import de.mki.jchess.server.implementation.threePersonChess.figures.Queen;
+import de.mki.jchess.server.implementation.threePersonChess.figures.Rook;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.commons.HistoryEntry;
 import de.mki.jchess.server.exception.MoveNotAllowedException;
@@ -143,6 +146,20 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         return hexagons;
     }
 
+    private List<List<Hexagon>> getMovementFieldsSeparated(String figureId) {
+        List<List<Hexagon>> hexagons = new ArrayList<>();
+        getFigures().stream()
+                // Only active figures
+                .filter(hexagonFigure -> !hexagonFigure.isRemoved())
+                // Only the desired figure
+                .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                .findFirst().ifPresent(hexagonFigure -> {
+            hexagons.add(hexagonFigure.getPossibleMovements(this));
+            hexagons.add(hexagonFigure.getPossibleSpecialMovements(this));
+        });
+        return hexagons;
+    }
+
     /**
      * {@inheritDoc}
      * @param figureId The id of the {@link Figure}.
@@ -158,10 +175,13 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
         if (!clientId.equals(getCurrentPlayer().getId()))
             throw new MoveNotAllowedException();
 
-        List<Hexagon> possibleMovements = getPossibleFieldsToMove(figureId);
+        List<List<Hexagon>> possibleMovements = getMovementFieldsSeparated(figureId);
+        List<Hexagon> flatPossibleMovements = possibleMovements.stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
         // Throw an exception when the client ID does not match the figures owner id
         // or when the target field is not in the list of possible moves.
-        if (possibleMovements.stream()
+        if (flatPossibleMovements.stream()
                 .filter(hexagon -> hexagon.getNotation().equals(targetFieldNotation))
                 .count() == 0
                 ||
@@ -184,6 +204,9 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 // Only figures on the target hexagon
                 .filter(hexagonFigure -> hexagonFigure.getPosition().getNotation().equals(targetFieldNotation))
+                // Only enemy figures
+                // Else the king gets deleted when doing castling
+                .filter(hexagonFigure -> !hexagonFigure.getClient().getId().equals(clientId))
                 .findFirst().ifPresent(hexagonFigure -> {
                     historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(hexagonFigure.getId()).setEvent(FigureEvent.Event.REMOVED));
                     hexagonFigure.setRemoved(true);
@@ -195,6 +218,35 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 // Only figures on the source hexagon
                 .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
+                .filter(hexagonFigure -> {
+                    // Do additional moves for special movements here
+                    // This method should always return true
+                    List<String> specialTargetFields = possibleMovements.get(1).stream()
+                            .map(Hexagon::getNotation)
+                            .collect(Collectors.toList());
+                    // Castling started from the King
+                    if (hexagonFigure instanceof King && specialTargetFields.contains(targetFieldNotation)) {
+                        Rook rook = ((King) hexagonFigure).findRookForCastling(this, targetFieldNotation);
+                        historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(rook.getId()).setFromNotation(rook.getPosition().getNotation()).setToNotation(hexagonFigure.getPosition().getNotation()));
+                        rook.setPosition(hexagonFigure.getPosition());
+                    }
+                    // Castling started from the Rook
+                    if (hexagonFigure instanceof Rook && specialTargetFields.contains(targetFieldNotation)) {
+                        King king = ((Rook) hexagonFigure).moveKingForCastling(this);
+                        historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(king.getId()).setFromNotation(king.getHypotheticalPosition().getNotation()).setToNotation(king.getPosition().getNotation()));
+                        king.setHypotheticalPosition(null);
+                    }
+                    // En passant
+                    if (hexagonFigure instanceof Pawn && specialTargetFields.contains(targetFieldNotation)) {
+                        // Get the pawn to be removed
+                        Optional<Pawn> toBeRemoved = ((Pawn) hexagonFigure).enPassantPawn(targetFieldNotation, this);
+                        toBeRemoved.ifPresent(pawn -> {
+                            pawn.setRemoved(true);
+                            historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(pawn.getId()).setEvent(FigureEvent.Event.REMOVED));
+                        });
+                    }
+                    return true;
+                })
                 .findFirst().ifPresent(hexagonFigure -> {
                     historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(figureId).setFromNotation(hexagonFigure.getPosition().getNotation()).setToNotation(targetFieldNotation));
                     try {
@@ -202,7 +254,22 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     } catch (NotationNotFoundException e) {
                         logger.error("", e);
                     }
+                    // Pawn promotion
+                    if (hexagonFigure instanceof Pawn) {
+                        Pawn pawn = (Pawn) hexagonFigure;
+                        if (pawn.isAtEnemyBaseline()) {
+                            Queen queen = new Queen(pawn.getClient());
+                            queen.setPosition(pawn.getPosition());
+                            queen.setPictureId("queen-" + queen.getClient().getTeam());
+                            pawn.setRemoved(true);
+                            historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(pawn.getId()).setEvent(FigureEvent.Event.REMOVED));
+                            historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(queen.getId()).setEvent(FigureEvent.Event.ADDED));
+                            historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(queen.getId()).setToNotation(targetFieldNotation));
+                            getFigures().add(queen);
+                        }
+                    }
                 });
+
         // Add action to history
         getParentGame().getGameHistory().add(historyEntry);
         // Send event through websocket
@@ -325,6 +392,14 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .flatMap(Collection::stream)
                 .count() == 0) {
             client.setDefeated(true);
+
+            // Remove the king of the player.
+            // Fixes CCD2015-56
+            getFigures().stream().parallel()
+                    .filter(o -> o instanceof King)
+                    .filter(o1 -> o1.getClient().getId().equals(client.getId()))
+                    .findFirst().get().setRemoved(true);
+
             // Send the defeated message to all clients
             getParentGame().getPlayerList().stream()
                     .forEach(client1 -> {

@@ -246,62 +246,62 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @throws Exception
      */
     public void joinGame(String host, int port, String gameID, String nickname) throws Exception {
-        if (serverApi != null) {
 
-           // Connect to game
-            clientModel = serverApi.connectToGame(nickname, gameID);
-
-            // setup Websockets
-            webSocketClient = new WebSocketClient();
-            webSocketClient.connect(host, port);
-
-            // subscribe to Websocket destination url game/{gameid}/{clientid}
-            webSocketClient.subscribe("/game/" + gameID + "/" + clientModel.get().getId(), new StompFrameHandler() {
-                @Override
-                public Type getPayloadType(StompHeaders headers) {
-                    return null;
-                }
-
-                @Override
-                public void handleFrame(StompHeaders headers, Object payload) {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    String objectType = headers.getFirst("data-type");
-                    String content = new String((byte[]) payload);
-
-                    logger.trace("Event {} was triggered using websockets", objectType);
-
-                    switch (objectType) {
-                        case "PlayerChangedEvent":
-                            Optional<PlayerChangedEvent> playerChangedEvent = null;
-                            try {
-                                playerChangedEvent = Optional.of(objectMapper.readValue(content, PlayerChangedEvent.class));
-                            } catch (IOException e) {
-                                logger.error("", e);
-                            }
-                            PlayerChangedAction(playerChangedEvent.get());
-                            break;
-                        case "HistoryEntry":
-                            // at the moment the client is not able to handle the history-objects
-                            ChessboardChangedAction();
-                            break;
-                        case "PlayerDefeatedEvent":
-                            Optional<PlayerDefeatedEvent> playerDefeatedEvent = null;
-                            try {
-                                playerDefeatedEvent = Optional.of(objectMapper.readValue(content, PlayerDefeatedEvent.class));
-                            } catch (IOException e) {
-                                logger.error("", e);
-                            }
-                            PlayerDefeatedAction(playerDefeatedEvent.get());
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            });
-
-        } else {
-            throw new Exception("Es wurde keine Verbindung zum Server aufgebaut.");
+        // Fixes CCD2015-58 [Client] Es wurde keine Verbindung zum Server aufgebaut.
+        if (serverApi == null) {
+            serverApi = new ServerApi(host, port);
         }
+
+        // Connect to game
+        clientModel = serverApi.connectToGame(nickname, gameID);
+
+        // setup Websockets
+        webSocketClient = new WebSocketClient();
+        webSocketClient.connect(host, port);
+
+        // subscribe to Websocket destination url game/{gameid}/{clientid}
+        webSocketClient.subscribe("/game/" + gameID + "/" + clientModel.get().getId(), new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return null;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                String objectType = headers.getFirst("data-type");
+                String content = new String((byte[]) payload);
+
+                logger.trace("Event {} was triggered using websockets", objectType);
+
+                switch (objectType) {
+                    case "PlayerChangedEvent":
+                        Optional<PlayerChangedEvent> playerChangedEvent = null;
+                        try {
+                            playerChangedEvent = Optional.of(objectMapper.readValue(content, PlayerChangedEvent.class));
+                        } catch (IOException e) {
+                            logger.error("", e);
+                        }
+                        PlayerChangedAction(playerChangedEvent.get());
+                        break;
+                    case "HistoryEntry":
+                        // at the moment the client is not able to handle the history-objects
+                        ChessboardChangedAction();
+                        break;
+                    case "PlayerDefeatedEvent":
+                        Optional<PlayerDefeatedEvent> playerDefeatedEvent = null;
+                        try {
+                            playerDefeatedEvent = Optional.of(objectMapper.readValue(content, PlayerDefeatedEvent.class));
+                        } catch (IOException e) {
+                            logger.error("", e);
+                        }
+                        PlayerDefeatedAction(playerDefeatedEvent.get());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /**

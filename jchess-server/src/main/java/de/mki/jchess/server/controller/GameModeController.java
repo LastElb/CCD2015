@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * The game mode controller specifies the game modes that can be played.
  * Created by Igor on 11.11.2015.
  */
 @RestController
@@ -15,11 +16,18 @@ public class GameModeController {
 
     List<String> availableGameModes;
 
+    /**
+     * Constructor initializing the available game modes.
+     */
     public GameModeController() {
         availableGameModes = new ArrayList<>();
         availableGameModes.add("default-3-person-chess");
     }
 
+    /**
+     * Lists all available game modes.
+     * @return Returns a {@link List} of all available game modes.
+     */
     @RequestMapping("/available")
     public List<String> getAvailableGameModes() {
         return availableGameModes;
