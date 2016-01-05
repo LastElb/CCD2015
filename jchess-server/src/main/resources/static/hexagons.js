@@ -149,14 +149,28 @@ angular.module('jchess', [])
             if (count.length == 4) {
                 // Player message
                 var playerid = count[3];
+                var messageProcessed = false;
                 angular.forEach($scope.players, function(player) {
                     if (player.id == playerid && JSON.parse(message.body).itYouTurn == true) {
                         $scope.activeClient = player;
                         $scope.updateGame(count[2]);
                         $scope.showAddPlayer = false;
                         $scope.showCreateGame = false;
+                        messageProcessed = true;
                     }
                 });
+                if (!messageProcessed) {
+                    if (JSON.parse(message.body).itYouTurn) {
+                        $scope.updateGame(count[2]);
+                        $scope.showAddPlayer = false;
+                        $scope.showCreateGame = false;
+                        messageProcessed = true;
+                    }
+                    if (JSON.parse(message.body).name) {
+                        notie.alert(2, 'Player ' + JSON.parse(message.body).name + ' is defeated!', 5);
+                        messageProcessed = true;
+                    }
+                }
             }
         });
 
@@ -252,7 +266,7 @@ angular.module('jchess', [])
             var i,
                 j;
             // The field colors
-            var colors = ["#DEFFD6", "#4AA631", "#8CDB73"];
+            var colors = ["#C7B299", "#8CC63F", "#006837"];
 
             for(i = 0; i < width; ++i) {
                 for(j = 0; j < height; ++j) {

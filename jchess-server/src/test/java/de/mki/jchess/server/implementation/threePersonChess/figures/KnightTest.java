@@ -125,7 +125,7 @@ public class KnightTest extends FigureTest {
     public void testGetAttackableFields3() throws Exception {
         Knight knight = new Knight(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(knight.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
         List<Hexagon> possibleMovements = knight.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("c1"),
@@ -141,7 +141,7 @@ public class KnightTest extends FigureTest {
     public void testGetAttackableFields4() throws Exception {
         Knight knight = new Knight(game.getPlayerList().get(0));
         game.getChessboard().getFigures().add(knight.setPosition((Hexagon) game.getChessboard().getFieldByNotation("a2")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
         List<Hexagon> possibleMovements = knight.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("c1"),

@@ -1,5 +1,6 @@
 package de.mki.jchess.server.implementation.threePersonChess;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.mki.jchess.commons.Field;
 
 import java.util.ArrayList;
@@ -94,6 +95,27 @@ public class Hexagon extends Field<Direction> {
         public Hexagon getHexagon() {
             return hexagon;
         }
+    }
+
+    /**
+     * Checks if this {@link Hexagon} is neighbour of another {@link Hexagon}.
+     * @param neighbour    The neighbour to check for
+     * @return Returns true if the specified {@link Hexagon} is a neighbour of this {@link Hexagon}.
+     */
+    public boolean isHexagonNeighbour(Hexagon neighbour) {
+        return neighbours.stream()
+                .filter(hexagonNeighbourModel -> hexagonNeighbourModel.getHexagon().equals(neighbour))
+                .findAny().isPresent();
+    }
+
+    @JsonIgnore
+    public int getColumn() {
+        return column;
+    }
+
+    @JsonIgnore
+    public int getRow() {
+        return row;
     }
 
     @Override

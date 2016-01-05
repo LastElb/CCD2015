@@ -181,7 +181,7 @@ public class QueenTest extends FigureTest {
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
         getGame().getChessboard().getFigures().add(new Bishop(getGame().getPlayerList().get(0)).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
         List<Hexagon> possibleMovements = queen.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("c5"),
@@ -213,7 +213,7 @@ public class QueenTest extends FigureTest {
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
         getGame().getChessboard().getFigures().add(new Bishop(getGame().getPlayerList().get(0)).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
         List<Hexagon> possibleMovements = queen.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b4"),
@@ -253,9 +253,9 @@ public class QueenTest extends FigureTest {
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
         getGame().getChessboard().getFigures().add(new Bishop(getGame().getPlayerList().get(0)).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
         List<Hexagon> possibleMovements = queen.getAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -354,7 +354,7 @@ public class QueenTest extends FigureTest {
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
         getGame().getChessboard().getFigures().add(new Bishop(getGame().getPlayerList().get(0)).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
         List<Hexagon> possibleMovements = queen.getHypotheticalAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("c5"),
@@ -386,7 +386,7 @@ public class QueenTest extends FigureTest {
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
         getGame().getChessboard().getFigures().add(new Bishop(getGame().getPlayerList().get(0)).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
         List<Hexagon> possibleMovements = queen.getHypotheticalAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("b4"),
@@ -426,9 +426,9 @@ public class QueenTest extends FigureTest {
         queen.setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a4"));
         getGame().getChessboard().getFigures().add(queen);
         getGame().getChessboard().getFigures().add(new Bishop(getGame().getPlayerList().get(0)).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("a3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
-        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b3")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b4")));
+        getGame().getChessboard().getFigures().add(new Pawn(getGame().getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) getGame().getChessboard().getFieldByNotation("b5")));
         List<Hexagon> possibleMovements = queen.getHypotheticalAttackableFields(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
