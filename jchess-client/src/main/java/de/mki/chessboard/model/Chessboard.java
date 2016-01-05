@@ -17,6 +17,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     int height; //correlates with image height
     Map<String, T> fields;
     List<Figure> figures;
+    private boolean chessboardBlocked;
 
     public Chessboard() {
         figures = new ArrayList<>();
@@ -85,6 +86,28 @@ public abstract class Chessboard<T extends Field> extends JPanel {
      */
     public String getClickedField(int x, int y) {
         return getField(x,y).getNotation();
+    }
+
+    /**
+     * Check whether the chessboard is blocked for any actions
+     * @return boolean
+     */
+    public boolean isBlocked() {
+        return chessboardBlocked;
+    }
+
+    /**
+     * Block chessboard for actions
+     */
+    public void block() {
+        this.chessboardBlocked = true;
+    }
+
+    /**
+     * Unblock Chessboard for actions
+     */
+    public void unblock() {
+        this.chessboardBlocked = false;
     }
 
     /**

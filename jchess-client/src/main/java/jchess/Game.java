@@ -70,9 +70,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     private Optional<Client> clientModel;
     private smallHexboard chessboard;
 
-
-    public boolean blockedChessboard;
-
     Game() {
 
         initializeHexboard();
@@ -109,7 +106,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @param message what to show player(s) at end of the game (for example "draw", "black wins" etc.)
      */
     public void endGame(String message) {
-        this.blockedChessboard = true;
+        // block chessboard
+        chessboard.block();
+
         System.out.println(message);
         JOptionPane.showMessageDialog(null, message);
     }
@@ -175,7 +174,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         if (event.getButton() == MouseEvent.BUTTON1) //left button
         {
             // its your turn
-            if (!blockedChessboard) {
+            if (!chessboard.isBlocked()) {
                 int x = event.getX();//get X position of mouse
                 int y = event.getY();//get Y position of mouse
 
@@ -329,13 +328,12 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     private void PlayerChangedAction(PlayerChangedEvent playerChangedEvent) {
         if (playerChangedEvent.isItYouTurn()) {
             // unblock chessboard, it is your turn
-            blockedChessboard = false;
+            chessboard.unblock();
             // show hint
             JOptionPane.showMessageDialog(this, "Du bist dran!");
         } else {
             // block chessboard, it is not your turn
-            blockedChessboard = true;
-            //todo: block chessboard in hexboard class?
+            chessboard.block();
         }
 
     }
