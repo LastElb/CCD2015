@@ -1,5 +1,10 @@
 package jchess.client.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties({"atEnemyBaseline"})
+
 /**
  * Created by Malte on 02.12.2015.
  */
@@ -43,6 +48,7 @@ public class Figure {
         this.removed = removed;
     }
 
+    @JsonProperty("position")
     public Position getPositionObject() {
         return position;
     }

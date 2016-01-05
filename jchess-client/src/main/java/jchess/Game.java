@@ -80,6 +80,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         // this.add(chessboard);
 
         //this.setLayout(null);
+        this.addMouseListener(this);
         this.addComponentListener(this);
         //this.setDoubleBuffered(true);
     }
@@ -123,7 +124,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         this.setLayout(null);
         this.setDoubleBuffered(false);
 
-        java.util.List<Figure> figures;
+        /*java.util.List<Figure> figures;
         Figure figure1;
         Position position1;
 
@@ -151,13 +152,13 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
         figures = new ArrayList<Figure>();
         figures.add(figure1);
-        figures.add(figure2);
+        figures.add(figure2);*/
 
         try {
             chessboard = new smallHexboard();
 
-            chessboard.setupBoard(figures);
-            chessboard.addMouseListener(this);
+            //chessboard.setupBoard(figures);
+            this.addMouseListener(this);
             this.add(chessboard);
             chessboard.repaint();
         } catch (Exception e) {
@@ -328,6 +329,17 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @param playerChangedEvent
      */
     private void PlayerChangedAction(PlayerChangedEvent playerChangedEvent) {
+        // is the game initialized?
+        if(chessboard.getFigures().size() == 0){
+            try {
+                jchess.client.models.Game game = serverApi.getFullGame(getGameID()).get();
+                Chessboard newChessboard = game.getChessboard();
+                chessboard.setupBoard(newChessboard.getFigures());
+            } catch (Exception e) {
+                logger.error("", e);
+            }
+        }
+
         if (playerChangedEvent.isItYouTurn()) {
             // unblock chessboard, it is your turn
             chessboard.unblock();
@@ -347,7 +359,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         try {
             jchess.client.models.Game game = serverApi.getFullGame(getGameID()).get();
 
-            Chessboard newChessboard = (Chessboard) game.getChessboard();
+            Chessboard newChessboard = game.getChessboard();
             chessboard.updateChessboard(newChessboard.getFigures());
         } catch (Exception e) {
             logger.error("", e);

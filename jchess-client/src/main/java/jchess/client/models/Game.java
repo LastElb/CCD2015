@@ -17,7 +17,7 @@ public class Game {
     String gameMode;
     int maximumPlayers;
     List<HistoryEntry> gameHistory;
-    Object chessboard;
+    Chessboard chessboard;
 
     public Game() {
         this.gameHistory = new ArrayList<>();
@@ -66,11 +66,11 @@ public class Game {
         return gameHistory;
     }
 
-    public Object getChessboard() {
+    public Chessboard getChessboard() {
         return chessboard;
     }
 
-    public Game setChessboard(Object chessboard) {
+    public Game setChessboard(Chessboard chessboard) {
         this.chessboard = chessboard;
         return this;
     }

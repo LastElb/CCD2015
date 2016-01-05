@@ -7,10 +7,10 @@ public class Position {
     String notation;
 
     public String getNotation() {
-        return notation;
+        return notation.toUpperCase();
     }
 
     public void setNotation(String notation) {
-        this.notation = notation;
+        this.notation = notation.toUpperCase();
     }
 }

@@ -106,7 +106,7 @@ public class ServerApi {
     public Optional<Game> getFullGame(String gameID) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-        Future<Response> future = asyncHttpClient.preparePost("game/" + gameID + "/full").execute();
+        Future<Response> future = asyncHttpClient.preparePost("http://" + host + ":" + port + "/game/" + gameID + "/full").execute();
         Response response = future.get();
         asyncHttpClient.close();
         if (response.getStatusCode() == 200) {

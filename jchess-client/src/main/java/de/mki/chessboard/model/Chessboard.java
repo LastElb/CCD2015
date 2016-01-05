@@ -171,7 +171,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         for (Figure tempFigure : this.figures) {
             Image figureImage = loadImage(tempFigure.getPictureId()+".png");
             String position = tempFigure.getPositionObject().getNotation();
-            Field field = getFieldByNotation(position);
+            Field field = getFieldByNotation(position.toUpperCase());
             g2d.drawImage(figureImage, field.getX(), field.getY(), null);
         }
     }
