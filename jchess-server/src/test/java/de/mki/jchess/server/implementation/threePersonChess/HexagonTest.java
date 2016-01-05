@@ -32,4 +32,13 @@ public class HexagonTest extends FigureTest {
         assertFalse(hexagon.isHexagonNeighbour((Hexagon) getGame().getChessboard().getFieldByNotation("m8")));
         assertFalse(hexagon.isHexagonNeighbour((Hexagon) getGame().getChessboard().getFieldByNotation("g12")));
     }
+
+    /**
+     * Generates a {@link Hexagon} with out of bounds values
+     */
+    @Test
+    public void testOutOfBoundsHexagon() throws Exception {
+        Hexagon hexagon = new Hexagon(13, 13);
+        hexagon.getNotation();
+    }
 }
