@@ -161,4 +161,13 @@ public class ChessboardTest {
                 chessboard.getPossibleFieldsToMove(pawn2.getId()).get(0).getNotation(),
                 simpMessagingTemplate);
     }
+
+    /**
+     * Creating a game scene for en passant
+     * @throws Exception
+     */
+    @Test
+    public void gameScene1() throws Exception {
+        //chessboard.performMovement();
+    }
 }
