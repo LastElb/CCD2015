@@ -29,6 +29,7 @@ import jchess.client.ServerApi;
 
 import jchess.client.WebSocketClient;
 import jchess.client.models.Chessboard;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 
@@ -61,12 +62,13 @@ import java.util.logging.Logger;
  */
 public class Game extends JPanel implements MouseListener, ComponentListener {
 
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
+
     private ServerApi serverApi;
     private WebSocketClient webSocketClient;
     private Optional<jchess.client.models.Game> gameModel;
     private Optional<Client> clientModel;
     private smallHexboard chessboard;
-
 
 
     public boolean blockedChessboard;
@@ -118,7 +120,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public void switchActive() {
     }
 
-    public void initializeHexboard(){
+    public void initializeHexboard() {
         this.setLayout(null);
         this.setDoubleBuffered(false);
 
@@ -160,7 +162,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             this.add(chessboard);
             chessboard.repaint();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 
@@ -174,8 +176,8 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         {
             // its your turn
             if (!blockedChessboard) {
-                    int x = event.getX();//get X position of mouse
-                    int y = event.getY();//get Y position of mouse
+                int x = event.getX();//get X position of mouse
+                int y = event.getY();//get Y position of mouse
 
                 // @Todo: Pass position to chessboard
                 String clickedField = chessboard.getClickedField(x, y);
@@ -219,6 +221,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     /**
      * Initialize a game on the server and join it
+     *
      * @throws Exception
      */
     public void initiaizeAndJoinHostedGame(String host, int port, String nickname) throws Exception {
@@ -230,6 +233,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     /**
      * Join a network game as player
+     *
      * @param host
      * @param port
      * @param gameID
@@ -243,7 +247,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             webSocketClient.connect(host, port);
 
             // subscribe to Websocket destination url game/{gameid}
-            webSocketClient.subscribe("/game/"+gameID, new StompFrameHandler() {
+            webSocketClient.subscribe("/game/" + gameID, new StompFrameHandler() {
                 @Override
                 public Type getPayloadType(StompHeaders headers) {
                     return null;
@@ -260,7 +264,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             clientModel = serverApi.connectToGame(nickname, gameID);
 
             // subscribe to Websocket destination url game/{gameid}/{clientid}
-            webSocketClient.subscribe("/game/"+gameID+"/"+clientModel.get().getId(), new StompFrameHandler() {
+            webSocketClient.subscribe("/game/" + gameID + "/" + clientModel.get().getId(), new StompFrameHandler() {
                 @Override
                 public Type getPayloadType(StompHeaders headers) {
                     return null;
@@ -270,7 +274,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                 public void handleFrame(StompHeaders headers, Object payload) {
                     ObjectMapper objectMapper = new ObjectMapper();
                     String objectType = headers.getFirst("data-type");
-                    String content = new String((byte[])payload);
+                    String content = new String((byte[]) payload);
+
+                    logger.trace("Event {} was triggered using websockets", objectType);
 
                     switch (objectType) {
                         case "PlayerChangedEvent":
@@ -278,7 +284,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                             try {
                                 playerChangedEvent = Optional.of(objectMapper.readValue(content, PlayerChangedEvent.class));
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                logger.error("", e);
                             }
                             PlayerChangedAction(playerChangedEvent.get());
                             break;
@@ -291,40 +297,42 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                             try {
                                 playerDefeatedEvent = Optional.of(objectMapper.readValue(content, PlayerDefeatedEvent.class));
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                logger.error("", e);
                             }
                             PlayerDefeatedAction(playerDefeatedEvent.get());
                             break;
-                        default: break;
+                        default:
+                            break;
                     }
                 }
             });
 
-        } else{
+        } else {
             throw new Exception("Es wurde keine Verbindung zum Server aufgebaut.");
         }
     }
 
     /**
      * Get the id of the current game if running
+     *
      * @return
      */
-    public String getGameID(){
+    public String getGameID() {
         return gameModel.get().getId();
     }
 
     /**
      * Action which is triggered when the player changes
+     *
      * @param playerChangedEvent
      */
     private void PlayerChangedAction(PlayerChangedEvent playerChangedEvent) {
-        if(playerChangedEvent.isItYouTurn()) {
+        if (playerChangedEvent.isItYouTurn()) {
             // unblock chessboard, it is your turn
             blockedChessboard = false;
             // show hint
             JOptionPane.showMessageDialog(this, "Du bist dran!");
-        }
-        else{
+        } else {
             // block chessboard, it is not your turn
             blockedChessboard = true;
             //todo: block chessboard in hexboard class?
@@ -335,23 +343,31 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     /**
      * This action is triggered by the server when something on the chessboard changed. The chessboard gets reloaded
      */
-    private void ChessboardChangedAction(){
+    private void ChessboardChangedAction() {
         try {
             jchess.client.models.Game game = serverApi.getFullGame(getGameID()).get();
 
             Chessboard newChessboard = (Chessboard) game.getChessboard();
             chessboard.updateChessboard(newChessboard.getFigures());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 
     /**
      * Action triggered by the server, when the player is defeated
+     *
      * @param playerDefeatedEvent
      */
     private void PlayerDefeatedAction(PlayerDefeatedEvent playerDefeatedEvent) {
-        if(playerDefeatedEvent.isAreYouDefeated())
+        if (playerDefeatedEvent.isAreYouDefeated()) {
+            logger.trace("Player {} with ClientID {} playing Team {} defeated",
+                    clientModel.get().getNickname(),
+                    clientModel.get().getId(),
+                    clientModel.get().getTeam()
+            );
+
             JOptionPane.showMessageDialog(this, "Du wurdest besiegt!");
+        }
     }
 }
