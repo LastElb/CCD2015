@@ -19,18 +19,19 @@
  */
 package jchess;
 
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
 /**
  * Class responible for drawing Network Settings, when player want to start
  * a game on a network
- *
  */
 public class DrawNetworkSettings extends JPanel implements ActionListener {
 
@@ -41,15 +42,15 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     private JRadioButton radioServer;
     private JRadioButton radioClient;
     private JLabel labelNick;
-    private JLabel labelPassword;
     private JLabel labelGameID;
     private JLabel labelOptions;
     private JPanel panelOptions;
     private JTextField textNick;
-    private JPasswordField textPassword;
     private JTextField textGameID;
     private JButton buttonStart;
     private ClientOptionsPanel clientOptions;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
+    private URI uri;
 
     DrawNetworkSettings(JDialog parent) {
         super();
@@ -132,6 +133,8 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         this.gbl.setConstraints(panelOptions, gbc);
         this.add(panelOptions);
 
+        this.panelOptions.add(clientOptions);
+
         this.gbc.gridx = 0;
         this.gbc.gridy = 7;
         this.gbc.gridwidth = 2;
@@ -146,6 +149,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         {
             this.textGameID.setEnabled(false); // disable gameID
             this.panelOptions.removeAll();
+            this.panelOptions.add(clientOptions);
             this.panelOptions.revalidate();
             this.panelOptions.requestFocus();
             this.panelOptions.repaint();
@@ -166,14 +170,24 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
             if (this.textNick.getText().length() == 0) {
                 error += "Bitte geben Sie einen Nickname an.\n";
             }
-            if (this.radioClient.isSelected() && this.clientOptions.textServIP.getText().length() == 0) {
+            if (this.clientOptions.textServIP.getText().length() == 0) {
                 error += "Bitte geben Sie eine IP an.\n";
-            } else if (this.radioClient.isSelected()) {
-                Pattern ipPattern = Pattern.compile("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}");
-                if (!ipPattern.matcher(this.clientOptions.textServIP.getText()).matches()) {
-                    error += "Bitte geben Sie eine gültige IP an.\n";
-                }
             }
+
+            // fixes CCD2015-59 [Client] Enable custom port
+            try {
+                // WORKAROUND: add any scheme to make the resulting URI valid.
+                this.uri = new URI("my://" + this.clientOptions.textServIP.getText()); // may throw URISyntaxException
+
+                if (uri.getHost() == null || uri.getPort() == -1) {
+                    error += "URI must have host and port parts.\n";
+                }
+
+            } catch (URISyntaxException ex) {
+                // validation failed
+                logger.error("", ex);
+            }
+
             if (error.length() > 0) {
                 JOptionPane.showMessageDialog(this, error);
                 return;
@@ -187,24 +201,24 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 // Host game & join
                 Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel");
                 try {
-                    newGUI.initiaizeAndJoinHostedGame("localhost", 8080, textNick.getText());
+                    newGUI.initiaizeAndJoinHostedGame(uri.getHost(), uri.getPort(), textNick.getText());
 
                     // wait for opponents
                     JOptionPane.showMessageDialog(this, "Warten auf Mitspieler! Spiel-ID: " + newGUI.getGameID());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
-            } else{
-                Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel: "+clientOptions.textServIP.getText());
+            } else {
+                Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel: " + clientOptions.textServIP.getText());
 
                 // join existing game
                 try {
-                    newGUI.joinGame(clientOptions.textServIP.getText(), 8080, textNick.getText(), textGameID.getText());
+                    newGUI.joinGame(uri.getHost(), uri.getPort(), textNick.getText(), textGameID.getText());
 
                     // wait for opponents
                     JOptionPane.showMessageDialog(this, "Ein Moment Geduld, wir warten noch auf Mitspieler");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
 
@@ -228,16 +242,16 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
 
                 if (isJoining) //Client connection: succesful
                 { */
-                    //System.out.println("Client connection: succesful");
-                    //create new game and draw chessboard
-                    //Game newGUI = JChessApp.getjChessView().addNewTab("Network game, table: " + textGameID.getText());
-                    //client.game = newGUI;
-                    //newGUI.chessboard.draw();
+            //System.out.println("Client connection: succesful");
+            //create new game and draw chessboard
+            //Game newGUI = JChessApp.getjChessView().addNewTab("Network game, table: " + textGameID.getText());
+            //client.game = newGUI;
+            //newGUI.chessboard.draw();
 
-                    //Thread thread = new Thread(client);
-                    //thread.start(); //client listening
+            //Thread thread = new Thread(client);
+            //thread.start(); //client listening
 
-                    this.parent.setVisible(false);//hide parent
+            this.parent.setVisible(false);//hide parent
             /*
                 } else {
                     JOptionPane.showMessageDialog(this, Settings.lang("error_connecting_to_server"));
@@ -257,7 +271,6 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     {
 
         public JTextField textServIP;
-        public JCheckBox checkOnlyWatch;
         private GridBagLayout gbl;
         private GridBagConstraints gbc;
         private JLabel labelServIP;
@@ -265,9 +278,9 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         ClientOptionsPanel() {
             super();
 
-            this.labelServIP = new JLabel("Server IP");
+            this.labelServIP = new JLabel("Server IP / Domain inkl. Port");
             this.textServIP = new JTextField();
-            this.checkOnlyWatch = new JCheckBox("Spiel beobachten");
+            this.textServIP.setText("127.0.0.1:8080");
 
             this.gbl = new GridBagLayout();
             this.gbc = new GridBagConstraints();
@@ -276,18 +289,15 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
 
             this.gbc.gridx = 0;
             this.gbc.gridy = 0;
+            this.gbc.gridwidth = 2;
             this.gbl.setConstraints(labelServIP, gbc);
             this.add(labelServIP);
 
             this.gbc.gridx = 0;
             this.gbc.gridy = 1;
+            this.gbc.gridwidth = 2;
             this.gbl.setConstraints(textServIP, gbc);
             this.add(textServIP);
-
-            this.gbc.gridx = 0;
-            this.gbc.gridy = 2;
-            this.gbl.setConstraints(checkOnlyWatch, gbc);
-            this.add(checkOnlyWatch);
         }
     }
 }
