@@ -109,7 +109,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         // block chessboard
         chessboard.block();
 
-        System.out.println(message);
+        logger.trace("endGame method was called with message: {}", message);
         JOptionPane.showMessageDialog(null, message);
     }
 
@@ -181,8 +181,14 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                 // @Todo: Pass position to chessboard
                 String clickedField = chessboard.getClickedField(x, y);
 
+                logger.trace("Click on x={}, y={} which is field {}",
+                        x,
+                        y,
+                        clickedField
+                );
+
             } else {
-                System.out.println("Chessboard is blocked");
+                logger.trace("Chessboard is blocked");
             }
         }
         //chessboard.repaint();
