@@ -57,8 +57,8 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         //components
         this.parent = parent;
 
-        this.radioServer = new JRadioButton("Server starten", true);
-        this.radioClient = new JRadioButton("Mit Server verbinden", false);
+        this.radioServer = new JRadioButton("Spiel starten", true);
+        this.radioClient = new JRadioButton("Mit Spiel verbinden", false);
         this.serverORclient = new ButtonGroup();
         this.serverORclient.add(this.radioServer);
         this.serverORclient.add(this.radioClient);
