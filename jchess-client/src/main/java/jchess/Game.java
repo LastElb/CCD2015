@@ -247,26 +247,13 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      */
     public void joinGame(String host, int port, String gameID, String nickname) throws Exception {
         if (serverApi != null) {
+
+           // Connect to game
+            clientModel = serverApi.connectToGame(nickname, gameID);
+
             // setup Websockets
             webSocketClient = new WebSocketClient();
             webSocketClient.connect(host, port);
-
-            // subscribe to Websocket destination url game/{gameid}
-            webSocketClient.subscribe("/game/" + gameID, new StompFrameHandler() {
-                @Override
-                public Type getPayloadType(StompHeaders headers) {
-                    return null;
-                }
-
-                @Override
-                public void handleFrame(StompHeaders headers, Object payload) {
-                    System.out.println(headers);
-                    System.out.println(payload);
-                }
-            });
-
-            // Connect to game
-            clientModel = serverApi.connectToGame(nickname, gameID);
 
             // subscribe to Websocket destination url game/{gameid}/{clientid}
             webSocketClient.subscribe("/game/" + gameID + "/" + clientModel.get().getId(), new StompFrameHandler() {
