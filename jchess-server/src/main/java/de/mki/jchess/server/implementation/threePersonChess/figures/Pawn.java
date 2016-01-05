@@ -196,6 +196,8 @@ public class Pawn extends Figure<Hexagon> {
                         .filter(attackableHexagon -> attackableHexagon.getNotation().equals(hexagon.getNotation()))
                         .findFirst()
                         .ifPresent(hexagon1 -> chessboard.getFigures().stream()
+                                // Just active figures
+                                .filter(o -> !((Figure) o).isRemoved())
                                 .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
                                 .filter(o -> ((Figure) o).getPosition().getNotation().equals(hexagon.getNotation()))
                                 .findFirst()
