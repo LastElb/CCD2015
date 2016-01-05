@@ -187,6 +187,15 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         clickedField
                 );
 
+                /* Debugging */
+                int centerX = chessboard.getFieldByNotation(clickedField).getX();
+                int centerY = chessboard.getFieldByNotation(clickedField).getY();
+                logger.trace("The center of {} is at ({},{})",
+                        clickedField,
+                        centerX,
+                        centerY
+                );
+
             } else {
                 logger.trace("Chessboard is blocked");
             }

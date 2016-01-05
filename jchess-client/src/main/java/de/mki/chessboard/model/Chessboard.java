@@ -77,7 +77,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     /**
      * get a field by its chess notation
      */
-    protected abstract Field getFieldByNotation(String position);
+    public abstract Field getFieldByNotation(String position);
 
     /**
      * get the clicked field by x and y pixel coordinates

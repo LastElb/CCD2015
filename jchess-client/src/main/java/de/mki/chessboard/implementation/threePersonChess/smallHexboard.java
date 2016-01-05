@@ -15,8 +15,8 @@ public class smallHexboard extends Hexboard {
         this.setWidth(600);
         this.setHeight(600);
         this.setHexHeight(46);
-        this.setHexSize(new Point(27, 27));  //TODO: find fitting size.
-        this.setOrigin(new Point(0, 0));     //TODO: find the actual origin point in the gui.
+        this.setHexSize(new Point(23, 23));  //TODO: find fitting size.
+        this.setOrigin(new Point(138, 65));     //TODO: find the actual origin point in the gui.
         this.setLayout(new Layout(Layout.pointy, getHexSize(), getOrigin()));
         this.setImage(loadImage("chessboard600x600.png"));
     }
