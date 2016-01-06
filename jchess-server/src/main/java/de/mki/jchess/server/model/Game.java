@@ -95,7 +95,10 @@ public abstract class Game {
                 Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
                 webSocketDataHeader.put("data-type", "PlayerChangedEvent");
 
-                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client1.equals(getChessboard().getCurrentPlayer()));
+                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
+                        .setItYouTurn(client1.equals(getChessboard().getCurrentPlayer()))
+                        .setNickname(getChessboard().getCurrentPlayer().getNickname())
+                        .setTeam(getChessboard().getCurrentPlayer().getTeam());
                 simpMessagingTemplate.ifPresent(simpMessagingTemplate1 -> {
                     simpMessagingTemplate1.convertAndSend("/game/" + getId() + "/" + client1.getId(), playerChangedEvent, webSocketDataHeader);
                 });
@@ -112,7 +115,10 @@ public abstract class Game {
                 webSocketDataHeader.put("data-type", "PlayerChangedEvent");
 
                 Client lastClient = playerList.get(playerList.size() - 1);
-                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()));
+                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
+                        .setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()))
+                        .setNickname(getChessboard().getCurrentPlayer().getNickname())
+                        .setTeam(getChessboard().getCurrentPlayer().getTeam());
                 simpMessagingTemplate.ifPresent(simpMessagingTemplate1 -> {
                     simpMessagingTemplate1.convertAndSend("/game/" + getId() + "/" + lastClient.getId(), playerChangedEvent, webSocketDataHeader);
                 });
