@@ -290,7 +290,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
                     webSocketDataHeader.put("data-type", "PlayerChangedEvent");
 
-                    PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client.equals(getCurrentPlayer()));
+                    PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
+                            .setItYouTurn(client.equals(getCurrentPlayer()))
+                            .setNickname(getCurrentPlayer().getNickname())
+                            .setTeam(getCurrentPlayer().getTeam());
                     simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client.getId(), playerChangedEvent, webSocketDataHeader);
                 });
     }
