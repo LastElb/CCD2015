@@ -55,13 +55,14 @@ angular.module('jchess', [])
 
         return service;
     }])
-    .controller('chessboardController', function($scope, WebsocketService, $http) {
+    .controller('chessboardController', function($scope, WebsocketService, $http, $timeout) {
 
         $scope.editClient = {};
         $scope.players = [];
         $scope.activeClient = null;
         $scope.selectedField = null;
         $scope.possibleMoves = [];
+        $scope.requestInQueue = false;
 
         $scope.performMovement = function(targetField) {
             $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.activeClient.connectedGameId + '/performMoveByField/'
@@ -160,19 +161,27 @@ angular.module('jchess', [])
                     }
                 });
                 if (!messageProcessed) {
-                    if (JSON.parse(message.body).itYouTurn) {
-                        $scope.updateGame(count[2]);
-                        $scope.showAddPlayer = false;
-                        $scope.showCreateGame = false;
-                        messageProcessed = true;
+                    if (JSON.parse(message.body).itYouTurn == false) {
+                        requestLimiter();
                     }
                     if (JSON.parse(message.body).name) {
                         notie.alert(2, 'Player ' + JSON.parse(message.body).name + ' is defeated!', 5);
-                        messageProcessed = true;
                     }
                 }
             }
         });
+
+        function requestLimiter() {
+            if ($scope.requestInQueue)
+                return;
+            $scope.requestInQueue = true;
+            $timeout(function() {
+                if ($scope.requestInQueue) {
+                    $scope.requestInQueue = false;
+                    $scope.updateGame($scope.players[0].connectedGameId);
+                }
+            }, 1000);
+        }
 
 
         var canvas = document.getElementById('hexmap');
