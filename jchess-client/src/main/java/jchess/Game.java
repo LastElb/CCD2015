@@ -64,11 +64,11 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
 
-    private ServerApi serverApi;
-    private WebSocketClient webSocketClient;
-    private Optional<jchess.client.models.Game> gameModel;
-    private Optional<Client> clientModel;
-    private smallHexboard chessboard;
+    transient private ServerApi serverApi;
+    transient private WebSocketClient webSocketClient;
+    transient private Optional<jchess.client.models.Game> gameModel;
+    transient private Optional<Client> clientModel;
+    transient private smallHexboard chessboard;
 
     Game() {
 

@@ -12,11 +12,11 @@ import java.util.Map;
 
 public abstract class Chessboard<T extends Field> extends JPanel {
 
-    Image image;
+    transient Image image;
     int width;  //correlates with image width
     int height; //correlates with image height
-    Map<String, T> fields;
-    List<Figure> figures;
+    transient Map<String, T> fields;
+    transient List<Figure> figures;
     private boolean chessboardBlocked;
 
     public Chessboard() {

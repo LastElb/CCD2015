@@ -28,10 +28,10 @@ import java.awt.image.ImageObserver;
 
 public class JChessTabbedPane extends JTabbedPane implements MouseListener, ImageObserver {
 
-    private TabbedPaneIcon closeIcon;
-    private Image addIcon = null;
-    private Image clickedAddIcon = null;
-    private Image unclickedAddIcon = null;
+    transient private TabbedPaneIcon closeIcon;
+    transient private Image addIcon = null;
+    transient private Image clickedAddIcon = null;
+    transient private Image unclickedAddIcon = null;
     private Rectangle addIconRect = null;
 
     JChessTabbedPane() {
