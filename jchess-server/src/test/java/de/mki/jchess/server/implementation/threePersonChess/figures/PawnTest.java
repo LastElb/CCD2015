@@ -35,7 +35,7 @@ public class PawnTest extends FigureTest {
     @Test
     public void testInvalidFacingDirection() throws Exception {
         try {
-            new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOP);
+            new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOP, game.getChessboard());
             fail("Pawn created with invalid facing direction");
         } catch (Exception ignore) {
         }
@@ -47,7 +47,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleMovements1() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
         List<Hexagon> possibleMovements = pawn.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
@@ -62,9 +62,9 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleMovements2() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c6")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c6")));
         List<Hexagon> possibleMovements = pawn.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Collections.singletonList((Hexagon) game.getChessboard().getFieldByNotation("c5"));
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -77,9 +77,9 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleMovements3() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALTOPLEFT).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c6")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALTOPLEFT, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c6")));
         List<Hexagon> possibleMovements = pawn.getPossibleMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -91,7 +91,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements1() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
@@ -106,9 +106,10 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements2() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("c5")));
         HistoryEntry historyEntry = new HistoryEntry();
+        historyEntry.setPlayer(game.getPlayerList().get(0));
         historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(pawn.getId()).setFromNotation("b5").setToNotation("c5"));
         game.getGameHistory().add(historyEntry);
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
@@ -122,9 +123,9 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements3() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("d5")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("d5")));
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Collections.singletonList((Hexagon) game.getChessboard().getFieldByNotation("d7"));
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -136,10 +137,10 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements5() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("d7")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("d5")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("d7")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("d5")));
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -151,9 +152,9 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements6() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("d5"),
@@ -168,10 +169,10 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements7() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Arrays.asList(
                 (Hexagon) game.getChessboard().getFieldByNotation("d5"),
@@ -187,11 +188,11 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements8() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c5")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c5")));
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = Collections.singletonList((Hexagon) game.getChessboard().getFieldByNotation("d7"));
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -203,10 +204,10 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetPossibleSpecialMovements9() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("b5")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
-        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALTOPRIGHT).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALBOTTOM, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("c4")));
+        game.getChessboard().getFigures().add(new Pawn(game.getPlayerList().get(1), Direction.DIAGONALTOPRIGHT, game.getChessboard()).setPosition((Hexagon) game.getChessboard().getFieldByNotation("b4")));
         List<Hexagon> possibleMovements = pawn.getPossibleSpecialMovements(game.getChessboard());
         List<Hexagon> expectedMovements = new ArrayList<>();
         ListAssert.assertEquals(expectedMovements, possibleMovements);
@@ -218,7 +219,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetAttackableFields1() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("f7")));
 
         List<Hexagon> possibleMovements = pawn.getAttackableFields(game.getChessboard());
@@ -235,7 +236,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetAttackableFields2() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPRIGHT);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPRIGHT, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("f7")));
 
         List<Hexagon> possibleMovements = pawn.getAttackableFields(game.getChessboard());
@@ -252,7 +253,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetAttackableFields3() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPLEFT);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPLEFT, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("f7")));
 
         List<Hexagon> possibleMovements = pawn.getAttackableFields(game.getChessboard());
@@ -269,7 +270,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetHypotheticalAttackableFields1() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALBOTTOM, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("f7")));
 
         List<Hexagon> possibleMovements = pawn.getHypotheticalAttackableFields(game.getChessboard());
@@ -286,7 +287,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetHypotheticalAttackableFields2() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPRIGHT);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPRIGHT, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("f7")));
 
         List<Hexagon> possibleMovements = pawn.getHypotheticalAttackableFields(game.getChessboard());
@@ -303,7 +304,7 @@ public class PawnTest extends FigureTest {
      */
     @Test
     public void testGetHypotheticalAttackableFields3() throws Exception {
-        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPLEFT);
+        Pawn pawn = new Pawn(game.getPlayerList().get(0), Direction.DIAGONALTOPLEFT, game.getChessboard());
         game.getChessboard().getFigures().add(pawn.setPosition((Hexagon) game.getChessboard().getFieldByNotation("f7")));
 
         List<Hexagon> possibleMovements = pawn.getHypotheticalAttackableFields(game.getChessboard());

@@ -97,16 +97,39 @@ public class Hexagon extends Field<Direction> {
         }
     }
 
+    /**
+     * Checks if this {@link Hexagon} is neighbour of another {@link Hexagon}.
+     * @param neighbour    The neighbour to check for
+     * @return Returns true if the specified {@link Hexagon} is a neighbour of this {@link Hexagon}.
+     */
+    public boolean isHexagonNeighbour(Hexagon neighbour) {
+        return neighbours.stream()
+                .filter(hexagonNeighbourModel -> hexagonNeighbourModel.getHexagon().equals(neighbour))
+                .findAny().isPresent();
+    }
+
+    /**
+     * Gets the column number.
+     * @return Returns the column number in the interval [0,12].
+     */
     @JsonIgnore
     public int getColumn() {
         return column;
     }
 
+    /**
+     * Gets the row number.
+     * @return Returns the row number in the interval [0,12].
+     */
     @JsonIgnore
     public int getRow() {
         return row;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Returns a formatted {@link String} with row, column and notation.
+     */
     @Override
     public String toString() {
         return "Hexagon{" +

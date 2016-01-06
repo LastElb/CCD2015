@@ -12,10 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -78,11 +75,11 @@ public abstract class Game {
     /**
      * Adds a {@link Client} as player. Initializes the game (call to {@link #initializeGame()}) as soon as there are enough players.
      * @param client The {@link Client} that wants to join as player.
-     * @param simpMessagingTemplate MessagingTemplate for sending websocket messages
+     * @param simpMessagingTemplate {@link Optional} of {@link SimpMessagingTemplate} for sending websocket messages
      * @return Returns a modified version of {@link Client} where the {@link Client#connectedGameId} is set to the current {@link Game} id.
      * @throws TooManyPlayersException If you want to add a player and the count of sufficient players is exceeded an exception is thrown.
      */
-    public Client addClientAsPlayer(Client client, SimpMessagingTemplate simpMessagingTemplate) throws TooManyPlayersException {
+    public Client addClientAsPlayer(Client client, Optional<SimpMessagingTemplate> simpMessagingTemplate) throws TooManyPlayersException {
         if (!hasSufficientPlayers()) {
             playerList.add(client);
             if (playerList.size() - 2 >= 0)
@@ -98,8 +95,13 @@ public abstract class Game {
                 Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
                 webSocketDataHeader.put("data-type", "PlayerChangedEvent");
 
-                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client1.equals(getChessboard().getCurrentPlayer()));
-                simpMessagingTemplate.convertAndSend("/game/" + getId() + "/" + client1.getId(), playerChangedEvent, webSocketDataHeader);
+                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
+                        .setItYouTurn(client1.equals(getChessboard().getCurrentPlayer()))
+                        .setNickname(getChessboard().getCurrentPlayer().getNickname())
+                        .setTeam(getChessboard().getCurrentPlayer().getTeam());
+                simpMessagingTemplate.ifPresent(simpMessagingTemplate1 -> {
+                    simpMessagingTemplate1.convertAndSend("/game/" + getId() + "/" + client1.getId(), playerChangedEvent, webSocketDataHeader);
+                });
             });
             //The last client does connect to the websocket channel after this method is executed. So he will not get the message send above
             // Ugly workaround: Wait a second and resend the message
@@ -113,8 +115,13 @@ public abstract class Game {
                 webSocketDataHeader.put("data-type", "PlayerChangedEvent");
 
                 Client lastClient = playerList.get(playerList.size() - 1);
-                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()));
-                simpMessagingTemplate.convertAndSend("/game/" + getId() + "/" + lastClient.getId(), playerChangedEvent, webSocketDataHeader);
+                PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
+                        .setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()))
+                        .setNickname(getChessboard().getCurrentPlayer().getNickname())
+                        .setTeam(getChessboard().getCurrentPlayer().getTeam());
+                simpMessagingTemplate.ifPresent(simpMessagingTemplate1 -> {
+                    simpMessagingTemplate1.convertAndSend("/game/" + getId() + "/" + lastClient.getId(), playerChangedEvent, webSocketDataHeader);
+                });
             }).start();
 
         }

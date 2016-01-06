@@ -2,6 +2,8 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.commons.Client;
 import de.mki.jchess.commons.Field;
+import de.mki.jchess.server.implementation.threePersonChess.figures.Pawn;
+import de.mki.jchess.server.implementation.threePersonChess.figures.Queen;
 import de.mki.jchess.server.implementation.threePersonChess.figures.Rook;
 import de.mki.jchess.server.model.Figure;
 import de.mki.jchess.commons.HistoryEntry;
@@ -222,15 +224,26 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     List<String> specialTargetFields = possibleMovements.get(1).stream()
                             .map(Hexagon::getNotation)
                             .collect(Collectors.toList());
+                    // Castling started from the King
                     if (hexagonFigure instanceof King && specialTargetFields.contains(targetFieldNotation)) {
                         Rook rook = ((King) hexagonFigure).findRookForCastling(this, targetFieldNotation);
                         historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(rook.getId()).setFromNotation(rook.getPosition().getNotation()).setToNotation(hexagonFigure.getPosition().getNotation()));
                         rook.setPosition(hexagonFigure.getPosition());
                     }
+                    // Castling started from the Rook
                     if (hexagonFigure instanceof Rook && specialTargetFields.contains(targetFieldNotation)) {
                         King king = ((Rook) hexagonFigure).moveKingForCastling(this);
                         historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(king.getId()).setFromNotation(king.getHypotheticalPosition().getNotation()).setToNotation(king.getPosition().getNotation()));
                         king.setHypotheticalPosition(null);
+                    }
+                    // En passant
+                    if (hexagonFigure instanceof Pawn && specialTargetFields.contains(targetFieldNotation)) {
+                        // Get the pawn to be removed
+                        Optional<Pawn> toBeRemoved = ((Pawn) hexagonFigure).enPassantPawn(targetFieldNotation, this);
+                        toBeRemoved.ifPresent(pawn -> {
+                            pawn.setRemoved(true);
+                            historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(pawn.getId()).setEvent(FigureEvent.Event.REMOVED));
+                        });
                     }
                     return true;
                 })
@@ -240,6 +253,20 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                         hexagonFigure.setPosition((Hexagon) getFieldByNotation(targetFieldNotation));
                     } catch (NotationNotFoundException e) {
                         logger.error("", e);
+                    }
+                    // Pawn promotion
+                    if (hexagonFigure instanceof Pawn) {
+                        Pawn pawn = (Pawn) hexagonFigure;
+                        if (pawn.isAtEnemyBaseline()) {
+                            Queen queen = new Queen(pawn.getClient());
+                            queen.setPosition(pawn.getPosition());
+                            queen.setPictureId("queen-" + queen.getClient().getTeam());
+                            pawn.setRemoved(true);
+                            historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(pawn.getId()).setEvent(FigureEvent.Event.REMOVED));
+                            historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(queen.getId()).setEvent(FigureEvent.Event.ADDED));
+                            historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(queen.getId()).setToNotation(targetFieldNotation));
+                            getFigures().add(queen);
+                        }
                     }
                 });
 
@@ -263,7 +290,10 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
                     webSocketDataHeader.put("data-type", "PlayerChangedEvent");
 
-                    PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent().setItYouTurn(client.equals(getCurrentPlayer()));
+                    PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
+                            .setItYouTurn(client.equals(getCurrentPlayer()))
+                            .setNickname(getCurrentPlayer().getNickname())
+                            .setTeam(getCurrentPlayer().getTeam());
                     simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client.getId(), playerChangedEvent, webSocketDataHeader);
                 });
     }

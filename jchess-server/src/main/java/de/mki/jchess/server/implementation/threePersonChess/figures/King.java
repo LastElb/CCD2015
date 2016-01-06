@@ -190,6 +190,12 @@ public class King extends Figure<Hexagon> {
         return output;
     }
 
+    /**
+     * Finds the {@link Rook} for castling when moving to a given castling position / {@link Hexagon}.
+     * @param chessboard             The {@link Chessboard} instance
+     * @param targetFieldNotation    The castling {@link Hexagon#getNotation()} where the {@link King} is located after castling
+     * @return Returns the according {@link Rook} for the castling.
+     */
     public Rook findRookForCastling(Chessboard chessboard, String targetFieldNotation) {
         // Find the direction between king position and target field
         Hexagon targetField;

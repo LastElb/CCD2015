@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -30,9 +32,9 @@ public abstract class FigureTest {
     @Before
     public void setUpGame() throws Exception {
         game = new ThreePersonGame(RandomStringService.getRandomString());
-        game.addClientAsPlayer(new Client().setNickname("Client1"), simpMessagingTemplate);
-        game.addClientAsPlayer(new Client().setNickname("Client2"), simpMessagingTemplate);
-        game.addClientAsPlayer(new Client().setNickname("Client3"), simpMessagingTemplate);
+        game.addClientAsPlayer(new Client().setNickname("Client1"), Optional.ofNullable(simpMessagingTemplate));
+        game.addClientAsPlayer(new Client().setNickname("Client2"), Optional.ofNullable(simpMessagingTemplate));
+        game.addClientAsPlayer(new Client().setNickname("Client3"), Optional.ofNullable(simpMessagingTemplate));
         game.initializeGame();
         // Reset figures
         game.getChessboard().getFigures().clear();

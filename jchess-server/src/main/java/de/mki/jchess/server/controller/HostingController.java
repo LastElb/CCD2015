@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 /**
  * The Hosting controller can create new games and join {@link Client}s as Player or Observer
  * Created by Igor on 11.11.2015.
@@ -62,7 +64,7 @@ public class HostingController {
     @RequestMapping(value = "/joinAsPlayer/{gameId}", method = RequestMethod.POST)
     public Client connectToHostedGameAsPlayer(@PathVariable String gameId, @RequestBody Client client) throws HostedGameNotFoundException, TooManyPlayersException {
         client.setId(RandomStringService.getRandomString());
-        hostedGamesService.getHostedGameByID(gameId).addClientAsPlayer(client, simpMessagingTemplate);
+        hostedGamesService.getHostedGameByID(gameId).addClientAsPlayer(client, Optional.ofNullable(simpMessagingTemplate));
         return client;
     }
 

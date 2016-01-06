@@ -8,6 +8,7 @@ import de.mki.jchess.server.model.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -142,7 +143,7 @@ public class FigureUtils {
      * @param target The source {@link Hexagon}
      * @return Returns the direction the target is in view of the source.
      */
-    public static Direction findDirection (Hexagon source, Hexagon target) {
+    public static Direction findDirection (@NotNull Hexagon source, @NotNull Hexagon target) {
         List<Direction> directions = Arrays.asList(
                 Direction.RIGHT,
                 Direction.BOTTOMRIGHT,
