@@ -162,6 +162,7 @@ angular.module('jchess', [])
                 });
                 if (!messageProcessed) {
                     if (JSON.parse(message.body).itYouTurn == false) {
+                        $scope.activeClient = JSON.parse(message.body);
                         requestLimiter();
                     }
                     if (JSON.parse(message.body).name) {
