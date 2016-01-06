@@ -15,8 +15,10 @@
 
 package jchess;
 
+import ch.qos.logback.classic.Level;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import org.slf4j.LoggerFactory;
 
 /**
  * The main class of the application.
@@ -49,6 +51,10 @@ public class JChessApp extends SingleFrameApplication {
      */
     @Override
     protected void startup() {
+
+        ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+        rootLogger.setLevel(Level.toLevel("trace"));
+
         jChessView = new JChessView(this);
         show(jChessView);
     }
