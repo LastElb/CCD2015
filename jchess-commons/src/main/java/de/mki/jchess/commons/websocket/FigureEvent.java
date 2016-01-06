@@ -1,7 +1,9 @@
 package de.mki.jchess.commons.websocket;
 
+import de.mki.jchess.commons.Figure;
+
 /**
- * Event for websocket communication. Indicates that the state of a {@link de.mki.jchess.server.model.Figure} has changed.
+ * Event for websocket communication. Indicates that the state of a {@link Figure} has changed.
  * Created by Igor on 14.11.2015.
  */
 public class FigureEvent implements ChessboardEvent {

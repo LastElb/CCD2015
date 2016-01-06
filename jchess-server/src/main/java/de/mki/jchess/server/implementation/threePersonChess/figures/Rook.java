@@ -155,7 +155,7 @@ public class Rook extends Figure<Hexagon> {
     }
 
     /**
-     * Searches for the {@link King} required for the castling. Also moves the {@link King} to his new position.<br/>
+     * Searches for the {@link King} required for the castling. Also moves the {@link King} to his new position.<br>
      * Does NOT generate a {@link de.mki.jchess.commons.HistoryEntry}!
      * @param chessboard    The instance of the {@link Chessboard}.
      * @return Returns the {@link King} required for castling.

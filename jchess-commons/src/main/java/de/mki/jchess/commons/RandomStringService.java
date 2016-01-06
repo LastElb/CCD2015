@@ -3,6 +3,7 @@ package de.mki.jchess.commons;
 import java.util.Random;
 
 /**
+ * Creates a random String of [a-z0-9]. Length can be specified.
  * Created by Igor on 11.11.2015.
  */
 public class RandomStringService {
@@ -15,7 +16,7 @@ public class RandomStringService {
 
     /**
      * Returns a {@link String} containing the lower cased english alphabet and the digits from 0 to 9
-     * @return String Returns a {@link String} with the length of 20
+     * @return Returns a {@link String} with the length of 20
      */
     public static String getRandomString() {
         return getRandomString(20);
@@ -24,7 +25,7 @@ public class RandomStringService {
     /**
      * Returns a {@link String} containing the lower cased english alphabet and the digits from 0 to 9
      * @param length The desired length of the {@link String}.
-     * @return @return String Returns a {@link String} with the specified length
+     * @return Returns a {@link String} with the specified length
      */
     public static String getRandomString(int length) {
         char[] chars = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
