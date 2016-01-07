@@ -121,9 +121,9 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * Mark the given fields with a red dot
-     * @param fieldsToHighight List of Strings, containing Field notation e.g. A1
+     * @param fieldsToHighlight List of Strings, containing Field notation e.g. A1
      */
-    public abstract void highlightFieldsByNotation(List<String> fieldsToHighight);
+    public abstract void highlightFieldsByNotation(List<String> fieldsToHighlight);
 
     /**
      * Redraw the chessboard without marks for possible movements
