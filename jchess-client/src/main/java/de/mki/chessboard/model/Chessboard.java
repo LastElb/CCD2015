@@ -76,6 +76,8 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * get a field by its chess notation
+     * «
+     * @return Field Object
      */
     public abstract Field getFieldByNotation(String position);
 
@@ -112,7 +114,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * push changes to chessboard and repaint it
-     * @param figures
+     * @param figures List of figure objects
      */
     public void updateChessboard(List<Figure> figures) {
         this.figures = figures;
@@ -172,7 +174,9 @@ public abstract class Chessboard<T extends Field> extends JPanel {
             Image figureImage = loadImage(tempFigure.getPictureId()+".png");
             String position = tempFigure.getPositionObject().getNotation();
             Field field = getFieldByNotation(position.toUpperCase());
-            g2d.drawImage(figureImage, field.getX(), field.getY(), null);
+            int x = field.getX() - 23;
+            int y = field.getY() - 28;
+            g2d.drawImage(figureImage, x, y, null);
         }
     }
 }
