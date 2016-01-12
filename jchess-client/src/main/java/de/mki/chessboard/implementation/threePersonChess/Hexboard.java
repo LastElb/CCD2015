@@ -1,6 +1,7 @@
 package de.mki.chessboard.implementation.threePersonChess;
 
 import de.mki.chessboard.model.Chessboard;
+import de.mki.chessboard.model.Field;
 import jchess.client.models.Figure;
 
 import java.awt.*;
@@ -95,12 +96,20 @@ public class Hexboard extends Chessboard {
     }
 
     @Override
-    public void clearHighlightedFields() {
-
+    public void highlightFieldsByNotation(List fieldsToHighlight) {
+        List<Hexagon> possibleMoves = new ArrayList<Hexagon>();
+        for (Object position : fieldsToHighlight) {
+            Hexagon field = getFieldByNotation(position.toString().toUpperCase());
+            possibleMoves.add(field);
+        }
+        this.setPossibleMoves(possibleMoves);
+        this.repaint();
     }
 
     @Override
-    public void highlightFieldsByNotation(List fieldsToHighight) {
-        
+    public void clearHighlightedFields() {
+        this.setPossibleMoves(new ArrayList<Hexagon>());
+        this.repaint();
     }
+
 }

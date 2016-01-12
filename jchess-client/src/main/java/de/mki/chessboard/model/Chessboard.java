@@ -5,10 +5,8 @@ import jchess.client.models.Figure;
 import static de.mki.chessboard.controller.GraphicsController.loadImage;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public abstract class Chessboard<T extends Field> extends JPanel {
 
@@ -19,6 +17,8 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     transient List<Figure> figures;
     private boolean chessboardBlocked;
     Point pixelCorrection;  // correction of position where figures are drawn in pixels
+    Point getPixelCorrectionMoves; // correction of position where possible moves are drawn in pixels
+    List<Field> possibleMoves = new ArrayList<>();
 
     public Chessboard() {
         figures = new ArrayList<>();
@@ -59,6 +59,14 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     public void setPixelCorrection(Point pixelCorrection) {
         this.pixelCorrection = pixelCorrection;
+    }
+
+    public void setGetPixelCorrectionMoves(Point getPixelCorrectionMoves) {
+        this.getPixelCorrectionMoves = getPixelCorrectionMoves;
+    }
+
+    public void setPossibleMoves(List<Field> possibleMoves) {
+        this.possibleMoves = possibleMoves;
     }
 
     /**
@@ -151,6 +159,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         drawBoard(g2d);
         drawFigures(g2d);
+        drawPossibleMoves(g2d);
     }
 
     /**
@@ -182,6 +191,15 @@ public abstract class Chessboard<T extends Field> extends JPanel {
             int x = field.getX() - this.pixelCorrection.x;
             int y = field.getY() - this.pixelCorrection.y;
             g2d.drawImage(figureImage, x, y, null);
+        }
+    }
+
+    private void drawPossibleMoves(Graphics2D g2d) {
+        Image moveImage = loadImage("able_square.png");
+        for (Field tempField : this.possibleMoves) {
+            int x = tempField.getX() - this.getPixelCorrectionMoves.x;
+            int y = tempField.getY() - this.getPixelCorrectionMoves.y;
+            g2d.drawImage(moveImage, x, y, null);
         }
     }
 }

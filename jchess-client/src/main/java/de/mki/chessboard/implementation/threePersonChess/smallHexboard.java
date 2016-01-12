@@ -19,6 +19,7 @@ public class smallHexboard extends Hexboard {
         this.setLayout(new Layout(Layout.pointy, 26, 26.5, new Point(138, 65)));
         this.setImage(loadImage("chessboard600x600.png"));
         this.setPixelCorrection(new Point(22, 27));
+        this.setGetPixelCorrectionMoves(new Point(11, 17));
     }
 
 }

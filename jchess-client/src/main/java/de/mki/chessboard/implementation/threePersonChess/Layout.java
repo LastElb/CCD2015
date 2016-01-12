@@ -72,7 +72,6 @@ public class Layout {
         {
             s = -q - r;
         }
-        System.out.println("this rounds to q=" + q + " and r=" + r);
         return new Hexagon(q,r);
     }
 }
