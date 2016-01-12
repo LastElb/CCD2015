@@ -9,8 +9,6 @@ import java.util.List;
 
 public class Hexboard extends Chessboard {
 
-    int hexWidth;
-    int hexHeight;
     Point hexSize;
     Point origin;
     Layout layout;
@@ -26,13 +24,6 @@ public class Hexboard extends Chessboard {
         this.repaint();
     }
 
-    public int getHexWidth() {
-        return hexWidth;
-    }
-
-    public int getHexHeight() {
-        return hexHeight;
-    }
 
     public Point getHexSize() {
         return hexSize;
@@ -44,14 +35,6 @@ public class Hexboard extends Chessboard {
 
     public Layout getChessboardLayout() {
         return layout;
-    }
-
-    public void setHexWidth(int hexWidth) {
-        this.hexWidth = hexWidth;
-    }
-
-    public void setHexHeight(int hexHeight) {
-        this.hexHeight = hexHeight;
     }
 
     public void setHexSize(Point hexSize) {

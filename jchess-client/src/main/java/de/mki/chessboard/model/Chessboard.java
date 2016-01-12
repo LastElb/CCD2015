@@ -18,6 +18,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     transient Map<String, T> fields;
     transient List<Figure> figures;
     private boolean chessboardBlocked;
+    Point pixelCorrection;  // correction of position where figures are drawn in pixels
 
     public Chessboard() {
         figures = new ArrayList<>();
@@ -54,6 +55,10 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     public void setFigures(List<Figure> figures) {
         this.figures = figures;
+    }
+
+    public void setPixelCorrection(Point pixelCorrection) {
+        this.pixelCorrection = pixelCorrection;
     }
 
     /**
@@ -174,8 +179,8 @@ public abstract class Chessboard<T extends Field> extends JPanel {
             Image figureImage = loadImage(tempFigure.getPictureId()+".png");
             String position = tempFigure.getPositionObject().getNotation();
             Field field = getFieldByNotation(position.toUpperCase());
-            int x = field.getX() - 23;
-            int y = field.getY() - 28;
+            int x = field.getX() - this.pixelCorrection.x;
+            int y = field.getY() - this.pixelCorrection.y;
             g2d.drawImage(figureImage, x, y, null);
         }
     }

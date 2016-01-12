@@ -14,12 +14,11 @@ public class smallHexboard extends Hexboard {
     public smallHexboard() {
         this.setWidth(600);
         this.setHeight(600);
-        this.setHexWidth(46);
-        this.setHexHeight(53);
-        int vertDistance = 39; //52*3/4;
-        this.setHexSize(new Point(26, 26));  //TODO: find fitting size.
-        this.setOrigin(new Point(138, 65));     //TODO: find the actual origin point in the gui.
+        this.setHexSize(new Point(26, 26));
+        this.setOrigin(new Point(138, 65));
         this.setLayout(new Layout(Layout.pointy, 26, 26.5, new Point(138, 65)));
         this.setImage(loadImage("chessboard600x600.png"));
+        this.setPixelCorrection(new Point(22, 27));
     }
+
 }
