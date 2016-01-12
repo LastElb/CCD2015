@@ -63,6 +63,7 @@ angular.module('jchess', [])
         $scope.selectedField = null;
         $scope.possibleMoves = [];
         $scope.requestInQueue = false;
+        var lastRefresh = Date.now();
 
         $scope.performMovement = function(targetField) {
             $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.activeClient.connectedGameId + '/performMoveByField/'
@@ -158,10 +159,11 @@ angular.module('jchess', [])
                         $scope.showAddPlayer = false;
                         $scope.showCreateGame = false;
                         messageProcessed = true;
+                        lastRefresh = Date.now();
                     }
                 });
                 if (!messageProcessed) {
-                    if (JSON.parse(message.body).itYouTurn == false) {
+                    if (JSON.parse(message.body).itYouTurn == false && Date.now() - lastRefresh > 1000) {
                         $scope.activeClient = JSON.parse(message.body);
                         requestLimiter();
                     }
