@@ -92,6 +92,10 @@ public class Hexagon extends Field<Direction> {
             this.direction = direction;
         }
 
+        /**
+         * Returns the {@link Hexagon} of this model.
+         * @return Returns the {@link Hexagon} of this model.
+         */
         public Hexagon getHexagon() {
             return hexagon;
         }
