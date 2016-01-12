@@ -259,8 +259,12 @@ angular.module('jchess', [])
                 hexX = Math.floor((x - (hexY % 2) * hexRadius) / hexRectangleWidth);
 
                 // Check if the mouse's coords are on the board
-                if(hexX >= 0 && hexX < boardWidth && hexY >= 0 && hexY < boardHeight) {
+                if(hexX >= 0 && hexX < boardWidth && hexY >= 0 && hexY < boardHeight && isHexagonValid(hexX, hexY)) {
                     $scope.hoveredField = getHexagonNotation(hexX, hexY);
+                    $scope.$apply();
+                } else {
+                    // Fixes 
+                    $scope.hoveredField = null;
                     $scope.$apply();
                 }
             });
