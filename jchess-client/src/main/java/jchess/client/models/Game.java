@@ -1,10 +1,13 @@
 package jchess.client.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import de.mki.jchess.commons.HistoryEntry;
 
 import java.util.ArrayList;
 import java.util.List;
+
+@JsonIgnoreProperties({"gameHistory"})
 
 /**
  * Class to implement a specific game mode.

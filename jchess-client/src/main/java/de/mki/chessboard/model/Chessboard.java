@@ -185,12 +185,14 @@ public abstract class Chessboard<T extends Field> extends JPanel {
      */
     private void drawFigures(Graphics2D g2d) {
         for (Figure tempFigure : this.figures) {
-            Image figureImage = loadImage(tempFigure.getPictureId()+".png");
-            String position = tempFigure.getPositionObject().getNotation();
-            Field field = getFieldByNotation(position.toUpperCase());
-            int x = field.getX() - this.pixelCorrection.x;
-            int y = field.getY() - this.pixelCorrection.y;
-            g2d.drawImage(figureImage, x, y, null);
+            if(tempFigure.getRemoved() == false) {
+                Image figureImage = loadImage(tempFigure.getPictureId() + ".png");
+                String position = tempFigure.getPositionObject().getNotation();
+                Field field = getFieldByNotation(position.toUpperCase());
+                int x = field.getX() - this.pixelCorrection.x;
+                int y = field.getY() - this.pixelCorrection.y;
+                g2d.drawImage(figureImage, x, y, null);
+            }
         }
     }
 

@@ -212,7 +212,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
 
                 // join existing game
                 try {
-                    newGUI.joinGame(uri.getHost(), uri.getPort(), textNick.getText(), textGameID.getText());
+                    newGUI.joinGame(uri.getHost(), uri.getPort(), textGameID.getText(), textNick.getText());
 
                     // wait for opponents
                     JOptionPane.showMessageDialog(this, "Ein Moment Geduld, wir warten noch auf Mitspieler");

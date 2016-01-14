@@ -21,7 +21,9 @@
 package jchess;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mki.chessboard.implementation.threePersonChess.Hexagon;
 import de.mki.chessboard.implementation.threePersonChess.smallHexboard;
+import de.mki.chessboard.model.Field;
 import de.mki.jchess.commons.Client;
 import de.mki.jchess.commons.websocket.PlayerChangedEvent;
 import de.mki.jchess.commons.websocket.PlayerDefeatedEvent;
@@ -69,10 +71,18 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     transient private Optional<jchess.client.models.Game> gameModel;
     transient private Optional<Client> clientModel;
     transient private smallHexboard chessboard;
+    transient private Hexagon lastClickedField;
+    transient private ArrayList<String> highlightedFields;
+    transient private String gameID;
 
     Game() {
 
         initializeHexboard();
+
+        // initialize lastClickedField as A0
+        lastClickedField = new Hexagon(0, -1);
+        highlightedFields = new ArrayList<>();
+
         //this.setLayout(null);
         // ToDo: Initalize Chessboard & add MouseListener & add JPanel
         // chessboard.addMouseListener(this);
@@ -160,7 +170,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             //chessboard.setupBoard(figures);
             this.addMouseListener(this);
             this.add(chessboard);
-            chessboard.repaint();
+            this.repaint();
         } catch (Exception e) {
             logger.error("", e);
         }
@@ -188,13 +198,48 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         clickedField
                 );
 
-                /* Debugging */
-                int centerX = chessboard.getFieldByNotation(clickedField).getX();
-                int centerY = chessboard.getFieldByNotation(clickedField).getY();
+                // Action
+
+                // try move
+                // clicked field is already marked
+                if(highlightedFields.contains(clickedField)){
+                    try{
+                        serverApi.performMovement(getGameID(), lastClickedField.getNotation(), clickedField, clientModel.get().getId());
+                        // reset highlighted fields
+                        chessboard.clearHighlightedFields();
+                        highlightedFields.clear();
+                    } catch (Exception e) {
+                        logger.error("", e);
+                    }
+                }
+                else{
+                    // mark possible moves
+                    List<Figure> figures = chessboard.getFigures();
+
+                    for (Figure figure : figures) {
+                        if( figure.getPositionObject().getNotation().equals(clickedField)){
+                            // request possible moves from server
+                            try {
+                                highlightedFields = serverApi.getPossibleMoves(getGameID(), clickedField);
+                                chessboard.highlightFieldsByNotation(highlightedFields);
+                                break;
+                            } catch (Exception e) {
+                                logger.error("", e);
+                            }
+
+                        }
+                    }
+                }
+                this.repaint();
+
+                // save last clicked field
+                lastClickedField = chessboard.getFieldByNotation(clickedField);
+
+                /* Save position for Debugging */
                 logger.trace("The center of {} is at ({},{})",
                         clickedField,
-                        centerX,
-                        centerY
+                        lastClickedField.getX(),
+                        lastClickedField.getY()
                 );
 
             } else {
@@ -243,7 +288,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         serverApi = new ServerApi(host, port);
         gameModel = serverApi.hostGame("default-3-person-chess");
 
-        joinGame(host, port, gameModel.get().getId(), nickname);
+        joinGame(host, port, gameID, nickname);
     }
 
     /**
@@ -256,6 +301,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @throws Exception
      */
     public void joinGame(String host, int port, String gameID, String nickname) throws Exception {
+
+        // save gameID
+        this.setGameID(gameID);
 
         // Fixes CCD2015-58 [Client] Es wurde keine Verbindung zum Server aufgebaut.
         if (serverApi == null) {
@@ -293,9 +341,6 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                             logger.error("", e);
                         }
                         PlayerChangedAction(playerChangedEvent.get());
-                        break;
-                    case "HistoryEntry":
-                        // at the moment the client is not able to handle the history-objects
                         ChessboardChangedAction();
                         break;
                     case "PlayerDefeatedEvent":
@@ -320,7 +365,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @return
      */
     public String getGameID() {
-        return gameModel.get().getId();
+            return gameID;
     }
 
     /**
@@ -361,6 +406,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
             Chessboard newChessboard = game.getChessboard();
             chessboard.updateChessboard(newChessboard.getFigures());
+            this.repaint();
+            this.updateUI();
+
         } catch (Exception e) {
             logger.error("", e);
         }
@@ -382,4 +430,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
             JOptionPane.showMessageDialog(this, "Du wurdest besiegt!");
         }
     }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
+    }
+
+
 }
