@@ -98,7 +98,7 @@ angular.module('jchess', [])
                 $scope.selectedField = null;
             }
             $scope.$apply();
-            window.navigator.vibrate(100)
+            window.navigator.vibrate(100);
             return select;
         };
 
@@ -309,7 +309,7 @@ angular.module('jchess', [])
                             angular.forEach($scope.possibleMoves, function(field) {
                                 if (field.notation == notation)
                                     //canvasContext.fillStyle = "#FF6A00";
-                                    canvasContext.fillStyle = tinycolor(canvasContext.fillStyle).greyscale().toHexString();
+                                    canvasContext.fillStyle = tinycolor(canvasContext.fillStyle).tetrad()[2].toHexString();
                             });
                         }
                         if ($scope.selectedField && notation == $scope.selectedField) {
