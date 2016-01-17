@@ -64,13 +64,18 @@ angular.module('jchess', [])
         $scope.possibleMoves = [];
         $scope.requestInQueue = false;
         var lastRefresh = Date.now();
+        $scope.gameid = '';
 
         $scope.performMovement = function(targetField) {
-            $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.activeClient.connectedGameId + '/performMoveByField/'
+            if (!$scope.activeClient.connectedGameId) {
+                notie.alert(3, "It is not your turn", 2);
+                return;
+            }
+            $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.gameid + '/performMoveByField/'
                 + $scope.selectedField + '/' + $scope.activeClient.id + '/' + targetField)
                 .success(function(message) {
                     $scope.possibleMoves = [];
-                    $scope.updateGame($scope.activeClient.connectedGameId);
+                    $scope.updateGame();
                 })
                 .error(function(message) {
                     console.log(message);
@@ -93,11 +98,12 @@ angular.module('jchess', [])
                 $scope.selectedField = null;
             }
             $scope.$apply();
+            window.navigator.vibrate(100);
             return select;
         };
 
         $scope.updatePossibleMoves = function () {
-            $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.activeClient.connectedGameId +
+            $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.gameid +
                 '/possibleMovesByField/' + $scope.selectedField )
                 .success(function(response) {
                     console.log(response);
@@ -109,8 +115,10 @@ angular.module('jchess', [])
                 })
         };
 
-        $scope.updateGame = function(gameid) {
-            $http.get(($scope.host ? $scope.host : '') + '/game/' + gameid + "/full")
+        $scope.updateGame = function() {
+            if (!$scope.gameid)
+                return;
+            $http.get(($scope.host ? $scope.host : '') + '/game/' + $scope.gameid + "/full")
                 .success(function(message) {
                     $scope.game = message;
                     drawBoard(ctx, boardWidth, boardHeight);
@@ -155,11 +163,13 @@ angular.module('jchess', [])
                 angular.forEach($scope.players, function(player) {
                     if (player.id == playerid && JSON.parse(message.body).itYouTurn == true) {
                         $scope.activeClient = player;
-                        $scope.updateGame(count[2]);
+                        $scope.updateGame();
                         $scope.showAddPlayer = false;
                         $scope.showCreateGame = false;
                         messageProcessed = true;
                         lastRefresh = Date.now();
+                        window.navigator.vibrate(500);
+                        notie.alert(1, "It is your turn", 5);
                     }
                 });
                 if (!messageProcessed) {
@@ -181,7 +191,7 @@ angular.module('jchess', [])
             $timeout(function() {
                 if ($scope.requestInQueue) {
                     $scope.requestInQueue = false;
-                    $scope.updateGame($scope.players[0].connectedGameId);
+                    $scope.updateGame();
                 }
             }, 1000);
         }
@@ -299,7 +309,7 @@ angular.module('jchess', [])
                             angular.forEach($scope.possibleMoves, function(field) {
                                 if (field.notation == notation)
                                     //canvasContext.fillStyle = "#FF6A00";
-                                    canvasContext.fillStyle = tinycolor(canvasContext.fillStyle).greyscale().toHexString();
+                                    canvasContext.fillStyle = tinycolor(canvasContext.fillStyle).tetrad()[2].toHexString();
                             });
                         }
                         if ($scope.selectedField && notation == $scope.selectedField) {
