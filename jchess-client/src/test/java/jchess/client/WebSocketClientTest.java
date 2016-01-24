@@ -1,5 +1,6 @@
 package jchess.client;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -20,7 +21,8 @@ public class WebSocketClientTest {
         assertFalse(webSocketClient.isConnected());
     }
 
-//    @Test
+    @Ignore("Does not work as we have no running server.")
+    @Test
     public void testConnect() throws Exception {
         WebSocketClient webSocketClient = new WebSocketClient();
         webSocketClient.connect("localhost", 8080);
@@ -28,7 +30,8 @@ public class WebSocketClientTest {
         webSocketClient.close();
     }
 
-//    @Test
+    @Ignore("Does not work as we have no running server.")
+    @Test
     public void testSubscribe() throws Exception {
         WebSocketClient webSocketClient = new WebSocketClient();
         webSocketClient.connect("localhost", 8080);
@@ -46,7 +49,8 @@ public class WebSocketClientTest {
         webSocketClient.close();
     }
 
-//    @Test
+    @Ignore("Does not work as we have no running server.")
+    @Test
     public void testClose() throws Exception {
         WebSocketClient webSocketClient = new WebSocketClient();
         webSocketClient.connect("localhost", 8080);
