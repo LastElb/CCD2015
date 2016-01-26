@@ -53,6 +53,11 @@ public class Game {
         return gameMode;
     }
 
+    /**
+     * Set the game mode e.g. default-3-person-chess
+     * @param gameMode
+     * @return current {@link Game} object
+     */
     public Game setGameMode(String gameMode) {
         this.gameMode = gameMode;
         return this;
@@ -65,14 +70,27 @@ public class Game {
         return maximumPlayers;
     }
 
+    /**
+     * Get the history of the current Game as List. Not implemented yet.
+     * @return
+     */
     public List<HistoryEntry> getGameHistory() {
         return gameHistory;
     }
 
+    /**
+     * Get the {@link Chessboard} object
+     * @return Chessboard
+     */
     public Chessboard getChessboard() {
         return chessboard;
     }
 
+    /**
+     * Set the {@link Chessboard} object
+     * @param chessboard
+     * @return current {@link Game} object
+     */
     public Game setChessboard(Chessboard chessboard) {
         this.chessboard = chessboard;
         return this;
