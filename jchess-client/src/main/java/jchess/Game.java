@@ -17,13 +17,13 @@
  * Authors:
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
+ * Malte Müns
  */
 package jchess;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mki.chessboard.implementation.threePersonChess.Hexagon;
 import de.mki.chessboard.implementation.threePersonChess.smallHexboard;
-import de.mki.chessboard.model.Field;
 import de.mki.jchess.commons.Client;
 import de.mki.jchess.commons.websocket.PlayerChangedEvent;
 import de.mki.jchess.commons.websocket.PlayerDefeatedEvent;
@@ -36,16 +36,13 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 
 import jchess.client.models.Figure;
-import jchess.client.models.Position;
 
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedReader;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -53,14 +50,10 @@ import java.util.Optional;
 
 import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Class responsible for the starts of new games, loading games,
- * saving it, and for ending it.
- * This class is also responsible for appoing player with have
- * a move at the moment
+ * Class responsible for starting a new game.
+ * This class is also responsible for binding to APIs (Server, WebSocket) and to display the chessboard.
  */
 public class Game extends JPanel implements MouseListener, ComponentListener {
 
@@ -77,22 +70,15 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     Game() {
 
-        initializeHexboard();
-
         // initialize lastClickedField as A0
         lastClickedField = new Hexagon(0, -1);
         highlightedFields = new ArrayList<>();
 
-        //this.setLayout(null);
-        // ToDo: Initalize Chessboard & add MouseListener & add JPanel
-        // chessboard.addMouseListener(this);
-        // chessboard.setLocation(new Point(0, 0));
-        // this.add(chessboard);
+        // initialize Hexboard
+        initializeHexboard();
 
-        //this.setLayout(null);
         this.addMouseListener(this);
         this.addComponentListener(this);
-        //this.setDoubleBuffered(true);
     }
 
 
@@ -109,6 +95,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         }
 
         this.repaint();
+        this.updateUI();
     }
 
     /**
@@ -125,52 +112,20 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
 
     /**
-     * Method to swich active players after move
+     * Initialize the Chessboard in Hexagon-style
      */
-    public void switchActive() {
-    }
-
     public void initializeHexboard() {
         this.setLayout(null);
         this.setDoubleBuffered(false);
 
-        /*java.util.List<Figure> figures;
-        Figure figure1;
-        Position position1;
-
-        figure1 = new Figure();
-        figure1.setId("yripqepbztt6nv5d8t2m");
-
-        position1 = new Position();
-        position1.setNotation("A1");
-
-        figure1.setPositionObject(position1);
-        figure1.setName("King");
-        figure1.setPictureId("king-white");
-        figure1.setRemoved(false);
-
-        Figure figure2 = new Figure();
-        figure2.setId("y2ripqepbztt6nv5d8t2m");
-
-        Position position2 = new Position();
-        position2.setNotation("B2");
-
-        figure2.setPositionObject(position2);
-        figure2.setName("Knight");
-        figure2.setPictureId("knight-white");
-        figure2.setRemoved(false);
-
-        figures = new ArrayList<Figure>();
-        figures.add(figure1);
-        figures.add(figure2);*/
 
         try {
             chessboard = new smallHexboard();
 
-            //chessboard.setupBoard(figures);
             this.addMouseListener(this);
             this.add(chessboard);
             this.repaint();
+            this.updateUI();
         } catch (Exception e) {
             logger.error("", e);
         }
@@ -180,16 +135,22 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public void mouseClicked(MouseEvent arg0) {
     }
 
-
+    /**
+     * Method handling click-Events on the Chessboard
+     *
+     * @param event
+     */
     public void mousePressed(MouseEvent event) {
         if (event.getButton() == MouseEvent.BUTTON1) //left button
         {
             // its your turn
             if (!chessboard.isBlocked()) {
-                int x = event.getX();//get X position of mouse
-                int y = event.getY();//get Y position of mouse
+                // get X position of mouse
+                int x = event.getX();
+                // get Y position of mouse
+                int y = event.getY();
 
-                // @Todo: Pass position to chessboard
+                // Get clicked field form chessboard by passing coordinates
                 String clickedField = chessboard.getClickedField(x, y);
 
                 logger.trace("Click on x={}, y={} which is field {}",
@@ -198,12 +159,11 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         clickedField
                 );
 
-                // Action
-
                 // try move
                 // clicked field is already marked
-                if(highlightedFields.contains(clickedField)){
-                    try{
+                if (highlightedFields.contains(clickedField)) {
+                    try {
+                        // send request for movement to the server
                         serverApi.performMovement(getGameID(), lastClickedField.getNotation(), clickedField, clientModel.get().getId());
                         // reset highlighted fields
                         chessboard.clearHighlightedFields();
@@ -211,16 +171,17 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                     } catch (Exception e) {
                         logger.error("", e);
                     }
-                }
-                else{
+                } else {
                     // mark possible moves
                     List<Figure> figures = chessboard.getFigures();
 
+                    // get figure on the clicked field
                     for (Figure figure : figures) {
-                        if( figure.getPositionObject().getNotation().equals(clickedField)){
-                            // request possible moves from server
+                        if (figure.getPositionObject().getNotation().equals(clickedField)) {
                             try {
+                                // request possible moves from server
                                 highlightedFields = serverApi.getPossibleMoves(getGameID(), clickedField);
+                                // highlight fields
                                 chessboard.highlightFieldsByNotation(highlightedFields);
                                 break;
                             } catch (Exception e) {
@@ -230,7 +191,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         }
                     }
                 }
+                // repaint gui
                 this.repaint();
+                this.updateUI();
 
                 // save last clicked field
                 lastClickedField = chessboard.getFieldByNotation(clickedField);
@@ -246,36 +209,63 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                 logger.trace("Chessboard is blocked");
             }
         }
-        //chessboard.repaint();
     }
 
+    /**
+     * Method triggered when mouse is released: Not implemented
+     *
+     * @param arg0 MouseEvent
+     */
     public void mouseReleased(MouseEvent arg0) {
     }
 
+    /**
+     * Method triggered when mouse enters: Not implemented
+     *
+     * @param arg0 MouseEvent
+     */
     public void mouseEntered(MouseEvent arg0) {
     }
 
+    /**
+     * Method triggered when mouse exits: Not implemented
+     *
+     * @param arg0 MouseEvent
+     */
     public void mouseExited(MouseEvent arg0) {
     }
 
+    /**
+     * Method triggered when window gets resized: Repaint all components
+     *
+     * @param e ComponentEvent
+     */
     public void componentResized(ComponentEvent e) {
-        /*
-        int height = this.getHeight() >= this.getWidth() ? this.getWidth() : this.getHeight();
-        int chess_height = (int) Math.round((height * 0.8) / 8) * 8;
-        this.chessboard.resizeChessboard((int) chess_height);
-        chess_height = this.chessboard.getHeight();
-        this.moves.getScrollPane().setLocation(new Point(chess_height + 5, 100));
-        this.moves.getScrollPane().setSize(this.moves.getScrollPane().getWidth(), chess_height - 100);
-        this.gameClock.setLocation(new Point(chess_height + 5, 0));
-        */
+        this.repaint();
+        this.updateUI();
     }
 
+    /**
+     * Method triggered when component is moved: Not implemented
+     *
+     * @param e ComponentEvent
+     */
     public void componentMoved(ComponentEvent e) {
     }
 
+    /**
+     * Method triggered when component is shown: Not implemented
+     *
+     * @param e ComponentEvent
+     */
     public void componentShown(ComponentEvent e) {
     }
 
+    /**
+     * Method triggered when component is hidden: Not implemented
+     *
+     * @param e ComponentEvent
+     */
     public void componentHidden(ComponentEvent e) {
     }
 
@@ -285,19 +275,22 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @throws Exception
      */
     public void initiaizeAndJoinHostedGame(String host, int port, String nickname) throws Exception {
+        // Initialize Server-API
         serverApi = new ServerApi(host, port);
+        // Start new 3-person-chess game on server
         gameModel = serverApi.hostGame("default-3-person-chess");
 
+        // Join the hosted game
         joinGame(host, port, gameID, nickname);
     }
 
     /**
-     * Join a network game as player
+     * Join an existing network game as player
      *
-     * @param host
-     * @param port
-     * @param gameID
-     * @param nickname
+     * @param host     Hostname of the server
+     * @param port     Port of the server
+     * @param gameID   Identifier of the hosted Game
+     * @param nickname Nickname of the player
      * @throws Exception
      */
     public void joinGame(String host, int port, String gameID, String nickname) throws Exception {
@@ -306,14 +299,15 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         this.setGameID(gameID);
 
         // Fixes CCD2015-58 [Client] Es wurde keine Verbindung zum Server aufgebaut.
+        // Initialize Server-API if not done before
         if (serverApi == null) {
             serverApi = new ServerApi(host, port);
         }
 
-        // Connect to game
+        // Connect to existing game
         clientModel = serverApi.connectToGame(nickname, gameID);
 
-        // setup Websockets
+        // Setup Websockets
         webSocketClient = new WebSocketClient();
         webSocketClient.connect(host, port);
 
@@ -324,14 +318,21 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                 return null;
             }
 
+            /**
+             * Handle incoming events (PlayerChangedEvent & PlayerDefeatedEvent) and trigger actions.
+             * @param headers Headers of the Request
+             * @param payload Content of the Request
+             */
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 ObjectMapper objectMapper = new ObjectMapper();
+                // Get type of triggered event by special Header
                 String objectType = headers.getFirst("data-type");
                 String content = new String((byte[]) payload);
 
                 logger.trace("Event {} was triggered using websockets", objectType);
 
+                // Object-Mapping
                 switch (objectType) {
                     case "PlayerChangedEvent":
                         Optional<PlayerChangedEvent> playerChangedEvent = null;
@@ -340,8 +341,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         } catch (IOException e) {
                             logger.error("", e);
                         }
+                        // trigger Action
                         PlayerChangedAction(playerChangedEvent.get());
-                        ChessboardChangedAction();
+                        ChessboardChangedAction(false);
                         break;
                     case "PlayerDefeatedEvent":
                         Optional<PlayerDefeatedEvent> playerDefeatedEvent = null;
@@ -350,9 +352,12 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                         } catch (IOException e) {
                             logger.error("", e);
                         }
+                        // trigger Action
                         PlayerDefeatedAction(playerDefeatedEvent.get());
                         break;
                     default:
+                        // no Event found, we are going to log it
+                        logger.trace("Unhandeled Event {} was triggered using websockets", objectType);
                         break;
                 }
             }
@@ -362,27 +367,22 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     /**
      * Get the id of the current game if running
      *
-     * @return
+     * @return Identifier to the current game
      */
     public String getGameID() {
-            return gameID;
+        return gameID;
     }
 
     /**
-     * Action which is triggered when the player changes
+     * Action which is triggered when the player changes. Responsible for blocking the Chessboard.
      *
      * @param playerChangedEvent
      */
     private void PlayerChangedAction(PlayerChangedEvent playerChangedEvent) {
         // is the game initialized?
-        if(chessboard.getFigures().size() == 0){
-            try {
-                jchess.client.models.Game game = serverApi.getFullGame(getGameID()).get();
-                Chessboard newChessboard = game.getChessboard();
-                chessboard.setupBoard(newChessboard.getFigures());
-            } catch (Exception e) {
-                logger.error("", e);
-            }
+        if (chessboard.getFigures().size() == 0) {
+            // initialize figures
+            ChessboardChangedAction(true);
         }
 
         if (playerChangedEvent.isItYouTurn()) {
@@ -398,14 +398,23 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
 
     /**
-     * This action is triggered by the server when something on the chessboard changed. The chessboard gets reloaded
+     * Action which is called when the Chessboard changes. Responsible for updating the figures on the Chessboard.
+     * @param setup Does the Chessboard needs to be setup? Is it the first call?
      */
-    private void ChessboardChangedAction() {
+    private void ChessboardChangedAction(boolean setup) {
         try {
+            // pull game information from the server
             jchess.client.models.Game game = serverApi.getFullGame(getGameID()).get();
 
             Chessboard newChessboard = game.getChessboard();
-            chessboard.updateChessboard(newChessboard.getFigures());
+            if(setup){
+                // initial setup of the Chessboard
+                chessboard.setupBoard(newChessboard.getFigures());
+            } else {
+                // update figures
+                chessboard.updateChessboard(newChessboard.getFigures());
+            }
+
             this.repaint();
             this.updateUI();
 
@@ -415,7 +424,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
 
     /**
-     * Action triggered by the server, when the player is defeated
+     * Action triggered by the server, when the player is defeated, a hint is shown.
      *
      * @param playerDefeatedEvent
      */
@@ -431,6 +440,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         }
     }
 
+    /**
+     * Setter for the identifier of the current game
+     * @param gameID
+     */
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }
