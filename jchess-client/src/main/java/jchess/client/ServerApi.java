@@ -136,7 +136,7 @@ public class ServerApi {
      *
      * @param gameID        Identifier of the game
      * @param fieldNotation Field the figure is located e.g. A4
-     * @return ArrayList<String> Array Containing all possible Fields to move to as {@link Position} object
+     * @return Array Containing all possible Fields to move to as {@link Position} object
      * @throws Exception
      */
     public ArrayList<String> getPossibleMoves(String gameID, String fieldNotation) throws Exception {
