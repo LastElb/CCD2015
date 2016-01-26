@@ -17,6 +17,9 @@ package jchess;
 
 import org.jdesktop.application.Action;
 
+/**
+ * Class to show the original authors of this horrible chess project
+ */
 public class JChessAboutBox extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

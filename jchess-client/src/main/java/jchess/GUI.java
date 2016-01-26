@@ -29,7 +29,7 @@ import java.net.URL;
 /**
  * Class representing the game interface which is seen by a player and
  * where are located available for player options, current games and where
- * can he start a new game (load it or save it)
+ * can he start a new game
  */
 public class GUI {
 
@@ -38,8 +38,6 @@ public class GUI {
 
     public GUI() {
         this.game = new Game();
-
-        //this.drawGUI();
     }
 
     /** Method load image by a given name with extension

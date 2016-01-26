@@ -20,12 +20,17 @@
  */
 package jchess;
 
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.ImageObserver;
 
+/**
+ * Crazy swing stuff to add Tabs to GUI.
+ */
 public class JChessTabbedPane extends JTabbedPane implements MouseListener, ImageObserver {
 
     transient private TabbedPaneIcon closeIcon;
@@ -33,7 +38,11 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
     transient private Image clickedAddIcon = null;
     transient private Image unclickedAddIcon = null;
     private Rectangle addIconRect = null;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JChessTabbedPane.class);
 
+    /**
+     * Initialize Tabbed Pane
+     */
     JChessTabbedPane() {
         super();
         this.closeIcon = new TabbedPaneIcon(this.closeIcon);
@@ -44,23 +53,49 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         super.addMouseListener(this);
     }
 
+    /**
+     * Method to add a Tab to pane
+     *
+     * @param title     Title of the tab
+     * @param component
+     */
     @Override
     public void addTab(String title, Component component) {
         this.addTab(title, component, null);
     }
 
+    /**
+     * Add a tab with specified icon to pane
+     *
+     * @param title     Title of the tab
+     * @param component
+     * @param closeIcon Icon for closing the tab
+     */
     public void addTab(String title, Component component, Icon closeIcon) {
         super.addTab(title, new TabbedPaneIcon(closeIcon), component);
-        System.out.println("Present number of tabs: " + this.getTabCount());
+        logger.trace("Present number of tabs: {}", this.getTabCount());
         this.updateAddIconRect();
     }
 
+    /**
+     * Method triggered when mouse is released: Not implemented
+     *
+     * @param e MouseEvent
+     */
     public void mouseReleased(MouseEvent e) {
     }
 
+    /**
+     * Method triggered when mouse is pressed: Not implemented
+     *
+     * @param e MouseEvent
+     */
     public void mousePressed(MouseEvent e) {
     }
 
+    /**
+     * Add a new Game Window and show it
+     */
     private void showNewGameWindow() {
         JChessView jChessView = JChessApp.getjChessView();
         if (jChessView.newGameFrame == null) {
@@ -69,13 +104,18 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         JChessApp.getApplication().show(jChessView.newGameFrame);
     }
 
+    /**
+     * Click-Handler to add / remove tabs
+     *
+     * @param e MouseEvent
+     */
     public void mouseClicked(MouseEvent e) {
         Rectangle rect;
         int tabNumber = getUI().tabForCoordinate(this, e.getX(), e.getY());
         if (tabNumber >= 0) {
             rect = ((TabbedPaneIcon) getIconAt(tabNumber)).getBounds();
             if (rect.contains(e.getX(), e.getY())) {
-                System.out.println("Removing tab with " + tabNumber + " number!...");
+                logger.trace("Removing tabe with tabNumber: {}", tabNumber);
                 this.removeTabAt(tabNumber);//remove tab
                 this.updateAddIconRect();
             }
@@ -83,18 +123,30 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
                 this.showNewGameWindow();
             }
         } else if (this.addIconRect != null && this.addIconRect.contains(e.getX(), e.getY())) {
-            System.out.println("newGame by + button");
+            logger.trace("New Game started by + button");
             this.showNewGameWindow();
         }
-        //System.out.println("x:" +e.getX()+" y: "+e.getY()+" x:"+this.addIconRect.x+" y::"+this.addIconRect.y+" width:"+this.addIconRect.width+" height: "+this.addIconRect.height);
     }
 
+    /**
+     * Method triggered when mouse enters: Not implemented
+     *
+     * @param e MouseEvent
+     */
     public void mouseEntered(MouseEvent e) {
     }
 
+    /**
+     * Method triggered when mouse exits: Not implemented
+     *
+     * @param e MouseEvent
+     */
     public void mouseExited(MouseEvent e) {
     }
 
+    /**
+     * Update the addIcon Rectangle
+     */
     private void updateAddIconRect() {
         if (this.getTabCount() > 0) {
             Rectangle rect = this.getBoundsAt(this.getTabCount() - 1);
@@ -104,10 +156,26 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         }
     }
 
+    /**
+     * Get AddIcon Rectangle
+     *
+     * @return Rectangle
+     */
     private Rectangle getAddIconRect() {
         return this.addIconRect;
     }
 
+    /**
+     * Update icon on tab
+     *
+     * @param img       Image diaplayed
+     * @param infoflags
+     * @param x         x-position
+     * @param y         y-position
+     * @param width     width of the image
+     * @param height    height of the image
+     * @return true
+     */
     @Override
     public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
         super.imageUpdate(img, infoflags, x, y, width, height);
@@ -115,6 +183,11 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param g
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -124,12 +197,20 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param g
+     */
     @Override
     public void update(Graphics g) {
         this.repaint();
     }
 }
 
+/**
+ * Class for implementing the icons
+ */
 class TabbedPaneIcon implements Icon {
 
     private int x_pos;
@@ -138,12 +219,25 @@ class TabbedPaneIcon implements Icon {
     private int height;
     private Icon fileIcon;
 
+    /**
+     * Create Icon
+     *
+     * @param fileIcon
+     */
     public TabbedPaneIcon(Icon fileIcon) {
         this.fileIcon = fileIcon;
         width = 16;
         height = 16;
-    }//--endOf-TabbedPaneIcon--
+    }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param c
+     * @param g
+     * @param x
+     * @param y
+     */
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
         this.x_pos = x;
@@ -163,16 +257,31 @@ class TabbedPaneIcon implements Icon {
         if (fileIcon != null) {
             fileIcon.paintIcon(c, g, x + width, y_p);
         }
-    }//--endOf-PaintIcon--
+    }
 
+    /**
+     * Returns the width of the icon, if no file is set 0.
+     *
+     * @return Width of the icon
+     */
     public int getIconWidth() {
         return width + (fileIcon != null ? fileIcon.getIconWidth() : 0);
-    }//--endOf-getIconWidth--
+    }
 
+    /**
+     * Returns the height of the icon
+     *
+     * @return icon height
+     */
     public int getIconHeight() {
         return height;
-    }//--endOf-getIconHeight()--
+    }
 
+    /**
+     * Get the Rectangle containing the icon
+     *
+     * @return Rectangle
+     */
     public Rectangle getBounds() {
         return new Rectangle(x_pos, y_pos, width, height);
     }
