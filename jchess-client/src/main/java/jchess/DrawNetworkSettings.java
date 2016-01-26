@@ -212,6 +212,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
 
                 // join existing game
                 try {
+                    // fixes: CCD2015-68 [Client] Wrong textbox
                     newGUI.joinGame(uri.getHost(), uri.getPort(), textGameID.getText(), textNick.getText());
 
                     // wait for opponents
