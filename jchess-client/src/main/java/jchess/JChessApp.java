@@ -66,5 +66,6 @@ public class JChessApp extends SingleFrameApplication {
      */
     @Override
     protected void configureWindow(java.awt.Window root) {
+        // not implemented yet
     }
 }
