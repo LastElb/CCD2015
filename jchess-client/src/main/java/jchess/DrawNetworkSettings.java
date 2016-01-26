@@ -51,6 +51,10 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
     private URI uri;
 
+    /**
+     * Default constructor
+     * @param parent
+     */
     DrawNetworkSettings(JDialog parent) {
         super();
 

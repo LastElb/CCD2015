@@ -6,6 +6,9 @@ import de.mki.jchess.commons.HistoryEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Ignore Property gameHistory
+ */
 @JsonIgnoreProperties({"gameHistory"})
 
 /**

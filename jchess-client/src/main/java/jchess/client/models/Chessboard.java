@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Ignore properties field
+ */
 @JsonIgnoreProperties({"fields"})
 
 /**

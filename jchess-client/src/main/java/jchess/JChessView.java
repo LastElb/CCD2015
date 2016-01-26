@@ -66,6 +66,10 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
+            /**
+             * {@inheritDoc}
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
@@ -77,6 +81,10 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+            /**
+             * {@inheritDoc}
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
@@ -90,6 +98,10 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            /**
+             * {@inheritDoc}
+             * @param evt
+             */
             @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();

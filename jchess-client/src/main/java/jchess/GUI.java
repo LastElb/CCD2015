@@ -43,7 +43,8 @@ public class GUI {
         this.game = new Game();
     }
 
-    /** Method load image by a given name with extension
+    /**
+     * Method load image by a given name with extension
      * @param name string of image to load for ex. "chessboard.jpg"
      * @return image or null if cannot load
      **/
