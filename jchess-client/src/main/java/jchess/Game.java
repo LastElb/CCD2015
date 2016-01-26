@@ -135,12 +135,13 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
 
     /**
-     * Method triggered when mouse is released: Not implemented
+     * Method triggered when mouse is released
      *
      * @param arg0 MouseEvent
      */
     @Override
     public void mouseClicked(MouseEvent arg0) {
+        // Not implemented yet
     }
 
     /**
@@ -221,30 +222,33 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
 
     /**
-     * Method triggered when mouse is released: Not implemented
+     * Method triggered when mouse is released:
      *
      * @param arg0 MouseEvent
      */
     @Override
     public void mouseReleased(MouseEvent arg0) {
+        // Not implemented
     }
 
     /**
-     * Method triggered when mouse enters: Not implemented
+     * Method triggered when mouse enters
      *
      * @param arg0 MouseEvent
      */
     @Override
     public void mouseEntered(MouseEvent arg0) {
+        // Not implemented
     }
 
     /**
-     * Method triggered when mouse exits: Not implemented
+     * Method triggered when mouse exits
      *
      * @param arg0 MouseEvent
      */
     @Override
     public void mouseExited(MouseEvent arg0) {
+        // Not implemented
     }
 
     /**
@@ -259,30 +263,33 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
 
     /**
-     * Method triggered when component is moved: Not implemented
+     * Method triggered when component is moved
      *
      * @param e ComponentEvent
      */
     @Override
     public void componentMoved(ComponentEvent e) {
+        // Not implemented
     }
 
     /**
-     * Method triggered when component is shown: Not implemented
+     * Method triggered when component is shown
      *
      * @param e ComponentEvent
      */
     @Override
     public void componentShown(ComponentEvent e) {
+        // Not implemented
     }
 
     /**
-     * Method triggered when component is hidden: Not implemented
+     * Method triggered when component is hidden
      *
      * @param e ComponentEvent
      */
     @Override
     public void componentHidden(ComponentEvent e) {
+        // Not implemented
     }
 
     /**
