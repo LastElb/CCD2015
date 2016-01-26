@@ -78,19 +78,23 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
     }
 
     /**
-     * Method triggered when mouse is released: Not implemented
+     * Method triggered when mouse is released
      *
      * @param e MouseEvent
      */
+    @Override
     public void mouseReleased(MouseEvent e) {
+        // Not implemented
     }
 
     /**
-     * Method triggered when mouse is pressed: Not implemented
+     * Method triggered when mouse is pressed
      *
      * @param e MouseEvent
      */
+    @Override
     public void mousePressed(MouseEvent e) {
+        // Not implemented
     }
 
     /**
@@ -109,6 +113,7 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
      *
      * @param e MouseEvent
      */
+    @Override
     public void mouseClicked(MouseEvent e) {
         Rectangle rect;
         int tabNumber = getUI().tabForCoordinate(this, e.getX(), e.getY());
@@ -129,19 +134,23 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
     }
 
     /**
-     * Method triggered when mouse enters: Not implemented
+     * Method triggered when mouse enters
      *
      * @param e MouseEvent
      */
+    @Override
     public void mouseEntered(MouseEvent e) {
+        // Not implemented
     }
 
     /**
-     * Method triggered when mouse exits: Not implemented
+     * Method triggered when mouse exits
      *
      * @param e MouseEvent
      */
+    @Override
     public void mouseExited(MouseEvent e) {
+        // Not implemented
     }
 
     /**
@@ -264,6 +273,7 @@ class TabbedPaneIcon implements Icon {
      *
      * @return Width of the icon
      */
+    @Override
     public int getIconWidth() {
         return width + (fileIcon != null ? fileIcon.getIconWidth() : 0);
     }
@@ -273,6 +283,7 @@ class TabbedPaneIcon implements Icon {
      *
      * @return icon height
      */
+    @Override
     public int getIconHeight() {
         return height;
     }

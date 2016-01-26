@@ -66,6 +66,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
             }
