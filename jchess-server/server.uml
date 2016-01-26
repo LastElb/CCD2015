@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>de.mki.jchess.server</OriginalElement>
+  <nodes>
+    <node x="398.75" y="200.0">de.mki.jchess.server.implementation.threePersonChess.figures.Bishop</node>
+    <node x="232.25481029810294" y="280.0">de.mki.jchess.server.implementation.threePersonChess.Chessboard</node>
+    <node x="508.625" y="390.0">de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame</node>
+    <node x="54.0" y="110.0">de.mki.jchess.server.model.Game</node>
+    <node x="796.75" y="280.0">de.mki.jchess.server.implementation.threePersonChess.figures.Pawn</node>
+    <node x="509.625" y="470.0">de.mki.jchess.server.controller.HostingController</node>
+    <node x="534.75" y="110.0">de.mki.jchess.server.model.Figure</node>
+    <node x="205.5" y="110.0">de.mki.jchess.server.exception.NotationNotFoundException</node>
+    <node x="578.75" y="200.0">de.mki.jchess.server.implementation.threePersonChess.figures.King</node>
+    <node x="745.75" y="200.0">de.mki.jchess.server.implementation.threePersonChess.figures.Rook</node>
+    <node x="488.75" y="200.0">de.mki.jchess.server.implementation.threePersonChess.figures.Queen</node>
+    <node x="965.25" y="110.0">de.mki.jchess.server.implementation.threePersonChess.Hexagon.HexagonNeighbourModel</node>
+    <node x="80.75" y="200.0">de.mki.jchess.server.exception.MoveNotAllowedException</node>
+    <node x="0.0" y="0.0">de.mki.jchess.server.exception.TooManyPlayersException</node>
+    <node x="659.625" y="390.0">de.mki.jchess.server.exception.InvalidGameModeException</node>
+    <node x="1010.75" y="200.0">de.mki.jchess.server.implementation.threePersonChess.Hexagon</node>
+    <node x="656.75" y="200.0">de.mki.jchess.server.implementation.threePersonChess.figures.Knight</node>
+    <node x="279.75" y="200.0">de.mki.jchess.server.model.Chessboard</node>
+    <node x="838.75" y="200.0">de.mki.jchess.server.exception.InvalidFacingDirection</node>
+    <node x="682.3462059620597" y="0.0">de.mki.jchess.server.implementation.threePersonChess.Direction</node>
+    <node x="339.625" y="390.0">de.mki.jchess.server.controller.GameModeController</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Bishop" target="de.mki.jchess.server.model.Figure">
+      <point x="17.5" y="-15.0" />
+      <point x="451.25" y="170.0" />
+      <point x="549.1071428571429" y="170.0" />
+      <point x="-19.14285714285711" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.King" target="de.mki.jchess.server.implementation.threePersonChess.Direction">
+      <point x="14.5" y="-15.0" />
+      <point x="622.25" y="80.0" />
+      <point x="705.1239837398375" y="80.0" />
+      <point x="-18.22222222222217" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.figures.Knight">
+      <point x="19.649999999999977" y="-15.0" />
+      <point x="593.775" y="340.0" />
+      <point x="661.872493224932" y="340.0" />
+      <point x="661.872493224932" y="260.0" />
+      <point x="691.25" y="260.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.King" target="de.mki.jchess.server.model.Figure">
+      <point x="-14.5" y="-15.0" />
+      <point x="593.25" y="180.0" />
+      <point x="577.8214285714286" y="180.0" />
+      <point x="9.571428571428555" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.controller.HostingController" target="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.model.Chessboard" target="de.mki.jchess.server.exception.NotationNotFoundException">
+      <point x="0.0" y="-15.0" />
+      <point x="327.75" y="180.0" />
+      <point x="345.0" y="180.0" />
+      <point x="46.5" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.figures.King">
+      <point x="6.5499999999999545" y="-15.0" />
+      <point x="580.675" y="330.0" />
+      <point x="601.9413956639567" y="330.0" />
+      <point x="601.9413956639567" y="260.0" />
+      <point x="607.75" y="260.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.figures.Rook">
+      <point x="32.75" y="-15.0" />
+      <point x="606.875" y="350.0" />
+      <point x="746.872493224932" y="350.0" />
+      <point x="746.872493224932" y="260.0" />
+      <point x="776.25" y="260.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.controller.HostingController" target="de.mki.jchess.server.exception.InvalidGameModeException">
+      <point x="43.0" y="-15.0" />
+      <point x="617.125" y="445.0" />
+      <point x="750.625" y="445.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.model.Chessboard" target="de.mki.jchess.server.model.Game">
+      <point x="-32.0" y="-15.0" />
+      <point x="295.75" y="170.0" />
+      <point x="102.75" y="170.0" />
+      <point x="16.25" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.Chessboard" target="de.mki.jchess.server.model.Chessboard">
+      <point x="12.0" y="-15.0" />
+      <point x="292.25481029810294" y="250.0" />
+      <point x="327.75" y="250.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Pawn" target="de.mki.jchess.server.implementation.threePersonChess.Direction">
+      <point x="-12.600000000000023" y="-15.0" />
+      <point x="815.65" y="260.0" />
+      <point x="817.25" y="260.0" />
+      <point x="817.25" y="70.0" />
+      <point x="741.5684281842819" y="70.0" />
+      <point x="18.22222222222217" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Rook" target="de.mki.jchess.server.implementation.threePersonChess.Direction">
+      <point x="15.25" y="-15.0" />
+      <point x="791.5" y="80.0" />
+      <point x="732.4573170731708" y="80.0" />
+      <point x="9.111111111111086" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Queen" target="de.mki.jchess.server.implementation.threePersonChess.Direction">
+      <point x="-17.25" y="-15.0" />
+      <point x="506.0" y="70.0" />
+      <point x="696.0128726287263" y="70.0" />
+      <point x="-27.33333333333337" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.Chessboard" target="de.mki.jchess.server.exception.NotationNotFoundException">
+      <point x="-12.0" y="-15.0" />
+      <point x="269.25" y="180.0" />
+      <point x="252.0" y="180.0" />
+      <point x="-46.5" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Pawn" target="de.mki.jchess.server.exception.InvalidFacingDirection">
+      <point x="12.600000000000023" y="-15.0" />
+      <point x="840.85" y="250.0" />
+      <point x="914.75" y="250.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.model.Game">
+      <point x="-58.94999999999993" y="-15.0" />
+      <point x="515.1750000000001" y="370.0" />
+      <point x="70.25" y="370.0" />
+      <point x="-16.25" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.figures.Queen">
+      <point x="-6.5499999999999545" y="-15.0" />
+      <point x="567.575" y="330.0" />
+      <point x="540.5" y="330.0" />
+      <point x="17.25" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Pawn" target="de.mki.jchess.server.implementation.threePersonChess.Hexagon">
+      <point x="25.200000000000045" y="-15.0" />
+      <point x="853.45" y="260.0" />
+      <point x="1031.0" y="260.0" />
+      <point x="-20.25" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.figures.Pawn">
+      <point x="45.85000000000002" y="-15.0" />
+      <point x="619.975" y="360.0" />
+      <point x="828.25" y="360.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.Hexagon.HexagonNeighbourModel" target="de.mki.jchess.server.implementation.threePersonChess.Direction">
+      <point x="0.0" y="-15.0" />
+      <point x="1051.25" y="50.0" />
+      <point x="759.7906504065041" y="50.0" />
+      <point x="36.44444444444446" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.Hexagon" target="de.mki.jchess.server.implementation.threePersonChess.Hexagon.HexagonNeighbourModel">
+      <point x="-27.0" y="-15.0" />
+      <point x="1024.25" y="180.0" />
+      <point x="993.9166666666666" y="180.0" />
+      <point x="-57.33333333333337" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Knight" target="de.mki.jchess.server.model.Figure">
+      <point x="-23.0" y="-15.0" />
+      <point x="668.25" y="170.0" />
+      <point x="587.3928571428571" y="170.0" />
+      <point x="19.14285714285711" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Rook" target="de.mki.jchess.server.model.Figure">
+      <point x="-15.25" y="-15.0" />
+      <point x="761.0" y="160.0" />
+      <point x="596.9642857142857" y="160.0" />
+      <point x="28.714285714285666" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.model.Chessboard" target="de.mki.jchess.server.model.Figure">
+      <point x="32.0" y="-15.0" />
+      <point x="359.75" y="160.0" />
+      <point x="539.5357142857143" y="160.0" />
+      <point x="-28.714285714285666" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.Hexagon.HexagonNeighbourModel" target="de.mki.jchess.server.implementation.threePersonChess.Hexagon">
+      <point x="57.33333333333326" y="15.0" />
+      <point x="1108.5833333333333" y="180.0" />
+      <point x="1078.25" y="180.0" />
+      <point x="27.0" y="-15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.Chessboard">
+      <point x="-45.84999999999991" y="-15.0" />
+      <point x="528.2750000000001" y="360.0" />
+      <point x="256.25481029810294" y="360.0" />
+      <point x="-24.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.model.Game" target="de.mki.jchess.server.exception.TooManyPlayersException">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.Chessboard" target="de.mki.jchess.server.implementation.threePersonChess.figures.Queen">
+      <point x="36.0" y="-15.0" />
+      <point x="316.25481029810294" y="260.0" />
+      <point x="506.0" y="260.0" />
+      <point x="-17.25" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.figures.Bishop">
+      <point x="-19.649999999999977" y="-15.0" />
+      <point x="554.475" y="340.0" />
+      <point x="433.75" y="340.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Bishop" target="de.mki.jchess.server.implementation.threePersonChess.Direction">
+      <point x="-17.5" y="-15.0" />
+      <point x="416.25" y="60.0" />
+      <point x="686.9017615176152" y="60.0" />
+      <point x="-36.44444444444446" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Knight" target="de.mki.jchess.server.implementation.threePersonChess.Direction">
+      <point x="0.0" y="-15.0" />
+      <point x="691.25" y="90.0" />
+      <point x="714.2350948509486" y="90.0" />
+      <point x="-9.111111111111086" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Pawn" target="de.mki.jchess.server.model.Figure">
+      <point x="-25.200000000000045" y="-15.0" />
+      <point x="803.05" y="250.0" />
+      <point x="568.25" y="250.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.controller.HostingController" target="de.mki.jchess.server.controller.GameModeController">
+      <point x="-43.0" y="-15.0" />
+      <point x="531.125" y="445.0" />
+      <point x="414.125" y="445.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.ThreePersonGame" target="de.mki.jchess.server.implementation.threePersonChess.Hexagon">
+      <point x="58.950000000000045" y="-15.0" />
+      <point x="633.075" y="370.0" />
+      <point x="1071.5" y="370.0" />
+      <point x="20.25" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.figures.Queen" target="de.mki.jchess.server.model.Figure">
+      <point x="17.25" y="-15.0" />
+      <point x="540.5" y="180.0" />
+      <point x="558.6785714285714" y="180.0" />
+      <point x="-9.571428571428555" y="15.0" />
+    </edge>
+    <edge source="de.mki.jchess.server.implementation.threePersonChess.Chessboard" target="de.mki.jchess.server.exception.MoveNotAllowedException">
+      <point x="-36.0" y="-15.0" />
+      <point x="244.25481029810294" y="260.0" />
+      <point x="169.75" y="260.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8" x="567.75" y="337.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
