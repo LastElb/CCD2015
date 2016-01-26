@@ -25,6 +25,10 @@ public class JChessAboutBox extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
 
+    /**
+     * Initialize About Box
+     * @param parent
+     */
     public JChessAboutBox(java.awt.Frame parent) {
         super(parent);
         initComponents();
@@ -32,6 +36,9 @@ public class JChessAboutBox extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Close this horrible about box. Nobody wants to see the original authors.
+     */
     @Action
     public void closeAboutBox() {
         dispose();

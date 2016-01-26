@@ -17,6 +17,7 @@ package jchess;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.*;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,7 @@ import java.awt.event.ComponentListener;
  * The application's main frame.
  */
 public class JChessView extends FrameView implements ActionListener, ComponentListener {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JChessView.class);
     static GUI gui = null;
     // End of variables declaration//GEN-END:variables
     //private JTabbedPaneWithIcon gamesPane;
@@ -52,7 +54,11 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private javax.swing.JPanel statusPanel;
     private int busyIconIndex = 0;
     private JDialog aboutBox;
-    private PawnPromotionWindow promotionBox;
+
+    /**
+     * Initialize jChessView
+     * @param app SingleFrameApplication
+     */
     public JChessView(SingleFrameApplication app) {
         super(app);
 
@@ -113,12 +119,21 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
     }
 
+    /**
+     * Add a new Tab and a new game
+     * @param title title oif the new Tab
+     * @return New game
+     */
     public Game addNewTab(String title) {
         Game newGUI = new Game();
         this.gamesPane.addTab(title, newGUI);
         return newGUI;
     }
 
+    /**
+     * Adds a new GameFrame if new Game was clicked
+     * @param event
+     */
     public void actionPerformed(ActionEvent event) {
         Object target = event.getSource();
         if (target == newGameItem) {
@@ -127,6 +142,9 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         }
     }
 
+    /**
+     * Show box with version information and authors
+     */
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
@@ -135,25 +153,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
             aboutBox.setLocationRelativeTo(mainFrame);
         }
         JChessApp.getApplication().show(aboutBox);
-    }
-
-    public String showPawnPromotionBox(String color) {
-        if (promotionBox == null) {
-            JFrame mainFrame = JChessApp.getApplication().getMainFrame();
-            promotionBox = new PawnPromotionWindow(mainFrame, color);
-            promotionBox.setLocationRelativeTo(mainFrame);
-            promotionBox.setModal(true);
-
-        }
-        promotionBox.setColor(color);
-        JChessApp.getApplication().show(promotionBox);
-
-        return promotionBox.result;
-    }
-
-    public String showSaveWindow() {
-
-        return "";
     }
 
     /**
@@ -286,28 +285,53 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
     }//GEN-LAST:event_moveForwardItemMouseClicked
 
+    /**
+     * Triggerd when the jChessView is resized
+     * @param e ComponentEvent
+     */
     public void componentResized(ComponentEvent e) {
-        System.out.println("jchessView resized!!;");
+        logger.trace("jchessView resized!");
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Get the game corresponding to the active tab
+     * @return Game
+     * @throws ArrayIndexOutOfBoundsException
+     */
     protected Game getActiveTabGame() throws ArrayIndexOutOfBoundsException {
         Game activeGame = (Game) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
         return activeGame;
     }
 
+    /**
+     * Returns the number of opened Tabs
+     * @return int
+     */
     public int getNumberOfOpenedTabs() {
         return this.gamesPane.getTabCount();
     }
 
+    /**
+     * Triggered, when component is moved: Not implemented.
+     * @param e ComponentEvent
+     */
     public void componentMoved(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Triggered, when component is moved: Not implemented.
+     * @param e ComponentEvent
+     */
     public void componentShown(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Triggered, when component is moved: Not implemented.
+     * @param e ComponentEvent
+     */
     public void componentHidden(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
