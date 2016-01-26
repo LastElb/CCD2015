@@ -243,6 +243,9 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         private GridBagConstraints gbc;
         private JLabel labelServIP;
 
+        /**
+         * Default constructor for client options panel
+         */
         ClientOptionsPanel() {
             super();
 

@@ -47,7 +47,7 @@ public class GUI {
      * Method load image by a given name with extension
      * @param name string of image to load for ex. "chessboard.jpg"
      * @return image or null if cannot load
-     **/
+     */
     static Image loadImage(String name) {
         Image img = null;
         URL url = null;
