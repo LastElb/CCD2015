@@ -34,7 +34,7 @@ import java.net.URISyntaxException;
  */
 public class DrawNetworkSettings extends JPanel implements ActionListener {
 
-    private JDialog parent;
+    private JDialog parentDialog;
     private GridBagLayout gbl;
     private GridBagConstraints gbc;
     private ButtonGroup serverORclient;
@@ -55,7 +55,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         super();
 
         //components
-        this.parent = parent;
+        this.parentDialog = parent;
 
         this.radioServer = new JRadioButton("Spiel starten", true);
         this.radioClient = new JRadioButton("Mit Spiel verbinden", false);
@@ -144,6 +144,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     /**
      * Method for showing settings which the player is interested in
      */
+    @Override
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getSource() == this.radioServer) //show options for server
         {
@@ -223,7 +224,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
             }
 
             // close network settings window
-            this.parent.setVisible(false);
+            this.parentDialog.setVisible(false);
         }
     }
 

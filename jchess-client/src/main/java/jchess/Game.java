@@ -59,15 +59,18 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
 
-    transient private ServerApi serverApi;
-    transient private WebSocketClient webSocketClient;
-    transient private Optional<jchess.client.models.Game> gameModel;
-    transient private Optional<Client> clientModel;
-    transient private smallHexboard chessboard;
-    transient private Hexagon lastClickedField;
-    transient private ArrayList<String> highlightedFields;
-    transient private String gameID;
+    private transient ServerApi serverApi;
+    private transient WebSocketClient webSocketClient;
+    private transient Optional<jchess.client.models.Game> gameModel;
+    private transient Optional<Client> clientModel;
+    private transient smallHexboard chessboard;
+    private transient Hexagon lastClickedField;
+    private transient ArrayList<String> highlightedFields;
+    private transient String gameID;
 
+    /**
+     * Default constructor for game
+     */
     Game() {
 
         // initialize lastClickedField as A0
@@ -131,7 +134,12 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         }
     }
 
-    // MouseListener:
+    /**
+     * Method triggered when mouse is released: Not implemented
+     *
+     * @param arg0 MouseEvent
+     */
+    @Override
     public void mouseClicked(MouseEvent arg0) {
     }
 
@@ -140,6 +148,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param event
      */
+    @Override
     public void mousePressed(MouseEvent event) {
         if (event.getButton() == MouseEvent.BUTTON1) //left button
         {
@@ -216,6 +225,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param arg0 MouseEvent
      */
+    @Override
     public void mouseReleased(MouseEvent arg0) {
     }
 
@@ -224,6 +234,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param arg0 MouseEvent
      */
+    @Override
     public void mouseEntered(MouseEvent arg0) {
     }
 
@@ -232,6 +243,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param arg0 MouseEvent
      */
+    @Override
     public void mouseExited(MouseEvent arg0) {
     }
 
@@ -240,6 +252,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param e ComponentEvent
      */
+    @Override
     public void componentResized(ComponentEvent e) {
         this.repaint();
         this.updateUI();
@@ -250,6 +263,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param e ComponentEvent
      */
+    @Override
     public void componentMoved(ComponentEvent e) {
     }
 
@@ -258,6 +272,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param e ComponentEvent
      */
+    @Override
     public void componentShown(ComponentEvent e) {
     }
 
@@ -266,6 +281,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param e ComponentEvent
      */
+    @Override
     public void componentHidden(ComponentEvent e) {
     }
 
@@ -342,8 +358,8 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                             logger.error("", e);
                         }
                         // trigger Action
-                        PlayerChangedAction(playerChangedEvent.get());
-                        ChessboardChangedAction(false);
+                        playerChangedAction(playerChangedEvent.get());
+                        chessboardChangedAction(false);
                         break;
                     case "PlayerDefeatedEvent":
                         Optional<PlayerDefeatedEvent> playerDefeatedEvent = null;
@@ -353,7 +369,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
                             logger.error("", e);
                         }
                         // trigger Action
-                        PlayerDefeatedAction(playerDefeatedEvent.get());
+                        playerDefeatedAction(playerDefeatedEvent.get());
                         break;
                     default:
                         // no Event found, we are going to log it
@@ -378,11 +394,11 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param playerChangedEvent
      */
-    private void PlayerChangedAction(PlayerChangedEvent playerChangedEvent) {
+    private void playerChangedAction(PlayerChangedEvent playerChangedEvent) {
         // is the game initialized?
         if (chessboard.getFigures().size() == 0) {
             // initialize figures
-            ChessboardChangedAction(true);
+            chessboardChangedAction(true);
         }
 
         if (playerChangedEvent.isItYouTurn()) {
@@ -401,7 +417,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * Action which is called when the Chessboard changes. Responsible for updating the figures on the Chessboard.
      * @param setup Does the Chessboard needs to be setup? Is it the first call?
      */
-    private void ChessboardChangedAction(boolean setup) {
+    private void chessboardChangedAction(boolean setup) {
         try {
             // pull game information from the server
             jchess.client.models.Game game = serverApi.getFullGame(getGameID()).get();
@@ -428,7 +444,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param playerDefeatedEvent
      */
-    private void PlayerDefeatedAction(PlayerDefeatedEvent playerDefeatedEvent) {
+    private void playerDefeatedAction(PlayerDefeatedEvent playerDefeatedEvent) {
         if (playerDefeatedEvent.isAreYouDefeated()) {
             logger.trace("Player {} with ClientID {} playing Team {} defeated",
                     clientModel.get().getNickname(),

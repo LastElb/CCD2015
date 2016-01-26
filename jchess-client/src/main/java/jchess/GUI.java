@@ -36,6 +36,9 @@ public class GUI {
     static Logger logger = LoggerFactory.getLogger(GUI.class);
     public Game game;
 
+    /**
+     * Default constructor for the GUI
+     */
     public GUI() {
         this.game = new Game();
     }

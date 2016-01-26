@@ -21,6 +21,12 @@ public class ServerApi {
     String host;
     int port;
 
+    /**
+     * Default constructor of the ServerAPI
+     *
+     * @param host Hostname of the server
+     * @param port Port of the server
+     */
     public ServerApi(String host, int port) {
         this.host = host;
         this.port = port;

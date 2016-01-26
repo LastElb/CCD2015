@@ -3,6 +3,9 @@ package jchess.client.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Ignore the attribute atEnemyBaseline if set
+ */
 @JsonIgnoreProperties({"atEnemyBaseline"})
 
 /**

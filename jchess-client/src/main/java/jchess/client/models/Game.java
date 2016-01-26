@@ -1,6 +1,5 @@
 package jchess.client.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import de.mki.jchess.commons.HistoryEntry;
 
@@ -22,6 +21,9 @@ public class Game {
     List<HistoryEntry> gameHistory;
     Chessboard chessboard;
 
+    /**
+     * Constructor for creating a new empty game model object
+     */
     public Game() {
         this.gameHistory = new ArrayList<>();
     }
@@ -64,6 +66,7 @@ public class Game {
     }
 
     /**
+     * Get the maximum number of players, regarding the game mode
      * @return Returns an integer with indicating the maximum count of players for this game.
      */
     public int getMaximumPlayers() {

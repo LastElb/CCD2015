@@ -33,7 +33,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JChessView.class);
     static GUI gui = null;
     // End of variables declaration//GEN-END:variables
-    //private JTabbedPaneWithIcon gamesPane;
     private final Timer messageTimer;
     private final Timer busyIconTimer;
     private final Icon idleIcon;
@@ -77,6 +76,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
@@ -89,6 +89,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
                 if ("started".equals(propertyName)) {
@@ -134,6 +135,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
      * Adds a new GameFrame if new Game was clicked
      * @param event
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         Object target = event.getSource();
         if (target == newGameItem) {
@@ -273,12 +275,20 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     }// </editor-fold>//GEN-END:initComponents
 
 
+    /**
+     * Move Back item was clicked
+     * @param evt
+     */
     private void moveBackItemMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_moveBackItemMouseClicked
     {//GEN-HEADEREND:event_moveBackItemMouseClicked
         // TODO add your handling code here:
 
     }//GEN-LAST:event_moveBackItemMouseClicked
 
+    /**
+     * Move forward item was clicked
+     * @param evt
+     */
     private void moveForwardItemMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_moveForwardItemMouseClicked
     {//GEN-HEADEREND:event_moveForwardItemMouseClicked
         // TODO add your handling code here:
@@ -289,6 +299,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
      * Triggerd when the jChessView is resized
      * @param e ComponentEvent
      */
+    @Override
     public void componentResized(ComponentEvent e) {
         logger.trace("jchessView resized!");
         throw new UnsupportedOperationException("Not supported yet.");
@@ -316,6 +327,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
      * Triggered, when component is moved: Not implemented.
      * @param e ComponentEvent
      */
+    @Override
     public void componentMoved(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -324,6 +336,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
      * Triggered, when component is moved: Not implemented.
      * @param e ComponentEvent
      */
+    @Override
     public void componentShown(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -332,6 +345,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
      * Triggered, when component is moved: Not implemented.
      * @param e ComponentEvent
      */
+    @Override
     public void componentHidden(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
