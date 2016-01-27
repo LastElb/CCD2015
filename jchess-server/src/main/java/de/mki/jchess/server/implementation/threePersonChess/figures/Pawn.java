@@ -236,6 +236,8 @@ public class Pawn extends Figure<Hexagon> {
                             Optional<Pawn> pawn = chessboard.getFigures().stream()
                                     .filter(o -> ((Figure) o).getId().equals(movementEvent.getFigureId()))
                                     .filter(o -> o instanceof Pawn)
+                                    // Fixes CCD2015-71: Only take enemy pawns
+                                    .filter(o -> !((Figure) o).getClient().getId().equals(getClient().getId()))
                                     .findFirst();
                             if (pawn.isPresent()) {
                                 logger.trace("Keeping pawn at {}", pawn.get().getPosition().getNotation());

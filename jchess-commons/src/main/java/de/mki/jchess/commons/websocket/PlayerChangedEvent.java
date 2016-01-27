@@ -9,6 +9,7 @@ public class PlayerChangedEvent {
     boolean isItYouTurn;
     String nickname;
     String team;
+    String turnId;
 
     /**
      * Message specific for a player. Returns whether it's its turn on the game.
@@ -61,6 +62,24 @@ public class PlayerChangedEvent {
      */
     public PlayerChangedEvent setTeam(String team) {
         this.team = team;
+        return this;
+    }
+
+    /**
+     * Returns the id of the current turn. Used by the webclient to identify the correct player
+     * @return Returns the id of the turn.
+     */
+    public String getTurnId() {
+        return turnId;
+    }
+
+    /**
+     * Sets the id for the next turn
+     * @param turnId    The id as string
+     * @return Returns the updated instance of the {@link PlayerChangedEvent}.
+     */
+    public PlayerChangedEvent setTurnId(String turnId) {
+        this.turnId = turnId;
         return this;
     }
 }
