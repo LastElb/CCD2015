@@ -1,12 +1,14 @@
 package jchess.client.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import de.mki.jchess.commons.HistoryEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Ignore Property gameHistory
+ */
 @JsonIgnoreProperties({"gameHistory"})
 
 /**
@@ -22,6 +24,9 @@ public class Game {
     List<HistoryEntry> gameHistory;
     Chessboard chessboard;
 
+    /**
+     * Constructor for creating a new empty game model object
+     */
     public Game() {
         this.gameHistory = new ArrayList<>();
     }
@@ -53,26 +58,45 @@ public class Game {
         return gameMode;
     }
 
+    /**
+     * Set the game mode e.g. default-3-person-chess
+     * @param gameMode
+     * @return current {@link Game} object
+     */
     public Game setGameMode(String gameMode) {
         this.gameMode = gameMode;
         return this;
     }
 
     /**
+     * Get the maximum number of players, regarding the game mode
      * @return Returns an integer with indicating the maximum count of players for this game.
      */
     public int getMaximumPlayers() {
         return maximumPlayers;
     }
 
+    /**
+     * Get the history of the current Game as List. Not implemented yet.
+     * @return
+     */
     public List<HistoryEntry> getGameHistory() {
         return gameHistory;
     }
 
+    /**
+     * Get the {@link Chessboard} object
+     * @return Chessboard
+     */
     public Chessboard getChessboard() {
         return chessboard;
     }
 
+    /**
+     * Set the {@link Chessboard} object
+     * @param chessboard
+     * @return current {@link Game} object
+     */
     public Game setChessboard(Chessboard chessboard) {
         this.chessboard = chessboard;
         return this;

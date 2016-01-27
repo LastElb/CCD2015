@@ -29,12 +29,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Class responible for drawing Network Settings, when player want to start
- * a game on a network
+ * Class responible for drawing Network Settings, when player wants to start
+ * a game
  */
 public class DrawNetworkSettings extends JPanel implements ActionListener {
 
-    private JDialog parent;
+    private JDialog parentDialog;
     private GridBagLayout gbl;
     private GridBagConstraints gbc;
     private ButtonGroup serverORclient;
@@ -51,11 +51,15 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
     private URI uri;
 
+    /**
+     * Default constructor
+     * @param parent
+     */
     DrawNetworkSettings(JDialog parent) {
         super();
 
         //components
-        this.parent = parent;
+        this.parentDialog = parent;
 
         this.radioServer = new JRadioButton("Spiel starten", true);
         this.radioClient = new JRadioButton("Mit Spiel verbinden", false);
@@ -141,8 +145,10 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         this.add(buttonStart);
     }
 
-    /*Method for showing settings which the player is intrested with
+    /**
+     * Method for showing settings which the player is interested in
      */
+    @Override
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getSource() == this.radioServer) //show options for server
         {
@@ -163,6 +169,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         } else if (arg0.getSource() == this.buttonStart) //click start button
         {
             String error = "";
+            // validation
             if (this.textGameID.getText().isEmpty() && this.radioClient.isSelected()) {
                 error = "Bitte geben Sie eine Game ID an.\n";
             }
@@ -179,7 +186,7 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 this.uri = new URI("my://" + this.clientOptions.textServIP.getText()); // may throw URISyntaxException
 
                 if (uri.getHost() == null || uri.getPort() == -1) {
-                    error += "URI must have host and port parts.\n";
+                    error += "Die URI muss aus einem Host und Port bestehen.\n";
                 }
 
             } catch (URISyntaxException ex) {
@@ -192,79 +199,41 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 return;
             }
 
-            // Server on the local PC
-            if (this.radioServer.isSelected()) {
-                // @ToDo Start server & save gameID
+            Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel");
 
+            // Start game on Server
+            if (this.radioServer.isSelected()) {
 
                 // Host game & join
-                Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel");
                 try {
                     newGUI.initiaizeAndJoinHostedGame(uri.getHost(), uri.getPort(), textNick.getText());
 
                     // wait for opponents
-                    JOptionPane.showMessageDialog(this, "Warten auf Mitspieler! Spiel-ID: " + newGUI.getGameID());
+                    JOptionPane.showMessageDialog(this, "Ein Moment Geduld, wir warten noch auf Mitspieler!\nSpiel-ID: " + newGUI.getGameID());
                 } catch (Exception e) {
                     logger.error("", e);
                 }
             } else {
-                Game newGUI = JChessApp.getjChessView().addNewTab("Netzwerksspiel: " + clientOptions.textServIP.getText());
 
                 // join existing game
                 try {
+                    // fixes: CCD2015-68 [Client] Wrong textbox
                     newGUI.joinGame(uri.getHost(), uri.getPort(), textGameID.getText(), textNick.getText());
 
                     // wait for opponents
-                    JOptionPane.showMessageDialog(this, "Ein Moment Geduld, wir warten noch auf Mitspieler");
+                    JOptionPane.showMessageDialog(this, "Ein Moment Geduld, wir warten noch auf Mitspieler!");
                 } catch (Exception e) {
                     logger.error("", e);
                 }
             }
 
             // close network settings window
-            this.parent.setVisible(false);
-
-
-            // @ToDo Start Client (do we really want to do it here?)
-            // Start Client an Join Game
-            // GameID: textGameID.getText()
-            // view only: clientOptions.checkOnlyWatch.isSelected()
-            // nickname: textNick.getText()
-
-            //create new game and draw chessboard
-            //Game newGUI = JChessApp.getjChessView().addNewTab("Network game, table: " + textGameID.getText());
-           /*
-            Client client;
-            try {
-                client = new Client(clientOptions.textServIP.getText(), 8080);//create client
-                boolean isJoining = client.join(Integer.parseInt(textGameID.getText()), !clientOptions.checkOnlyWatch.isSelected(), textNick.getText(), MD5.encrypt(textPassword.getText()));//join and wait for all players
-
-                if (isJoining) //Client connection: succesful
-                { */
-            //System.out.println("Client connection: succesful");
-            //create new game and draw chessboard
-            //Game newGUI = JChessApp.getjChessView().addNewTab("Network game, table: " + textGameID.getText());
-            //client.game = newGUI;
-            //newGUI.chessboard.draw();
-
-            //Thread thread = new Thread(client);
-            //thread.start(); //client listening
-
-            this.parent.setVisible(false);//hide parent
-            /*
-                } else {
-                    JOptionPane.showMessageDialog(this, Settings.lang("error_connecting_to_server"));
-                }
-
-            } catch (Error err) {
-                System.out.println("Client connection: failure");
-                JOptionPane.showMessageDialog(this, err);
-            }
-        */
+            this.parentDialog.setVisible(false);
         }
     }
 
-    /* Method responible for drawing clients panel
+    /**
+     *  Method responsible for drawing clients panel
      */
     private class ClientOptionsPanel extends JPanel //options for client
     {
@@ -274,6 +243,9 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
         private GridBagConstraints gbc;
         private JLabel labelServIP;
 
+        /**
+         * Default constructor for client options panel
+         */
         ClientOptionsPanel() {
             super();
 

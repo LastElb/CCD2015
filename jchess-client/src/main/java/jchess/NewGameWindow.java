@@ -23,11 +23,11 @@ package jchess;
 import javax.swing.*;
 
 /**
+ * Class to show a dialog to start a new game
  * @author donmateo
  */
 public class NewGameWindow extends JDialog {
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane jTabbedPane1;
 
     /**
@@ -47,6 +47,7 @@ public class NewGameWindow extends JDialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 new NewGameWindow().setVisible(true);
             }

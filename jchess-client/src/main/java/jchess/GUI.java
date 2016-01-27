@@ -29,23 +29,25 @@ import java.net.URL;
 /**
  * Class representing the game interface which is seen by a player and
  * where are located available for player options, current games and where
- * can he start a new game (load it or save it)
+ * can he start a new game
  */
 public class GUI {
 
     static Logger logger = LoggerFactory.getLogger(GUI.class);
     public Game game;
 
+    /**
+     * Default constructor for the GUI
+     */
     public GUI() {
         this.game = new Game();
-
-        //this.drawGUI();
     }
 
-    /** Method load image by a given name with extension
+    /**
+     * Method load image by a given name with extension
      * @param name string of image to load for ex. "chessboard.jpg"
      * @return image or null if cannot load
-     **/
+     */
     static Image loadImage(String name) {
         Image img = null;
         URL url = null;

@@ -11,26 +11,28 @@ import java.util.List;
 public abstract class Chessboard<T extends Field> extends JPanel {
 
     transient Image image;
-    int width;  //correlates with image width
-    int height; //correlates with image height
+    int widthOfChessboard;  //correlates with image widthOfChessboard
+    int heightOfChessboard; //correlates with image heightOfChessboard
     transient Map<String, T> fields;
     transient List<Figure> figures;
     private boolean chessboardBlocked;
     Point pixelCorrection;  // correction of position where figures are drawn in pixels
     Point getPixelCorrectionMoves; // correction of position where possible moves are drawn in pixels
-    List<Field> possibleMoves = new ArrayList<>();
+    transient List<Field> possibleMoves = new ArrayList<>();
 
     public Chessboard() {
         figures = new ArrayList<>();
         fields = new LinkedHashMap<>();
     }
 
+    @Override
     public int getWidth() {
-        return width;
+        return widthOfChessboard;
     }
 
+    @Override
     public int getHeight() {
-        return height;
+        return heightOfChessboard;
     }
 
     public Map getFields() {
@@ -38,11 +40,11 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     }
 
     public void setWidth(int width) {
-        this.width = width;
+        this.widthOfChessboard = width;
     }
 
     public void setHeight(int height) {
-        this.height = height;
+        this.heightOfChessboard = height;
     }
 
     public void setImage(Image image) {
@@ -185,7 +187,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
      */
     private void drawFigures(Graphics2D g2d) {
         for (Figure tempFigure : this.figures) {
-            if(tempFigure.getRemoved() == false) {
+            if(!tempFigure.getRemoved()) {
                 Image figureImage = loadImage(tempFigure.getPictureId() + ".png");
                 String position = tempFigure.getPositionObject().getNotation();
                 Field field = getFieldByNotation(position.toUpperCase());

@@ -17,11 +17,18 @@ package jchess;
 
 import org.jdesktop.application.Action;
 
+/**
+ * Class to show the original authors of this horrible chess project
+ */
 public class JChessAboutBox extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
 
+    /**
+     * Initialize About Box
+     * @param parent
+     */
     public JChessAboutBox(java.awt.Frame parent) {
         super(parent);
         initComponents();
@@ -29,6 +36,9 @@ public class JChessAboutBox extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Close this horrible about box. Nobody wants to see the original authors.
+     */
     @Action
     public void closeAboutBox() {
         dispose();
@@ -69,7 +79,7 @@ public class JChessAboutBox extends javax.swing.JDialog {
         closeButton.setAction(actionMap.get("closeAboutBox")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 
-        appTitleLabel.setFont(appTitleLabel.getFont().deriveFont(appTitleLabel.getFont().getStyle() | java.awt.Font.BOLD, appTitleLabel.getFont().getSize() + 4));
+        appTitleLabel.setFont(appTitleLabel.getFont().deriveFont(appTitleLabel.getFont().getStyle() | java.awt.Font.BOLD, (float) appTitleLabel.getFont().getSize() + 4));
         appTitleLabel.setText(resourceMap.getString("Application.title")); // NOI18N
         appTitleLabel.setName("appTitleLabel"); // NOI18N
 
