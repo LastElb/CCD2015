@@ -7,7 +7,7 @@
  * [ ] Client
  * [x] Server
 * [x] Codedokumentation in Doxygen
- * [x] (Bessere Dokumentation in Javadoc)
+ * [x] Bessere Dokumentation in Javadoc
 * [x] Testcoverage im Buildserver anzeigen
 * [x] Sonarqube integrieren
 
