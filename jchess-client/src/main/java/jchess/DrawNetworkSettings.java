@@ -227,6 +227,9 @@ public class DrawNetworkSettings extends JPanel implements ActionListener {
                 }
             }
 
+            JChessApp.getjChessView().mainPanel.setVisible(true);
+            JChessApp.getjChessView().mainPanel.repaint();
+
             // close network settings window
             this.parentDialog.setVisible(false);
         }
