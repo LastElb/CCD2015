@@ -19,4 +19,4 @@
  * [x] Spielmodi sollen ein von einem generischen Spiel erben.
 * [x] Einen Client auf einer anderen Plattform erstellen, um Möglichkeiten der REST-Schnittstellen zu zeigen
 * [x] Der ursprüngliche Javaclient soll nur noch das Spielfeld anzeigen und Zugbefehle an den Server schicken.
-* [ ] Die Zeichenfläche des Clients soll sich auch ohne Veränderung der Fenstergröße aktualisieren!
+* [x] Die Zeichenfläche des Clients soll sich auch ohne Veränderung der Fenstergröße aktualisieren!
