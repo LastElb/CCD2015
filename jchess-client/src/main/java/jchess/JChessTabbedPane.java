@@ -120,7 +120,7 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         if (tabNumber >= 0) {
             rect = ((TabbedPaneIcon) getIconAt(tabNumber)).getBounds();
             if (rect.contains(e.getX(), e.getY())) {
-                logger.trace("Removing tabe with tabNumber: {}", tabNumber);
+                logger.trace("Removing tab with tabNumber: {}", tabNumber);
                 this.removeTabAt(tabNumber);//remove tab
                 this.updateAddIconRect();
             }
