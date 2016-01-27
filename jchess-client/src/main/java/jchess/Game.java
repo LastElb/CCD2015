@@ -302,9 +302,11 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         serverApi = new ServerApi(host, port);
         // Start new 3-person-chess game on server
         gameModel = serverApi.hostGame("default-3-person-chess");
+        // save gameID
+        this.setGameID(gameModel.get().getId());
 
         // Join the hosted game
-        joinGame(host, port, gameID, nickname);
+        joinGame(host, port, this.getGameID(), nickname);
     }
 
     /**
