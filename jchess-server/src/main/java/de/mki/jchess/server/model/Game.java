@@ -1,10 +1,8 @@
 package de.mki.jchess.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.mki.jchess.commons.Client;
-import de.mki.jchess.commons.Field;
+import de.mki.jchess.commons.*;
 import de.mki.jchess.commons.Figure;
-import de.mki.jchess.commons.HistoryEntry;
 import de.mki.jchess.server.controller.GameModeController;
 import de.mki.jchess.server.exception.TooManyPlayersException;
 import de.mki.jchess.commons.websocket.PlayerChangedEvent;
@@ -91,6 +89,7 @@ public abstract class Game {
             client.setNextClient(playerList.get(0));
             initializeGame();
             getChessboard().setCurrentPlayer(playerList.get(0));
+            final String turnId = RandomStringService.getRandomString();
             playerList.forEach(client1 -> {
                 Map<String, Object> webSocketDataHeader = new LinkedHashMap<>();
                 webSocketDataHeader.put("data-type", "PlayerChangedEvent");
@@ -98,7 +97,8 @@ public abstract class Game {
                 PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
                         .setItYouTurn(client1.equals(getChessboard().getCurrentPlayer()))
                         .setNickname(getChessboard().getCurrentPlayer().getNickname())
-                        .setTeam(getChessboard().getCurrentPlayer().getTeam());
+                        .setTeam(getChessboard().getCurrentPlayer().getTeam())
+                        .setTurnId(turnId);
                 simpMessagingTemplate.ifPresent(simpMessagingTemplate1 -> {
                     simpMessagingTemplate1.convertAndSend("/game/" + getId() + "/" + client1.getId(), playerChangedEvent, webSocketDataHeader);
                 });
@@ -118,7 +118,8 @@ public abstract class Game {
                 PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
                         .setItYouTurn(lastClient.equals(getChessboard().getCurrentPlayer()))
                         .setNickname(getChessboard().getCurrentPlayer().getNickname())
-                        .setTeam(getChessboard().getCurrentPlayer().getTeam());
+                        .setTeam(getChessboard().getCurrentPlayer().getTeam())
+                        .setTurnId(turnId);
                 simpMessagingTemplate.ifPresent(simpMessagingTemplate1 -> {
                     simpMessagingTemplate1.convertAndSend("/game/" + getId() + "/" + lastClient.getId(), playerChangedEvent, webSocketDataHeader);
                 });

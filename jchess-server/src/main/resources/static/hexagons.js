@@ -64,6 +64,7 @@ angular.module('jchess', [])
         $scope.possibleMoves = [];
         $scope.requestInQueue = false;
         var lastRefresh = Date.now();
+        var lastTurnId = '';
         $scope.gameid = '';
 
         $scope.performMovement = function(targetField) {
@@ -170,10 +171,12 @@ angular.module('jchess', [])
                         lastRefresh = Date.now();
                         window.navigator.vibrate(500);
                         notie.alert(1, "It is your turn", 5);
+                        lastTurnId = message.body.turnId;
                     }
                 });
                 if (!messageProcessed) {
-                    if (JSON.parse(message.body).itYouTurn == false && Date.now() - lastRefresh > 1000) {
+                    if (JSON.parse(message.body).itYouTurn == false && Date.now() - lastRefresh > 1000 && (lastTurnId != message.body.turnId || !$scope.requestInQueue)) {
+                        lastTurnId = message.body.turnId;
                         $scope.activeClient = JSON.parse(message.body);
                         requestLimiter();
                     }

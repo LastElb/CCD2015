@@ -2,6 +2,7 @@ package de.mki.jchess.server.implementation.threePersonChess;
 
 import de.mki.jchess.commons.Client;
 import de.mki.jchess.commons.Field;
+import de.mki.jchess.commons.RandomStringService;
 import de.mki.jchess.server.implementation.threePersonChess.figures.Pawn;
 import de.mki.jchess.server.implementation.threePersonChess.figures.Queen;
 import de.mki.jchess.server.implementation.threePersonChess.figures.Rook;
@@ -218,7 +219,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                 .filter(hexagonFigure -> !hexagonFigure.isRemoved())
                 // Only figures on the source hexagon
                 .filter(hexagonFigure -> hexagonFigure.getId().equals(figureId))
-                .filter(hexagonFigure -> {
+                .peek(hexagonFigure -> {
                     // Do additional moves for special movements here
                     // This method should always return true
                     List<String> specialTargetFields = possibleMovements.get(1).stream()
@@ -245,7 +246,6 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                             historyEntry.getChessboardEvents().add(new FigureEvent().setFigureId(pawn.getId()).setEvent(FigureEvent.Event.REMOVED));
                         });
                     }
-                    return true;
                 })
                 .findFirst().ifPresent(hexagonFigure -> {
                     historyEntry.getChessboardEvents().add(new MovementEvent().setFigureId(figureId).setFromNotation(hexagonFigure.getPosition().getNotation()).setToNotation(targetFieldNotation));
@@ -284,6 +284,7 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
             checkIfCurrentPlayerIsDefeated(simpMessagingTemplate);
         }
 
+        final String turnId = RandomStringService.getRandomString();
         getParentGame().getPlayerList().stream()
                 .filter(client -> !client.isDefeated())
                 .forEach(client -> {
@@ -293,7 +294,8 @@ public class Chessboard extends de.mki.jchess.server.model.Chessboard<Hexagon> {
                     PlayerChangedEvent playerChangedEvent = new PlayerChangedEvent()
                             .setItYouTurn(client.equals(getCurrentPlayer()))
                             .setNickname(getCurrentPlayer().getNickname())
-                            .setTeam(getCurrentPlayer().getTeam());
+                            .setTeam(getCurrentPlayer().getTeam())
+                            .setTurnId(turnId);
                     simpMessagingTemplate.convertAndSend("/game/" + getParentGame().getId() + "/" + client.getId(), playerChangedEvent, webSocketDataHeader);
                 });
     }
