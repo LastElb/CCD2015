@@ -8,8 +8,8 @@ import java.awt.*;
 import java.net.URL;
 
 /**
- * @author Kevin Lamshoeft
- *         Controller to draw images related to the chessboard (i.e. figures, the board itself..)
+ * {@author Kevin Lamshoeft}
+ * Controller to draw images related to the chessboard (i.e. figures, the board itself..)
  */
 public class GraphicsController {
 

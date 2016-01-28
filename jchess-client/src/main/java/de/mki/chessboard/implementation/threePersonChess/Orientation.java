@@ -1,7 +1,7 @@
 package de.mki.chessboard.implementation.threePersonChess;
 
 /**
- * @author Kevin Lamshoeft
+ * {@author Kevin Lamshoeft}
  * Orientation of the hexagonal Chessboard
  * (is needed for the layout: pointy/flat top)
  */

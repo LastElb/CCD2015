@@ -3,8 +3,8 @@ package de.mki.chessboard.implementation.threePersonChess;
 import de.mki.chessboard.model.Field;
 
 /**
- * @author Kevin Lamshoeft
- *         Class to to implement Hexagons as a form of {@link Field}
+ * {@author Kevin Lamshoeft}
+ * Class to to implement Hexagons as a form of {@link Field}
  */
 public class Hexagon extends Field {
 

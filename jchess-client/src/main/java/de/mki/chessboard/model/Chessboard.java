@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * @author Kevin Lamshoeft
+ * {@author Kevin Lamshoeft}
  * Class which represents the Chessboard. Consists of Field objects like Hexagons or Squares.
  * Contains fields as map and a list of figures. Also implements logic to draw itself.
  * @param <T> Field
