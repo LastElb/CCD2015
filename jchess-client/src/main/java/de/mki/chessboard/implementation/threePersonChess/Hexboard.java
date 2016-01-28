@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.List;
 
 /**
- * {@author Kevin Lamshoeft}
  * General hexagonal Chessboard which is used in 3-Person-Chess.
  */
 public class Hexboard extends Chessboard {

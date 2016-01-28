@@ -3,7 +3,6 @@ package de.mki.chessboard.implementation.threePersonChess;
 import java.awt.*;
 
 /**
- * {@author Kevin Lamshoeft}
  * Layout of a hexagonal chessboard.
  * Possible layouts are pointy-top oder flat-top.
  */
