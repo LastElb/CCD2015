@@ -19,9 +19,9 @@ public class Hexboard extends Chessboard {
 
     /**
      * default constructor
-     * better use subclasses and setupBoard()
      */
     public Hexboard() {
+        //better use subclasses and setupBoard()
     }
 
     /**
