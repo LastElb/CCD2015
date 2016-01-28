@@ -1,8 +1,6 @@
 package de.mki.chessboard.implementation.threePersonChess;
 
 import de.mki.chessboard.model.Chessboard;
-import de.mki.chessboard.model.Field;
-import jchess.client.models.Figure;
 
 import java.awt.*;
 import java.util.*;
@@ -19,6 +17,10 @@ public class Hexboard extends Chessboard {
     Layout layout;
     Map<String, Hexagon> fields;
 
+    /**
+     * default constructor
+     * better use subclasses and setupBoard()
+     */
     public Hexboard() {
     }
 
@@ -66,20 +68,20 @@ public class Hexboard extends Chessboard {
      */
     @Override
     public Map generateFields() {
-        Map fields = new HashMap<>();
+        Map tempFields = new HashMap<>();
         // generate right half from x=0 to x=7
         for (int q = 0, maxR = 12; q <= 7; q++, maxR--) {
             for (int r = 0; r <= maxR; r++) {
-                fields = insertHexagonInMap(q, r, fields);
+                tempFields = insertHexagonInMap(q, r, tempFields);
             }
         }
         //generate left half from x=-1 to x=-5
         for (int q = -1, startR = 1; q >= -5; q--, startR++) {
             for (int r = startR; r <= 12; r++) {
-                fields = insertHexagonInMap(q, r, fields);
+                tempFields = insertHexagonInMap(q, r, tempFields);
             }
         }
-        return fields;
+        return tempFields;
     }
 
     /**
