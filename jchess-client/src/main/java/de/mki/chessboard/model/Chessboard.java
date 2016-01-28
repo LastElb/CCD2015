@@ -8,6 +8,12 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Class which represents the Chessboard. Consists of Field objects like Hexagons or Squares.
+ * Contains fields as map and a list of figures. Also implements logic to draw itself.
+ *
+ * @param <T> Field
+ */
 public abstract class Chessboard<T extends Field> extends JPanel {
 
     transient Image image;
@@ -73,8 +79,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * generates fields and puts figures on the board
-     *
-     * @param figures
+     * @param figures List of figure objects
      */
     public abstract void setupBoard(List<Figure> figures);
 
@@ -86,6 +91,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * get a field object (e.g. Hexagon) by its pixel coordinates
+     * @return Field (e.g. Hexagon)
      */
     public abstract T getField(int x, int y);
 
@@ -99,7 +105,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     /**
      * get the clicked field by x and y pixel coordinates
      *
-     * @return clicked field in chess notation
+     * @return clicked field in chess notation (as String)
      */
     public String getClickedField(int x, int y) {
         return getField(x,y).getNotation();
@@ -153,7 +159,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * mainly part of the old project (code) and is needed for rendering graphics
-     * @param g
+     * @param g Graphics
      */
     @Override
     public void paintComponent(Graphics g) {
@@ -166,7 +172,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * also part of the old project (code) and is needed for rendering graphics
-     * @param g
+     * @param g Graphics
      */
     @Override
     public void update(Graphics g) {
@@ -175,7 +181,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * draw image of the chessboard
-     * @param g2d
+     * @param g2d Graphics2D
      */
     private void drawBoard(Graphics2D g2d) {
         g2d.drawImage(this.image, 0, 0, null);
@@ -183,7 +189,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
 
     /**
      * draw images of the figures onto the board
-     * @param g2d
+     * @param g2d Graphics2D
      */
     private void drawFigures(Graphics2D g2d) {
         for (Figure tempFigure : this.figures) {
@@ -198,6 +204,10 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         }
     }
 
+    /**
+     * draw possible moves on chessboard
+     * @param g2d Graphics2D
+     */
     private void drawPossibleMoves(Graphics2D g2d) {
         Image moveImage = loadImage("able_square.png");
         for (Field tempField : this.possibleMoves) {

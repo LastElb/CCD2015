@@ -1,5 +1,8 @@
 package de.mki.chessboard.model;
 
+/**
+ * Abstract Class which represents a field of a {@link Chessboard}.
+ */
 public abstract class Field {
 
     /**
