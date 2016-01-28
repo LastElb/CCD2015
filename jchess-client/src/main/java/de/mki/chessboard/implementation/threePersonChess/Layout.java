@@ -3,7 +3,9 @@ package de.mki.chessboard.implementation.threePersonChess;
 import java.awt.*;
 
 /**
- * Class with represents the layout of a hexagonal chessboard.
+ * @author Kevin Lamshoeft
+ * Layout of a hexagonal chessboard.
+ * Possible layouts are pointy-top oder flat-top.
  */
 public class Layout {
 
@@ -14,6 +16,14 @@ public class Layout {
     public static final Orientation pointy = new Orientation(Math.sqrt(3.0), Math.sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0, Math.sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
     public static final Orientation flat = new Orientation(3.0 / 2.0, 0.0, Math.sqrt(3.0) / 2.0, Math.sqrt(3.0), 2.0 / 3.0, 0.0, -1.0 / 3.0, Math.sqrt(3.0) / 3.0, 0.0);
 
+    /**
+     * Mandatory Constructor
+     *
+     * @param orientation
+     * @param sizeX
+     * @param sizeY
+     * @param origin
+     */
     public Layout(Orientation orientation, double sizeX, double sizeY, Point origin)
     {
         this.orientation = orientation;
@@ -22,7 +32,12 @@ public class Layout {
         this.origin = origin;
     }
 
-
+    /**
+     * Calculate pixel coordinates of a hexagon
+     * more specific: (its center)
+     * @param h {@link Hexagon}
+     * @return Point (Center of hexagon)
+     */
     public Point hexagonToPixel(Hexagon h) {
         Orientation M = this.orientation;
         double sizeX = this.sizeX;
@@ -33,7 +48,11 @@ public class Layout {
         return new Point((int) x + origin.x, (int) y + origin.y);
     }
 
-
+    /**
+     * Get a Hexagon by its pixel coordinates.
+     * @param p Point
+     * @return {@link Hexagon} (nearest to the point)
+     */
     public Hexagon pixelToHexagon(Point p)
     {
         Orientation M = this.orientation;
@@ -49,6 +68,13 @@ public class Layout {
         return roundToNextHexagon(q,r,s);
     }
 
+    /**
+     * Rounds cubic coordinates (double values) to nearest hexagon
+     * @param q_
+     * @param r_
+     * @param s_
+     * @return Hexagon (nearest)
+     */
     private Hexagon roundToNextHexagon(double q_, double r_, double s_) {
 
         int q = (int)(Math.round(q_));

@@ -8,6 +8,10 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * @author Kevin Lamshoeft
+ *         General hexagonal Chessboard which is used in 3-Person-Chess.
+ */
 public class Hexboard extends Chessboard {
 
     Point hexSize;
@@ -18,6 +22,12 @@ public class Hexboard extends Chessboard {
     public Hexboard() {
     }
 
+    /**
+     * Set figures, generate (hexagonal) fields and draw the chessboard
+     * (including fields and figures)
+     * mandatory function for working chessboard
+     * @param figures List of figure objects
+     */
     @Override
     public void setupBoard(List figures) {
         this.setFigures(figures);
@@ -50,6 +60,10 @@ public class Hexboard extends Chessboard {
         this.layout = layout;
     }
 
+    /**
+     * Creates a Map and generates hexagonal fields with axial coordinates
+     * @return Map of fields (Hexagon)
+     */
     @Override
     public Map generateFields() {
         Map fields = new HashMap<>();
@@ -70,7 +84,7 @@ public class Hexboard extends Chessboard {
 
     /**
      * initialize hexagon, calculate the (pixel) center and put it into the map
-     *
+     * axial coordinates q and r
      * @param q
      * @param r
      * @param fields
@@ -85,16 +99,31 @@ public class Hexboard extends Chessboard {
         return fields;
     }
 
+    /**
+     * Get a field (hexagon) by its pixel coordinates
+     * @param x
+     * @param y
+     * @return Hexagon (field)
+     */
     @Override
     public Hexagon getField(int x, int y) {
         return this.layout.pixelToHexagon(new Point(x, y));
     }
 
+    /**
+     * Get a field by its chess notation
+     * @param position String (Chess Notation in Uppercase)
+     * @return Hexagon (field)
+     */
     @Override
     public Hexagon getFieldByNotation(String position) {
         return fields.get(position);
     }
 
+    /**
+     * Highlight possible moves
+     * @param fieldsToHighlight List of Strings, containing Field notation e.g. A1
+     */
     @Override
     public void highlightFieldsByNotation(List fieldsToHighlight) {
         List<Hexagon> possibleMoves = new ArrayList<Hexagon>();
@@ -106,6 +135,9 @@ public class Hexboard extends Chessboard {
         this.repaint();
     }
 
+    /**
+     * Clear highlighted fields of possible moves
+     */
     @Override
     public void clearHighlightedFields() {
         this.setPossibleMoves(new ArrayList<Hexagon>());

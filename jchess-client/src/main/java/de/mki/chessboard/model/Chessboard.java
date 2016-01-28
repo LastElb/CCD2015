@@ -9,9 +9,9 @@ import java.util.*;
 import java.util.List;
 
 /**
+ * @author Kevin Lamshoeft
  * Class which represents the Chessboard. Consists of Field objects like Hexagons or Squares.
  * Contains fields as map and a list of figures. Also implements logic to draw itself.
- *
  * @param <T> Field
  */
 public abstract class Chessboard<T extends Field> extends JPanel {
@@ -26,6 +26,9 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     Point getPixelCorrectionMoves; // correction of position where possible moves are drawn in pixels
     transient List<Field> possibleMoves = new ArrayList<>();
 
+    /**
+     * Default mandatory constructor
+     */
     public Chessboard() {
         figures = new ArrayList<>();
         fields = new LinkedHashMap<>();

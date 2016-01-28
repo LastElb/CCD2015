@@ -5,6 +5,10 @@ import java.util.List;
 
 import static de.mki.chessboard.controller.GraphicsController.loadImage;
 
+/**
+ * @author Kevin Lamshoeft
+ *         Class for a (rather small) 600 x 600 pixels hexagonal chessboard
+ */
 public class smallHexboard extends Hexboard {
 
     /**

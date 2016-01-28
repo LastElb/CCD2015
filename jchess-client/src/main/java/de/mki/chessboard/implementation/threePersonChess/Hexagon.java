@@ -2,6 +2,10 @@ package de.mki.chessboard.implementation.threePersonChess;
 
 import de.mki.chessboard.model.Field;
 
+/**
+ * @author Kevin Lamshoeft
+ *         Class to to implement Hexagons as a form of {@link Field}
+ */
 public class Hexagon extends Field {
 
     final int q;
@@ -20,6 +24,10 @@ public class Hexagon extends Field {
         return r;
     }
 
+    /**
+     * Get the chess notation of a hexagon
+     * @return chess notation as String (Uppercase)
+     */
     @Override
     public String getNotation() {
 
