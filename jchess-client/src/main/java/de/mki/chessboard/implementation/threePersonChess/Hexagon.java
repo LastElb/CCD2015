@@ -98,6 +98,10 @@ public class Hexagon extends Field {
                 notation = notation.concat("M");
                 notation = notation.concat(String.valueOf(this.q + 13));
                 break;
+
+            default:
+                notation = notation.concat("Z");
+                notation = notation.concat("42");
         }
 
         return notation;
