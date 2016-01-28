@@ -15,6 +15,13 @@ public class GraphicsController {
 
     private static final Logger logger = LoggerFactory.getLogger(GraphicsController.class);
 
+    /**
+     * Default private constructor
+     * (don't ask. SonarQube told me so.)
+     */
+    private GraphicsController() {
+    }
+
     /** load image by a given name with extension
      * @param name String of image to load for ex. "chessboard.jpg"
      * @return Image
