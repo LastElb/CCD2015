@@ -20,9 +20,11 @@ public class GraphicsController {
      * (don't ask. SonarQube told me so.)
      */
     private GraphicsController() {
+        // do nothing
     }
 
-    /** load image by a given name with extension
+    /**
+     * load image by a given name with extension
      * @param name String of image to load for ex. "chessboard.jpg"
      * @return Image
     * */
@@ -38,5 +40,5 @@ public class GraphicsController {
             logger.error("", e);
         }
         return img;
-    }/*--endOf-loadImage--*/
+    }
 }

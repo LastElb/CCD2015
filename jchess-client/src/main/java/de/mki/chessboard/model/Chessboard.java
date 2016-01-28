@@ -23,7 +23,7 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     transient List<Figure> figures;
     private boolean chessboardBlocked;
     Point pixelCorrection;  // correction of position where figures are drawn in pixels
-    Point getPixelCorrectionMoves; // correction of position where possible moves are drawn in pixels
+    Point pixelCorrectionMoves; // correction of position where possible moves are drawn in pixels
     transient List<Field> possibleMoves = new ArrayList<>();
 
     /**
@@ -34,48 +34,94 @@ public abstract class Chessboard<T extends Field> extends JPanel {
         fields = new LinkedHashMap<>();
     }
 
+    /**
+     * get the width in pixels
+     *
+     * @return int pixel width
+     */
     @Override
     public int getWidth() {
         return widthOfChessboard;
     }
 
+    /**
+     * get the height in pixel
+     * @return int pixel height
+     */
     @Override
     public int getHeight() {
         return heightOfChessboard;
     }
 
+    /**
+     * get the map of fields
+     * @return Map of fields
+     */
     public Map getFields() {
         return fields;
     }
 
+    /**
+     * set width in pixels
+     * @param width
+     */
     public void setWidth(int width) {
         this.widthOfChessboard = width;
     }
 
+    /**
+     * set height in pixels
+     * @param height
+     */
     public void setHeight(int height) {
         this.heightOfChessboard = height;
     }
 
+    /**
+     * definde background image
+     * @param image path to image
+     */
     public void setImage(Image image) {
         this.image = image;
     }
 
+    /**
+     * a list of all figures
+     * @return
+     */
     public List<Figure> getFigures() {
         return figures;
     }
 
+    /**
+     * set the list of figures
+     * @param figures
+     */
     public void setFigures(List<Figure> figures) {
         this.figures = figures;
     }
 
+    /**
+     * define a correction value for the display of figures
+     * @param pixelCorrection in pixels
+     */
     public void setPixelCorrection(Point pixelCorrection) {
         this.pixelCorrection = pixelCorrection;
     }
 
-    public void setGetPixelCorrectionMoves(Point getPixelCorrectionMoves) {
-        this.getPixelCorrectionMoves = getPixelCorrectionMoves;
+    /**
+     * define a correction value for the display of possible moves
+     *
+     * @param pixelCorrectionMoves
+     */
+    public void setPixelCorrectionMoves(Point pixelCorrectionMoves) {
+        this.pixelCorrectionMoves = pixelCorrectionMoves;
     }
 
+    /**
+     * define current possible moves
+     * @param possibleMoves list of fields
+     */
     public void setPossibleMoves(List<Field> possibleMoves) {
         this.possibleMoves = possibleMoves;
     }
@@ -214,8 +260,8 @@ public abstract class Chessboard<T extends Field> extends JPanel {
     private void drawPossibleMoves(Graphics2D g2d) {
         Image moveImage = loadImage("able_square.png");
         for (Field tempField : this.possibleMoves) {
-            int x = tempField.getX() - this.getPixelCorrectionMoves.x;
-            int y = tempField.getY() - this.getPixelCorrectionMoves.y;
+            int x = tempField.getX() - this.pixelCorrectionMoves.x;
+            int y = tempField.getY() - this.pixelCorrectionMoves.y;
             g2d.drawImage(moveImage, x, y, null);
         }
     }

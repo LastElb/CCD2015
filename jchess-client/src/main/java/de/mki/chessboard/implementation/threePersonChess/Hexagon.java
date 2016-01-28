@@ -11,15 +11,29 @@ public class Hexagon extends Field {
     final int q;
     final int r;
 
+    /**
+     * default constructor with axial coordinates
+     *
+     * @param q
+     * @param r
+     */
     public Hexagon(int q, int r) {
         this.q = q;
         this.r = r;
     }
 
+    /**
+     * get q coordinate
+     * @return q
+     */
     public int getQ() {
         return q;
     }
 
+    /**
+     * get r coordinate
+     * @return r
+     */
     public int getR() {
         return r;
     }

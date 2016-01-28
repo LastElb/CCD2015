@@ -37,27 +37,26 @@ public class Hexboard extends Chessboard {
         this.repaint();
     }
 
-
-    public Point getHexSize() {
-        return hexSize;
-    }
-
-    public Point getOrigin() {
-        return origin;
-    }
-
-    public Layout getChessboardLayout() {
-        return layout;
-    }
-
+    /**
+     * set hexagon size
+     */
     public void setHexSize(Point hexSize) {
         this.hexSize = hexSize;
     }
 
+    /**
+     * set point of origin
+     *
+     * @param origin
+     */
     public void setOrigin(Point origin) {
         this.origin = origin;
     }
 
+    /**
+     * define the layout
+     * @param layout
+     */
     public void setLayout(Layout layout) {
         this.layout = layout;
     }
